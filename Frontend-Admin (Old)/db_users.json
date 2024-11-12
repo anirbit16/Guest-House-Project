@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "user_name": "Alice Johnson",
+      "email_id": "alice.johnson@example.com",
+      "password": "alicepassword789",
+      "phone_no": "+11122334455",
+      "address": "789 Maple Ave, Metropolis, USA",
+      "id": "29c6"
+    },
+    {
+      "user_name": "Bob Williams",
+      "email_id": "bob.williams@example.com",
+      "password": "bobsecurepass321",
+      "phone_no": "+12233445566",
+      "address": "101 Oak St, Gotham, USA",
+      "id": "d38e"
+    },
+    {
+      "id": "29d0",
+      "admin_id": 1,
+      "user_name": "ray1234",
+      "email_id": "anirbit16@gmail.com",
+      "password": "qwerty",
+      "phone_no": "08250223198",
+      "address": "Dr. B.C. Roy Street"
+    },
+    {
+      "id": "7c1b",
+      "admin_id": 1,
+      "user_name": "ray1234",
+      "email_id": "anirbit16@gmail.com",
+      "password": "qwerty",
+      "phone_no": "08250223198",
+      "address": "Dr. B.C. Roy Street"
+    },
+    {
+      "id": "a7d5",
+      "admin_id": 1,
+      "user_name": "ray1234",
+      "email_id": "anirbit16@gmail.com",
+      "password": "qwerty",
+      "phone_no": "08250223198",
+      "address": "Dr. B.C. Roy Street"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "admins": [
+    {
+      "id": "1",
+      "user_name": "John Doe",
+      "password": "password123",
+      "property_name": "Sunset Villa",
+      "property_address": "123 Sunset Blvd",
+      "owner_name": "Jane Doe",
+      "owner_contact_no": "1234567890",
+      "email_id": "jane.doe@example.com",
+      "plan": "Premium",
+      "properties": "Pool, Garden",
+      "gst": "GST12345",
+      "pan": "PAN123456"
+    },
+    {
+      "id": "2",
+      "user_name": "Alice Smith",
+      "password": "alicepass456",
+      "property_name": "Mountain Retreat",
+      "property_address": "789 Mountain Dr",
+      "owner_name": "Bob Smith",
+      "owner_contact_no": "9876543210",
+      "email_id": "bob.smith@example.com",
+      "plan": "Standard",
+      "properties": "Fireplace, Garage",
+      "gst": "GST67890",
+      "pan": "PAN654321"
+    },
+    {
+      "id": "81b2",
+      "user_name": "ewrwerwer",
+      "password": "1234567gtreey",
+      "property_name": "wewerrweerwer qwewqer",
+      "property_address": "12 ABC St.",
+      "owner_name": "Khankir Baccha",
+      "owner_contact_no": "12345678",
+      "email_id": "xyz@gmail.com",
+      "plan": "Silver",
+      "properties": "",
+      "gst": "12345sdfee",
+      "pan": "123qwe123"
+    },
+    {
+      "id": "170a",
+      "username": "ABCD",
+      "email": "aseefde@example.com"
+    },
+    {
+      "id": "baa7",
+      "username": "Alice Smith",
+      "userPassword": "alicepass456"
+    },
+    {
+      "id": "2b73",
+      "username": "Alice Smith",
+      "userPassword": "wdwqqwqwe"
+    },
+    {
+      "id": "2e46",
+      "username": "Alice Smith",
+      "userPassword": "wdwqqwqwe"
+    },
+    {
+      "id": "a68f",
+      "username": "wqqweqwe",
+      "userPassword": "wdwqqwqwe"
+    },
+    {
+      "id": "a771",
+      "username": "wqqweqwe",
+      "userPassword": "wdwqqwqwe"
+    },
+    {
+      "id": "3801",
+      "username": "wqqweqwe",
+      "userPassword": "wdwqqwqwe"
+    },
+    {
+      "id": "caf1",
+      "username": "wqqweqwe",
+      "userPassword": "wdwqqwqwe"
+    },
+    {
+      "id": "815e",
+      "user_name": "ABCD EFGU",
+      "password": "23erewer",
+      "property_name": "Bokachoda",
+      "property_address": "123 Sunset Blvd",
+      "owner_name": "Pinaki Rehman",
+      "owner_contact_no": "1234567890",
+      "email_id": "pinaki.xyz@gmail.com",
+      "plan": "Silver",
+      "properties": "Pool, Garden",
+      "gst": "GST12345",
+      "pan": "PAN123456"
+    }
+  ]
+}
