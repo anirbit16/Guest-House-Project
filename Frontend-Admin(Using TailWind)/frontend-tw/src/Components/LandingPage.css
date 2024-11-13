@@ -670,7 +670,7 @@ footer ul li {
   display:flex;
   flex-direction: column;
   gap: 1rem;
-  padding-top: 6rem;
+  padding-top: 2rem;
   padding-left: 3.5rem;
 }
 .left-part h1{
@@ -709,7 +709,7 @@ form h1{
   font-size: 2rem;
   color:#8131ac;
   margin-bottom: 2rem;
-  margin-top: 6rem;
+  margin-top: 0.5rem;
   align-items: center;
 }
 

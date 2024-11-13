@@ -72,7 +72,7 @@ const Navbar = () => {
             <a
               href="#"
               className="login-dropdown block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-              onClick={()=>handleClick('User')} 
+              onClick={()=>handleLoginClick('User')} 
             >
               User
             </a>
@@ -81,7 +81,7 @@ const Navbar = () => {
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-              onClick={()=>handleClick('Admin')}    style={{color:'black'}}        
+              onClick={()=>handleLoginClick('Admin')}    style={{color:'black'}}        
             >
               Admin
             </a>
@@ -90,7 +90,7 @@ const Navbar = () => {
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-              onClick={()=>handleClick('Sys-Admin')}
+              onClick={()=>handleLoginClick('Sys-Admin')}
             >
               Sys-admin
             </a>
@@ -187,7 +187,7 @@ const Navbar = () => {
             <button
               type="button"
               className="inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500 mr-2"
-              onClick={() => console.log("Cancel")}
+              onClick={() => setOpen(false)}
             >
               Cancel
             </button>

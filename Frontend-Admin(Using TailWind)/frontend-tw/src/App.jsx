@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Intro from './Components/Intro.jsx';
 import OurPlans from './Components/OurPlans.jsx';
 import SignUpForm from './Components/SignUpForm.jsx';
+import PropertyDetails from './Components/PropertyDetails.jsx';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path='/intro-page' element={<Intro/>} /> 
           <Route path='/our-plans' element={<OurPlans/>} /> 
           <Route path='/sign-up' element={<SignUpForm/>} /> 
+          <Route path='/property-details' element={<PropertyDetails/>} /> 
         </Routes>
         <Footer/>
       </BrowserRouter>

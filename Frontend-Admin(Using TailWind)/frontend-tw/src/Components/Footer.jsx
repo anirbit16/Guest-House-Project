@@ -33,7 +33,8 @@ const Footer = () => {
       <footer>
         <div className='container'>
           <div className='box'>
-            <div className='logo' style={{lineHeight:'15px', fontFamily:'poppins'}}>
+            <div className='logo' 
+                  style={{lineHeight:'15px', fontFamily:'poppins'}}>
               <img src='../images/logo-light.png' alt='' />
               <h2 style={{fontSize:'25px',}}>VUCS Pvt Ltd</h2>
               <p>in Street No. 1111 (Major Arterial Road Mouza) –</p>
