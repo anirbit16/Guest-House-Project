@@ -6,18 +6,28 @@ const PropertyDetails = () => {
 const [rooms, setRooms] = useState('');
 const [subscriptionPlan, setSubscriptionPlan] = useState('');
 const [subscription, setSubscription] = useState('')
+const [basePriceOne,setBasePriceOne] = useState('');
+const [basePriceTwo,setBasePriceTwo] = useState('');
+const [rbvalue,setRBValue] = useState('');
+ 
+const [taxes,setTaxes]=useState(40)
+const [discount,setDiscount]=useState('') 
+const [totalAmount,setTotalAmount]=useState('') 
+const [months,setMonths]=useState('');
+
+ 
 
 useEffect(() => {
  
   if (rooms >= 5 && rooms <= 10) {
     setSubscriptionPlan('Silver');
+    
+    
   } else if (rooms >= 11 && rooms <= 20) {
     setSubscriptionPlan('Gold');
   } else if (rooms > 20) {
     setSubscriptionPlan('Platinum');
-  } else {
-    setSubscriptionPlan('');
-  }
+  }  
 }, [rooms]);
  
 
@@ -38,18 +48,32 @@ const handleSubscriptionChange = (event) => {
 };
 
 
-const basePrice = null;
-const taxes = null;
-const discount = null;
-const totalAmount = null;
+ 
 
 const handleClick = ()=>{
-  const basePrice = subscription === '6months' ? 260 : 460;
-  const taxes = 40;
-  const discount = 0;
-  const totalAmount = basePrice + taxes;
-  console.log(basePrice)
+  event.preventDefault()
+  if(subscriptionPlan==='Silver'){
+    setBasePriceOne(260)
+    setBasePriceTwo(460);
+  }else if(subscriptionPlan==='Gold')
+  {
+    setBasePriceOne(660);
+    setBasePriceTwo(860);
+  }
+  else{
+    setBasePriceOne(860)
+    setBasePriceTwo(1060)
+  }
 
+
+}
+const handleClickTwo=(value)=>{
+  if(value==='6'){
+    setRBValue('6')
+
+  }else if(value==='12'){
+    setRBValue('12')
+  }
 
 }
 
@@ -219,6 +243,7 @@ const handleClick = ()=>{
                       id="6months"
                       name="subscription"
                       value="6months"
+                      onClick={()=>handleClickTwo('6')}
                       checked={subscription === '6months'}
                       onChange={handleSubscriptionChange}
                     />
@@ -231,18 +256,45 @@ const handleClick = ()=>{
                       name="subscription"
                       value="12months"
                       checked={subscription === '12months'}
+                      onClick={()=>handleClickTwo('12')}
                       onChange={handleSubscriptionChange}
                     />
                     <label htmlFor="12months">12 Months</label>
                   </div>
+                  
            
               </div> 
-           
+                 
+         
            
             <div className="flex gap-6 mb-6" style={{display:'block'}}>
+              <table>
+              <tbody>
+                  <tr>
+                    <td>Base price</td>
+                    <td> </td>
+                    <td>{rbvalue==='6'?basePriceOne:basePriceTwo}</td>
+                  </tr>
+                  <tr>
+                    <td>Taxes</td>
+                    <td> </td>
+                    <td>{taxes}</td>
+                  </tr>
+                  <tr>
+                    <td>Discount</td>
+                    <td> </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>Total Amount</td>
+                    <td> </td>
+                    <td>{rbvalue==='6'?basePriceOne+taxes:basePriceTwo+taxes}</td>
+                  </tr>
+                </tbody>
+              </table>
             
             
-               <div className='container-price-breakup' style={{display:'flex',gap:'6em'}}>
+               {/* <div className='container-price-breakup' style={{display:'flex',gap:'6em'}}>
                  <div className="container-labels" style={{display:'block'}}>
                   <div className="base-price">
                     Base Price
@@ -260,19 +312,19 @@ const handleClick = ()=>{
                   </div>
                   <div className="container-values" style={{justifyContent:'right'}}>
                   <div className="container-base-price-value"  style={{justifyContent:'right',display:'flex'}}>
-                  {basePrice}
+                  {rbvalue==='6'?basePriceOne:basePriceTwo}
                   </div>
                   <div className="container-taxes-value"   style={{justifyContent:'right',display:'flex'}}>
-                  {taxes}
+                  00
                   </div>
                   <div className="discount-value" style={{justifyContent:'right',display:'flex'}}>
-               
+                   00
                   </div>
                   <div className="total-amount-value">
-                    {totalAmount}
+                    00
                   </div>
                   </div>                
-               </div>
+               </div> */}
 
             </div>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 
