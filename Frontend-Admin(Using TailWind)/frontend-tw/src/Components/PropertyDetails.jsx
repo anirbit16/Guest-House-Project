@@ -3,59 +3,128 @@ import SubFormImg from '../assets/SubFormimg.png'
 
 
 const PropertyDetails = () => {
-const [rooms, setRooms] = useState('');
-const [subscriptionPlan, setSubscriptionPlan] = useState('');
-const [subscription, setSubscription] = useState('')
-const [basePriceOne,setBasePriceOne] = useState('');
-const [basePriceTwo,setBasePriceTwo] = useState('');
-const [rbvalue,setRBValue] = useState('');
- 
-const [taxes,setTaxes]=useState(40)
-const [discount,setDiscount]=useState('') 
-const [totalAmount,setTotalAmount]=useState('') 
-const [months,setMonths]=useState('');
+const [propertyname,setPropertyName]=useState('')
+const [propertynameerror,setPropertyNameError]=useState('')
 
+const [propertyaddress,setPropertyAddress]=useState('')
+const [propertyaddresserror,setPropertyAddressError]=useState('')
+const [propertycontactno,setPropertyContactNo]=useState('')
+const [propertycontactnoerror,setPropertyContactNoError]=useState('')
+const [zip,setZip]=useState('');
+const [ziperror,setZiperror]=useState('');
+const [rooms,setRooms]=useState('');
+const [roomserror,setRoomsError]=useState('');
+const [subplan,setSubPlan]=useState('');
+const [taxes,setTaxes]=useState('');
+ 
+const [ownername,setOwnerName]=useState('');
+const [ownernameerror,setOwnerNameError]=useState('');
+const [ownercontact,setOwnerContact]=useState('');
+const [ownercontacterror,setOwnerContactError]=useState('');
+const [gst,setGst]=useState('');
+const [gsterror,setGstError]=useState('');
+const [pan,setPan]=useState('');
+const [panerror,setPanError]=useState('');
+const [rbvalue,setRBValue]=useState('')
+const [basePriceOne,setBasePriceOne]=useState('')
+const [basePriceTwo,setBasePriceTwo]=useState('')
+ 
  
 
 useEffect(() => {
  
   if (rooms >= 5 && rooms <= 10) {
-    setSubscriptionPlan('Silver');
+   setSubPlan('Silver');
     
     
   } else if (rooms >= 11 && rooms <= 20) {
-    setSubscriptionPlan('Gold');
+    setSubPlan('Gold');
   } else if (rooms > 20) {
-    setSubscriptionPlan('Platinum');
+    setSubPlan('Platinum');
   }  
 }, [rooms]);
  
 
-const handleSubscriptionChange = (event) => {
-  const selectedValue = event.target.value;
-  setSubscription(selectedValue);
+// const handleSubscriptionChange = (event) => {
+//   const selectedValue = event.target.value;
+//   setSubscription(selectedValue);
 
-  // Perform an action based on the selected subscription
-  if (selectedValue === '6months') {
-    console.log("6-month subscription selected");
-    console.log(selectedValue)
-    // Add any other action you want to perform for 6 months
-  } else if (selectedValue === '12months') {
-    console.log("12-month subscription selected");
-    console.log(selectedValue);
-    // Add any other action you want to perform for 12 months
-  }
-};
+//   // Perform an action based on the selected subscription
+//   if (selectedValue === '6months') {
+//     console.log("6-month subscription selected");
+//     console.log(selectedValue)
+//     // Add any other action you want to perform for 6 months
+//   } else if (selectedValue === '12months') {
+//     console.log("12-month subscription selected");
+//     console.log(selectedValue);
+//     // Add any other action you want to perform for 12 months
+//   }
+// };
+
+const handleCheck = ()=>{
+   if(!propertyname){
+    setPropertyNameError('Property Name Required');
+    return;
+   }else{
+    setPropertyNameError('');
+   }
 
 
- 
+   if(!propertyaddress){
+    setPropertyAddressError('Property Address Required')
+    return;
+   }else{
+    setPropertyAddressError('');
+   }
+
+  
+
+   if(!propertycontactno){
+    setPropertyContactNo('Property Contact Number Required')
+    return;
+   }else{
+    setPropertyAddressError('');
+   }
+
+   if(!ownername){
+    setOwnerNameError('Owner Name Required')
+    return;
+   }else{
+    setOwnerNameError('');
+   }
+
+   if(!ownercontact){
+    setOwnerContactError('Owner Contact Number Required')
+    return;
+   }else{
+    setOwnerContactError('');
+   }
+
+   if(!pan){
+    setPanError('PAN Number Required')
+    return;
+   }else{
+    setPanError('');
+   }
+
+   if(!gst){
+    setGstError('GST ID Required')
+    return;
+   }else{
+    setGstError('');
+   }
+
+
+   
+}
 
 const handleClick = ()=>{
   event.preventDefault()
-  if(subscriptionPlan==='Silver'){
+  handleCheck();
+  if(subplan==='Silver'){
     setBasePriceOne(260)
     setBasePriceTwo(460);
-  }else if(subscriptionPlan==='Gold')
+  }else if(subplan==='Gold')
   {
     setBasePriceOne(660);
     setBasePriceTwo(860);
@@ -105,8 +174,14 @@ const handleClickTwo=(value)=>{
                     type="text"
                     id="propname"
                     placeholder="Property Name"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={propertyname}
+                    className="w-full border border-gray-300 
+                                rounded py-2 px-3 
+                                leading-tight focus:border-gray-900 
+                                focus:ring-2 focus:ring-gray-500"
+                                onChange={(e) => setPropertyName(e.target.value)}        
                   />
+                     { propertynameerror && <div className="text-red-500 text-sm mt-2">{propertynameerror}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -114,8 +189,13 @@ const handleClickTwo=(value)=>{
                     type="text"
                     id="propadd"
                     placeholder="Property Address"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    className="w-full border border-gray-300 rounded py-2 px-3 
+                               leading-tight focus:border-gray-900 focus:ring-2 
+                               focus:ring-gray-500"
+                    value={propertyaddress}
+                    onChange={(e) => setPropertyAddress(e.target.value)}   
                   />
+                   {propertyaddresserror && <div className="text-red-500 text-sm mt-2">{propertyaddresserror}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -124,7 +204,10 @@ const handleClickTwo=(value)=>{
                     id="cont"
                     placeholder="Property Contact Number"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={propertycontactno}
+                    onChange={(e) => setPropertyContactNo(e.target.value)}   
                   />
+                   { propertycontactnoerror && <div className="text-red-500 text-sm mt-2">{propertycontactnoerror}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -133,7 +216,11 @@ const handleClickTwo=(value)=>{
                     id="zip"
                     placeholder="Zip Code"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={zip}
+                    onChange={(e) => setZip(e.target.value)}                     
                   />
+                     {ziperror && <div className="text-red-500 text-sm mt-2">{ziperror}</div>}
+
                 </div>
 
                 <div className="mb-4">
@@ -149,6 +236,8 @@ const handleClickTwo=(value)=>{
         {rooms < 5 && (
           <p className="text-red-500 text-sm mt-1">Please enter a value of 5 or more</p>
         )}
+          {roomserror && <div className="text-red-500 text-sm mt-2">{roomserror}</div>}           
+
       </div>
 
       <div className="mb-4">
@@ -156,10 +245,13 @@ const handleClickTwo=(value)=>{
           type="text"
           id="subp"
           placeholder="Subscription Plan"
-          value={subscriptionPlan}
+          value={subplan}
           readOnly
           className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+          onChange={(e) => setSubPlan(e.target.value)}   
         />
+         
+       
       </div>
                 <div className="mb-4">
                   <input
@@ -167,7 +259,9 @@ const handleClickTwo=(value)=>{
                     id="ownName"
                     placeholder="Owner Name"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  />
+                    onChange={(e)=>setOwnerName(e.target.value)}
+                      />
+                      {ownernameerror && <div className="text-red-500 text-sm mt-2">{ownernameerror}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -176,7 +270,9 @@ const handleClickTwo=(value)=>{
                     id="ownNo"
                     placeholder="Owner Contact Number"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  />
+                    onChange={(e)=>setOwnerContact(e.target.value)}
+                 />
+                  { ownercontacterror && <div className="text-red-500 text-sm mt-2">{ownercontacterror}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -186,6 +282,7 @@ const handleClickTwo=(value)=>{
                     placeholder="PAN No"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                   />
+                   { panerror && <div className="text-red-500 text-sm mt-2">{panerror}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -244,8 +341,6 @@ const handleClickTwo=(value)=>{
                       name="subscription"
                       value="6months"
                       onClick={()=>handleClickTwo('6')}
-                      checked={subscription === '6months'}
-                      onChange={handleSubscriptionChange}
                     />
                     <label htmlFor="6months">6 Months</label>
                   </div>
@@ -255,9 +350,9 @@ const handleClickTwo=(value)=>{
                       id="12months"
                       name="subscription"
                       value="12months"
-                      checked={subscription === '12months'}
+
                       onClick={()=>handleClickTwo('12')}
-                      onChange={handleSubscriptionChange}
+                    
                     />
                     <label htmlFor="12months">12 Months</label>
                   </div>
@@ -278,7 +373,7 @@ const handleClickTwo=(value)=>{
                   <tr>
                     <td>Taxes</td>
                     <td> </td>
-                    <td>{taxes}</td>
+                    <td>{basePriceOne||basePriceTwo?taxes:null}</td>
                   </tr>
                   <tr>
                     <td>Discount</td>
@@ -288,7 +383,7 @@ const handleClickTwo=(value)=>{
                   <tr>
                     <td>Total Amount</td>
                     <td> </td>
-                    <td>{rbvalue==='6'?basePriceOne+taxes:basePriceTwo+taxes}</td>
+                    <td>{basePriceOne||basePriceTwo?(rbvalue==='6'?basePriceOne+taxes:basePriceTwo+taxes):null}</td>
                   </tr>
                 </tbody>
               </table>
