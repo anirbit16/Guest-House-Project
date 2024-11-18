@@ -1,4 +1,4 @@
-import {React,useState,useEffect} from 'react'
+import {React,useState,useEffect,useRef} from 'react'
 import SubFormImg from '../assets/SubFormimg.png'
 
 
@@ -28,6 +28,11 @@ const [panerror,setPanError]=useState('');
 const [rbvalue,setRBValue]=useState('')
 const [basePriceOne,setBasePriceOne]=useState('')
 const [basePriceTwo,setBasePriceTwo]=useState('')
+const [ownerimage,setOwnerImage]=useState('');
+const [propertyimage,setPropertyImage]=useState('');
+const [propertyimageerror,setPropertyImageError]=useState('');
+const [ownerimageerror,setOwnerImageError]=useState('');
+ 
  
  
 
@@ -61,10 +66,30 @@ useEffect(() => {
 //   }
 // };
 
+const fileInputRef = useRef(null)
+const handleOwnerImgChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setOwnerImage(imageURL);
+  }
+};
+const handlePropertyImgChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setPropertyImage(imageURL);
+  }
+};
+
+const handleH1Click = () => {
+  fileInputRef.current.click();
+};
+
 const handleCheck = ()=>{
    if(!propertyname){
     setPropertyNameError('Property Name Required');
-    return;
+    
    }else{
     setPropertyNameError('');
    }
@@ -72,7 +97,7 @@ const handleCheck = ()=>{
 
    if(!propertyaddress){
     setPropertyAddressError('Property Address Required')
-    return;
+  
    }else{
     setPropertyAddressError('');
    }
@@ -80,39 +105,80 @@ const handleCheck = ()=>{
   
 
    if(!propertycontactno){
-    setPropertyContactNo('Property Contact Number Required')
-    return;
+    setPropertyContactNoError('Property Contact Number Required')
+ 
    }else{
-    setPropertyAddressError('');
+    setPropertyContactNoError('');
    }
 
    if(!ownername){
     setOwnerNameError('Owner Name Required')
-    return;
+ 
    }else{
     setOwnerNameError('');
    }
 
    if(!ownercontact){
     setOwnerContactError('Owner Contact Number Required')
-    return;
+   
    }else{
     setOwnerContactError('');
    }
 
    if(!pan){
     setPanError('PAN Number Required')
-    return;
+ 
    }else{
     setPanError('');
    }
 
    if(!gst){
     setGstError('GST ID Required')
-    return;
+ ;
    }else{
     setGstError('');
    }
+
+   if(!propertyimage){
+    setPropertyImageError("Property Image is required")
+   }else{
+    setPropertyImageError('')
+   }
+
+   if(!ownerimage){
+    setOwnerImageError("Owner mage is required")
+   }else{
+    setOwnerImageError('')
+   }
+
+
+   if(!zip){
+    setZiperror("ZIP Code is required")
+   }else{
+    setZiperror('')
+   }
+
+   if(!gst){
+    setGstError('GST ID is requried')
+   }else{
+    setGstError('')
+   }
+
+
+   if(subplan==='Silver'){
+    setBasePriceOne(260)
+    setBasePriceTwo(460);
+  }else if(subplan==='Gold')
+  {
+    setBasePriceOne(660);
+    setBasePriceTwo(860);
+  }
+  else{
+    setBasePriceOne(860)
+    setBasePriceTwo(1060)
+  }
+
+
 
 
    
@@ -292,18 +358,62 @@ const handleClickTwo=(value)=>{
                     placeholder="GST No"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                   />
+                   { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
                 </div>
                 <div className="mb-4 flex items-center space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
                     </svg>
-                      <h1 className="text-gray-800 font-semibold">Owner's Image</h1>
+                      <h1 className="text-gray-800 font-semibold cursor-pointer"
+                    onClick={handleH1Click} >Owner's Image</h1>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleOwnerImgChange}
+                  />
+
+          {ownerimage && (
+                <div className="mt-4">
+                    <img
+                        src={ownerimage}
+                        alt="Selected"
+                        className="max-w-full h-auto rounded-lg shadow"
+                    />
+                   
+                </div>
+            )}
+             { ownerimageerror && <div className="text-red-500 text-sm mt-2">{ownerimageerror}</div>}
+                      
                 </div>
                 <div className="mb-4 flex items-center space-x-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
                     </svg>
-                  <h1 className="text-gray-800 font-semibold">Property Image</h1>
+                      <h1 className="text-gray-800 font-semibold cursor-pointer"
+                    onClick={handleH1Click}>Property Image</h1>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handlePropertyImgChange}
+                  />
+
+          {propertyimage && (
+                <div className="mt-4">
+                    <img
+                        src={propertyimage}
+                        alt="Selected"
+                        className="max-w-full h-auto rounded-lg shadow"
+                        style={{height:"50px",width:"100px"}}
+                    />
+                  
+                </div>
+            )}
+            
+            { propertyimageerror && <div className="text-red-500 text-sm mt-2">{propertyimageerror}</div>}
                 </div>
               </div>
 

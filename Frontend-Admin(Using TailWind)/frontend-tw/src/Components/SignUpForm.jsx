@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import './LandingPage.css'
 import SubFormimg from '../assets/SubFormimg.png'
 import { useNavigate } from 'react-router-dom';
- 
+import axios from 'axios';
 
 const SignUpForm=()=> {
 
@@ -31,6 +31,7 @@ const SignUpForm=()=> {
   const shortcutfunc=()=>{
     navigate('/property-details')
   }
+ 
   const handleClick = async (e) => {
     e.preventDefault();
   
@@ -94,15 +95,36 @@ const SignUpForm=()=> {
     }
   
     if (isValid) {
-      navigate('/property-details');
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setContactNo('');
-      setPassword('');
-      setConfirmPassword('');
-    }
-  };
+      try {
+        const formdata = new FormData();
+        formdata.append("firstname", firstname);
+        formdata.append("lastname", lastname);
+        formdata.append("email", email);
+        formdata.append("contactno", contactno);
+        formdata.append("password", password);
+    
+        const response = await axios.post('http://192.168.1.8:8080//signups/insertDetails', formdata, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+    
+        if (response.status === 200) {
+          alert("Data submitted successfully!");
+          navigate("/property-details");
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setContactNo("");
+          setPassword("");
+          setConfirmPassword("");
+        }
+      } catch (error) {
+        console.error("Error submitting the form:", error);
+        alert("Failed to submit the form. Please try again.");
+      }
+  }
+}
  
   return (
     <>
@@ -223,7 +245,7 @@ const SignUpForm=()=> {
               Next
             </button>
 
-            <button style={{marginLeft:'40px'}} onClick={shortcutfunc}>SC</button>
+            <button style={{marginLeft:'40px'}} onClick={shortcutfunc}></button>
           </div>
           <div className="text-center mt-4">
             <h6 className="text-gray-600">Already have an account?<span className="LogInButton" style={{color:'blue'}}>Log In</span></h6>
