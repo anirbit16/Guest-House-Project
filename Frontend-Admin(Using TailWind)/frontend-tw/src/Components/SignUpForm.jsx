@@ -4,6 +4,7 @@ import './LandingPage.css'
 import SubFormimg from '../assets/SubFormimg.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {EyeOutlined,EyeInvisibleOutlined} from '@ant-design/icons';
 
 const SignUpForm=()=> {
 
@@ -12,6 +13,7 @@ const SignUpForm=()=> {
   const [email,setEmail]=useState('');
   const [contactno,setContactNo]=useState('');
   const [password,setPassword]=useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [confirmpassword,setConfirmPassword]=useState('');
   const [errorfirstname,setErrorFirstName]=useState('');
   const [errorlastname,setErrorLastName]=useState('');
@@ -103,7 +105,7 @@ const SignUpForm=()=> {
         formdata.append("contactno", contactno);
         formdata.append("password", password);
     
-        const response = await axios.post('http://192.168.1.8:8080//signups/insertDetails', formdata, {
+        const response = await axios.post('http://192.168.1.8:8080/signups/insertDetails', formdata, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -125,6 +127,15 @@ const SignUpForm=()=> {
       }
   }
 }
+
+
+const togglePasswordVisibility = () => {
+  setShowPassword((prevShowPassword) => !prevShowPassword);
+};
+
+const toggleConfirmPasswordVisibility = () => {
+  setConfirmPassword((prevCnfPassword) => !prevCnfPassword);
+};
  
   return (
     <>
@@ -208,33 +219,61 @@ const SignUpForm=()=> {
    
           </div>
           <div className="flex gap-4 mb-4">
-            <div className="w-1/2">
-              <label className="block  text-sm font-bold mb-2" htmlFor="passwd">
-                
-              </label>
-              <input
-                type="password"
-                id="passwd"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-                />
-                 {errorpassword && <div className="text-red-500 text-sm mt-2">{errorpassword}</div>}
-              </div>
+  {/* Password Field */}
+  <div className="w-1/2 relative">
+    <label className="block text-sm font-bold mb-2" htmlFor="passwd">
+      
+    </label>
+    <input
+      type={showPassword ? "text" : "password"}
+      id="passwd"
+      placeholder="Password"
+      className="appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+      onChange={(e) => setPassword(e.target.value)}
+    />
+    <span
+      onClick={togglePasswordVisibility}
+      style={{
+        position: "absolute",
+        right: "10px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        cursor: "pointer",
+      }}
+    >
+      {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+    </span>
+    {errorpassword && <div className="text-red-500 text-sm mt-2">{errorpassword}</div>}
+  </div>
 
-            <div className="w-1/2">
-              <label className="block  text-sm font-bold mb-2" htmlFor="conf_passwd">
-                
-              </label>
-              <input
-                type="password"
-                id="conf_passwd"
-                placeholder="Confirm Password"
-                className=" appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                {errorcnfpwd && <div className="text-red-500 text-sm mt-2">{errorcnfpwd}</div>}
-              </div>
-          </div>
+      {/* Confirm Password Field */}
+      <div className="w-1/2 relative">
+        <label className="block text-sm font-bold mb-2" htmlFor="conf_passwd">
+          
+        </label>
+        <input
+          type={confirmpassword ? "text" : "password"}
+          id="conf_passwd"
+          placeholder="Confirm Password"
+          className="appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        <span
+          onClick={toggleConfirmPasswordVisibility}
+          style={{
+            position: "absolute",
+            right: "10px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            cursor: "pointer",
+          }}
+        >
+          {confirmpassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+        </span>
+        {errorcnfpwd && <div className="text-red-500 text-sm mt-2">{errorcnfpwd}</div>}
+      </div>
+    </div>
+
           
           <div className="flex items-center justify-between">
             <button
@@ -245,7 +284,7 @@ const SignUpForm=()=> {
               Next
             </button>
 
-            <button style={{marginLeft:'40px'}} onClick={shortcutfunc}></button>
+            <button style={{marginLeft:'40px'}} onClick={shortcutfunc}>SC</button>
           </div>
           <div className="text-center mt-4">
             <h6 className="text-gray-600">Already have an account?<span className="LogInButton" style={{color:'blue'}}>Log In</span></h6>

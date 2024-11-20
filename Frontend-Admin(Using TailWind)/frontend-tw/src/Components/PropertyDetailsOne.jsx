@@ -1,8 +1,11 @@
 import {React,useState,useEffect,useRef} from 'react'
+import {useNavigate} from 'react-router-dom'
 import SubFormImg from '../assets/SubFormimg.png'
 
 
-const PropertyDetails = () => {
+const PropertyDetailsOne = () => {
+
+  /*States*/
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
 
@@ -12,9 +15,9 @@ const [propertycontactno,setPropertyContactNo]=useState('')
 const [propertycontactnoerror,setPropertyContactNoError]=useState('')
 const [zip,setZip]=useState('');
 const [ziperror,setZiperror]=useState('');
-const [rooms,setRooms]=useState('');
+ 
 const [roomserror,setRoomsError]=useState('');
-const [subplan,setSubPlan]=useState('');
+ 
 const [taxes,setTaxes]=useState('');
  
 const [ownername,setOwnerName]=useState('');
@@ -25,32 +28,34 @@ const [gst,setGst]=useState('');
 const [gsterror,setGstError]=useState('');
 const [pan,setPan]=useState('');
 const [panerror,setPanError]=useState('');
-const [rbvalue,setRBValue]=useState('')
-const [basePriceOne,setBasePriceOne]=useState('')
-const [basePriceTwo,setBasePriceTwo]=useState('')
+ 
+ 
 const [ownerimage,setOwnerImage]=useState('');
 const [propertyimage,setPropertyImage]=useState('');
 const [propertyimageerror,setPropertyImageError]=useState('');
 const [ownerimageerror,setOwnerImageError]=useState('');
  
- 
+
+const [rooms, setRooms] = useState("");
+const [subplan, setSubPlan] = useState("");
+const [duration, setDuration] = useState("6 Months");
+const [summary, setSummary] = useState({ basePrice: 0, taxes: 0, discount: 0, total: 0 });
+
+/*Regex Checkers*/
+const contactNumberRegex = /^\d{10}$/; //Only numbers,no special characters,less than 10
+const propertynameregex = /^[a-zA-Z0-9]+$/;//Only letters and numbers,no special characters
+const propertyaddressregex = /^[a-zA-Z0-9]+$/;//Only letters and numbers,no special characters
+const nameRegex = /^[A-Za-z\s]+$/;//Only letters,no numbers and special characters
+const panRegex = /^[a-zA-Z0-9]{1,10}$/;
+const gstRegex = /^[a-zA-Z0-9]{1,10}$/;
+const zipRegex = /^\d{6}$/; //Only numbers,no special characters,less than 6
+
+
  
 
-useEffect(() => {
- 
-  if (rooms >= 5 && rooms <= 10) {
-   setSubPlan('Silver');
-    
-    
-  } else if (rooms >= 11 && rooms <= 20) {
-    setSubPlan('Gold');
-  } else if (rooms > 20) {
-    setSubPlan('Platinum');
-  }  
-}, [rooms]);
- 
+ /*Image upload handling functions*/
 
- 
+ /*File input definations */
 const ownerFileInputRef = useRef(null);
 const propertyFileInputRef = useRef(null);
 
@@ -61,7 +66,7 @@ const handleOwnerImgChange = (e) => {
     setOwnerImage(imageURL);
   }
 };
-
+/*Property Image Change function */
 const handlePropertyImgChange = (e) => {
   const file = e.target.files[0];
   if (file) {
@@ -69,68 +74,74 @@ const handlePropertyImgChange = (e) => {
     setPropertyImage(imageURL);
   }
 };
-
+/*Owner Image Click */
 const handleOwnerH1Click = () => {
   ownerFileInputRef.current.click();
 };
-
+/*Property Image Click */
 const handlePropertyH1Click = () => {
   propertyFileInputRef.current.click();
 };
 
-
+/*Checker function*/
 const handleCheck = ()=>{
+  /*Property Name Error Check*/
    if(!propertyname){
     setPropertyNameError('Property Name Required');
     
+   }else if(!propertynameregex.test(propertyname)){
+    setPropertyNameError('Property name can contain only letters and numbers.');
    }else{
     setPropertyNameError('');
    }
 
-
+   /*Property Address Error Check*/
    if(!propertyaddress){
     setPropertyAddressError('Property Address Required')
   
+   }else if(!propertyaddressregex.test(propertyaddress)){
+    setPropertyAddressError('Property address can contain only letters and numbers.');
    }else{
     setPropertyAddressError('');
    }
 
   
-
+   /*Property Contact Number Check*/
    if(!propertycontactno){
     setPropertyContactNoError('Property Contact Number Required')
  
-   }else{
-    setPropertyContactNoError('');
+   }else if(!contactNumberRegex.test(propertycontactno)){
+    setPropertyContactNoError('Contact Number cannot contain letters or special characters,or more than 10 digits');
    }
 
    if(!ownername){
     setOwnerNameError('Owner Name Required')
  
+   }else if(!nameRegex.test(ownername)){
+    setOwnerNameError('Name cannot contain number or special characters.');
    }else{
     setOwnerNameError('');
    }
-
+   /*Owner contact number Check*/
    if(!ownercontact){
     setOwnerContactError('Owner Contact Number Required')
    
+   }else if(!contactNumberRegex.check(ownercontact)){
+    setOwnerContactError('Contact Number cannot contain letters or special characters');
    }else{
-    setOwnerContactError('');
+    setOwnerContactError('')
    }
+   /*PAN Check*/
 
    if(!pan){
     setPanError('PAN Number Required')
  
+   }else if(!panRegex.test(pan)){
+    setPanError('Pan card cannot special characters,gaps,or more than 10 characters');
    }else{
     setPanError('');
    }
-
-   if(!gst){
-    setGstError('GST ID Required')
- ;
-   }else{
-    setGstError('');
-   }
+ 
 
    if(!propertyimage){
     setPropertyImageError("Property Image is required")
@@ -144,66 +155,111 @@ const handleCheck = ()=>{
     setOwnerImageError('')
    }
 
-
+   /*ZIP Check */
    if(!zip){
     setZiperror("ZIP Code is required")
+   }else if(!zipRegex.test(zip)){
+    setZiperror('Zip can contain only numbers,not more than 10')
    }else{
     setZiperror('')
    }
+   /*GST Check*/
 
    if(!gst){
     setGstError('GST ID is requried')
+   }else if(!gstRegex.test(gst)){
+    setGstError('GST ID cannot special characters,gaps,or more than 10 characters')
    }else{
     setGstError('')
    }
 
 
-   if(subplan==='Silver'){
-    setBasePriceOne(260)
-    setBasePriceTwo(460);
-  }else if(subplan==='Gold')
-  {
-    setBasePriceOne(760);
-    setBasePriceTwo(1160);
-  }
-  else{
-    setBasePriceOne(1460)
-    setBasePriceTwo(2060)
-  }
+    
 
 
 
 
    
 }
-
-const handleClick = ()=>{
+const navigate = useNavigate();
+/*Handle Click Function*/
+const handleClick = (event)=>{
   event.preventDefault()
-  handleCheck();
-  if(subplan==='Silver'){
-    setBasePriceOne(260)
-    setBasePriceTwo(460);
-  }else if(subplan==='Gold')
-  {
-    setBasePriceOne(660);
-    setBasePriceTwo(860);
+  switch(event){
+    case Skip:
+         navigate('/about-us');
+         break;
+    case Next:
+         handleCheck();
+         
   }
-  else{
-    setBasePriceOne(860)
-    setBasePriceTwo(1060)
-  }
+  
 
 
 }
-const handleClickTwo=(value)=>{
-  if(value==='6'){
-    setRBValue('6')
 
-  }else if(value==='12'){
-    setRBValue('12')
+
+/*Plans Array*/
+const plans = {
+  Silver: {
+    "6 Months": { basePrice: 260, taxes: 40, discount:null },
+    "12 Months": { basePrice: 460, taxes: 10, discount: 12 },
+  },
+  Gold: {
+    "6 Months": { basePrice: 760, taxes: 40, discount: null },
+    "12 Months": { basePrice: 1160, taxes: 10, discount: 12 },
+  },
+  Platinum: {
+    "6 Months": { basePrice: 1460, taxes: 40, discount: null },
+    "12 Months": { basePrice: 2060, taxes: 10, discount: 12 },
+  },
+};
+
+
+
+/*Plan and room handling function*/
+/*Update plan and summary*/
+const updatePlanAndSummary = (rooms) => {
+  let selectedPlan = "";
+  if (rooms >= 5 && rooms < 10) selectedPlan = "Silver";
+  else if (rooms >= 10 && rooms < 20) selectedPlan = "Gold";
+  else if (rooms >= 20) selectedPlan = "Platinum";
+
+  const planDetails = plans[selectedPlan]?.[duration] || { basePrice: 0, taxes: 0, discount: 0 };
+  setSubPlan(selectedPlan);
+  setSummary({
+    ...planDetails,
+    total: planDetails.basePrice + planDetails.taxes - planDetails.discount,
+  });
+};
+/*Handle Room Change*/
+const handleRoomChange = (e) => {
+  const value = parseInt(e.target.value, 10) || 0;
+  setRooms(value);
+  if (value >= 5) {
+    updatePlanAndSummary(value);
+  } else {
+    setSubPlan("");
+    setSummary({ basePrice: 0, taxes: 0, discount: 0, total: 0 });
   }
+};
 
-}
+/*Handle Duration Change*/
+const handleDurationChange = (e) => {
+  const selectedDuration = e.target.value;
+  setDuration(selectedDuration);
+  if (subplan) {
+    const planDetails = plans[subplan]?.[selectedDuration] || { basePrice: 0, taxes: 0, discount: 0 };
+    setSummary({
+      ...planDetails,
+      total: planDetails.basePrice + planDetails.taxes - planDetails.discount,
+    });
+  }
+};
+
+
+
+ 
 
 
     
@@ -283,18 +339,16 @@ const handleClickTwo=(value)=>{
                 </div>
 
                 <div className="mb-4">
-        <input
-          type="number"
-          id="rooms"
-          placeholder="No. of Rooms"
-          value={rooms}
-          onChange={(e) => setRooms(Number(e.target.value))}
-          className={`w-full border rounded py-2 px-3 leading-tight focus:ring-2 
-            ${rooms < 5 ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-gray-900 focus:ring-gray-500'}`}
-        />
-        {rooms < 5 && (
-          <p className="text-red-500 text-sm mt-1">Please enter a value of 5 or more</p>
-        )}
+                <input
+                  type="number"
+                  value={rooms}
+                   className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                  onChange={handleRoomChange}
+                  placeholder="Enter number of rooms"
+                />
+                {rooms < 5 && rooms !== "" && (
+                  <p style={{ color: "red" }}>Enter a value of 5 or more</p>
+                )}
           {roomserror && <div className="text-red-500 text-sm mt-2">{roomserror}</div>}           
 
       </div>
@@ -307,11 +361,34 @@ const handleClickTwo=(value)=>{
           value={subplan}
           readOnly
           className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-          onChange={(e) => setSubPlan(e.target.value)}   
+          
         />
          
        
       </div>
+
+
+      
+      <div className="mb-4">
+                  <input
+   
+                    type="time"
+                    id="hours"
+                    placeholder="Hours"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                  />
+                
+                </div>
+                
+              <div className="mb-4">
+                  <input
+                    type="time"
+                    id="hours"
+                    placeholder="Hours"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                  />
+                
+                </div>
                 <div className="mb-4">
                   <input
                     type="text"
@@ -412,34 +489,26 @@ const handleClickTwo=(value)=>{
                 </div>
               </div>
 
+ 
 
-              <div className="mb-4">
-                  <input
-                    type="time"
-                    id="hours"
-                    placeholder="Hours"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  />
                 
-                </div>
 
-                <div className="mb-4">
-                  <input
-                    type="number"
-                    id="minutes"
-                    placeholder="minutes"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  />
-                   { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
-                </div>
-
-              <div className="mt-6 mx-20">
+              <div className="mt-6 mx-20" style={{display:'flex',gap:'10px'}}>
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
-                  onClick={()=>handleClick()}
+                  onClick={()=>handleClick('Next')}
                 >
                   Next
+                </button>
+
+                <button
+                  type="submit"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
+                  onClick={()=>handleClick('Skip')}
+                >
+                  Skip
+                  
                 </button>
               </div>
             </form>
@@ -464,22 +533,20 @@ const handleClickTwo=(value)=>{
                     <input
                       type="radio"
                       id="6months"
-                      checked
+                      
                       name="subscription"
-                      value="6months"
-                      onClick={()=>handleClickTwo('6')}
+                      value="6 Months"
+                      checked={duration === "6 Months"}
+                      onChange={handleDurationChange}
                     />
                     <label htmlFor="6months">6 Months</label>
                   </div>
                   <div className="flex items-center gap-1">
-                    <input
+                  <input
                       type="radio"
-                      id="12months"
-                      name="subscription"
-                      value="12months"
-
-                      onClick={()=>handleClickTwo('12')}
-                    
+                      value="12 Months"
+                      checked={duration === "12 Months"}
+                      onChange={handleDurationChange}
                     />
                     <label htmlFor="12months">12 Months</label>
                   </div>
@@ -495,22 +562,24 @@ const handleClickTwo=(value)=>{
                   <tr>
                     <td>Base price</td>
                     <td> </td>
-                    <td>{rbvalue==='6'?basePriceOne:basePriceTwo}</td>
+                    <td>{summary.basePrice > 0 ? summary.basePrice : null}</td>
+                  
                   </tr>
                   <tr>
                     <td>Taxes</td>
                     <td> </td>
-                    <td>{basePriceOne||basePriceTwo?taxes:null}</td>
+                    <td>{summary.taxes > 0 ? summary.taxes : null}</td>
                   </tr>
                   <tr>
                     <td>Discount</td>
                     <td> </td>
-                    <td></td>
+                   
+                    <td>{summary.discount > 0 ? summary.discount : null}</td>
                   </tr>
                   <tr>
                     <td>Total Amount</td>
                     <td> </td>
-                    <td>{basePriceOne||basePriceTwo?(rbvalue==='6'?basePriceOne+taxes:basePriceTwo+taxes):null}</td>
+                    <td>{summary.total > 0 ? summary.total : null}</td>
                   </tr>
                 </tbody>
               </table>
@@ -529,4 +598,4 @@ const handleClickTwo=(value)=>{
   )
 }
 
-export default PropertyDetails
+export default PropertyDetailsOne;

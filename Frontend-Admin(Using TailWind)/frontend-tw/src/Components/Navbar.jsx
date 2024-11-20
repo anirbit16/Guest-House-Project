@@ -5,18 +5,37 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
 import SignUpForm from './SignUpForm';
 
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false)
   const [role,setRole] = useState(false)
+  const [contactnumber,setContactNumber]=useState('');
+  const [contactnumbererror,setContactNumberError]=useState('');
+  const [password,setPassword] = useState('');
+  const [passworderror,setPasswordError] = useState('');
  
-
-
-  const handleLoginClick=(selectedrole)=>{
+  
+  
+  
+  const handleLoginClick=async(selectedrole)=>{
     setOpen(true)
     setRole(selectedrole)
-
+   
+     
+  }
+  const handleSubmit= async(e) => {
+        e.preventDefault();
+        const formdata = new FormData();
+        console.log(contactnumber)
+        console.log(password)
+        console.log(role)
+        formdata.append("contactnumber",contactnumber)
+        formdata.append("password",password)
+        formdata.append("role",role)
+        console.log("ABCD")
+         
+       D
+        
   }
  const navigate = useNavigate();
   const handleSignUpClick=()=>{
@@ -156,7 +175,7 @@ const Navbar = () => {
     >
       <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Log In as {role} </h3>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="contact-number" className="block text-sm font-medium text-gray-700">
               Contact Number
@@ -166,20 +185,24 @@ const Navbar = () => {
               id="contact-number"
               name="contact-number"
               placeholder="Enter your contact number"
+              value={contactnumber}
+              onChange={(e) => setContactNumber(e.target.value)}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               required
             />
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email
+              Password
             </label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
@@ -194,6 +217,7 @@ const Navbar = () => {
             <button
               type="submit"
               className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+              onClick={handleSubmit}
             >
               Submit
             </button>
