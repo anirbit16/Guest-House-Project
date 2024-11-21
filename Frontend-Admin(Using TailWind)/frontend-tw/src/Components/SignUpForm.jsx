@@ -236,7 +236,7 @@ const toggleConfirmPasswordVisibility = () => {
       style={{
         position: "absolute",
         right: "10px",
-        top: "50%",
+        top: "60%",
         transform: "translateY(-50%)",
         cursor: "pointer",
       }}
@@ -263,7 +263,7 @@ const toggleConfirmPasswordVisibility = () => {
           style={{
             position: "absolute",
             right: "10px",
-            top: "50%",
+            top: "60%",
             transform: "translateY(-50%)",
             cursor: "pointer",
           }}
@@ -284,7 +284,7 @@ const toggleConfirmPasswordVisibility = () => {
               Next
             </button>
 
-            <button style={{marginLeft:'40px'}} onClick={shortcutfunc}>SC</button>
+            <button style={{marginLeft:'40px',color:'#fff'}} onClick={shortcutfunc}>SC</button>
           </div>
           <div className="text-center mt-4">
             <h6 className="text-gray-600">Already have an account?<span className="LogInButton" style={{color:'blue'}}>Log In</span></h6>

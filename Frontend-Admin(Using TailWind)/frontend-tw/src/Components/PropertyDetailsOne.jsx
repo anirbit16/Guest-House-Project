@@ -1,5 +1,6 @@
+
 import {React,useState,useEffect,useRef} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import SubFormImg from '../assets/SubFormimg.png'
 
 
@@ -34,7 +35,9 @@ const [ownerimage,setOwnerImage]=useState('');
 const [propertyimage,setPropertyImage]=useState('');
 const [propertyimageerror,setPropertyImageError]=useState('');
 const [ownerimageerror,setOwnerImageError]=useState('');
- 
+
+const [checkintimeerror,setCheckInTimeError]=useState('');
+const [checkouttimeerror,setCheckOutTimeError]=useState('');
 
 const [rooms, setRooms] = useState("");
 const [subplan, setSubPlan] = useState("");
@@ -46,7 +49,7 @@ const contactNumberRegex = /^\d{10}$/; //Only numbers,no special characters,less
 const propertynameregex = /^[a-zA-Z0-9]+$/;//Only letters and numbers,no special characters
 const propertyaddressregex = /^[a-zA-Z0-9]+$/;//Only letters and numbers,no special characters
 const nameRegex = /^[A-Za-z\s]+$/;//Only letters,no numbers and special characters
-const panRegex = /^[a-zA-Z0-9]{1,10}$/;
+const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 const gstRegex = /^[a-zA-Z0-9]{1,10}$/;
 const zipRegex = /^\d{6}$/; //Only numbers,no special characters,less than 6
 
@@ -126,7 +129,7 @@ const handleCheck = ()=>{
    if(!ownercontact){
     setOwnerContactError('Owner Contact Number Required')
    
-   }else if(!contactNumberRegex.check(ownercontact)){
+   }else if(!contactNumberRegex.test(ownercontact)){
     setOwnerContactError('Contact Number cannot contain letters or special characters');
    }else{
     setOwnerContactError('')
@@ -173,6 +176,14 @@ const handleCheck = ()=>{
     setGstError('')
    }
 
+/*Rooms Check*/
+
+if(!rooms){
+ setRoomsError('Rooms cannot be empty')
+ } else{
+  setRoomsError('')
+ }
+
 
     
 
@@ -181,24 +192,15 @@ const handleCheck = ()=>{
 
    
 }
-const navigate = useNavigate();
+ 
 /*Handle Click Function*/
-const handleClick = (event)=>{
-  event.preventDefault()
-  switch(event){
-    case Skip:
-         navigate('/about-us');
-         break;
-    case Next:
-         handleCheck();
-         
-  }
-  
-
+const handleClick =  async (e)=>{
+  e.preventDefault();  
+  handleCheck();
 
 }
 
-
+ 
 /*Plans Array*/
 const plans = {
   Silver: {
@@ -265,6 +267,7 @@ const handleDurationChange = (e) => {
     
   return (
     <>
+    <div className="PropertyDetails" style={{fontSize:'0.7em',fontFamily:'Poppins'}} >
     <div className="container mx-4 my-6 mt-10">
       <h1 className="font-bold text-center text-purple-500 text-4xl mb-6">Register Your Property</h1>
     </div>
@@ -369,26 +372,7 @@ const handleDurationChange = (e) => {
 
 
       
-      <div className="mb-4">
-                  <input
-   
-                    type="time"
-                    id="hours"
-                    placeholder="Hours"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  />
-                
-                </div>
-                
-              <div className="mb-4">
-                  <input
-                    type="time"
-                    id="hours"
-                    placeholder="Hours"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  />
-                
-                </div>
+      
                 <div className="mb-4">
                   <input
                     type="text"
@@ -431,7 +415,7 @@ const handleDurationChange = (e) => {
                    { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
                 </div>
                 {/* Owner's Image */}
-                <div className="mb-4 flex items-center space-x-2">
+                <div className="mb-4 flex items-center space-x-2" style={{display:'block'}}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
                     </svg>
@@ -451,6 +435,7 @@ const handleDurationChange = (e) => {
                         src={ownerimage}
                         alt="Selected"
                         className="max-w-full h-auto rounded-lg shadow"
+                         style={{height:"100px",width:"100px"}}
                     />
                    
                 </div>
@@ -459,7 +444,7 @@ const handleDurationChange = (e) => {
                       
                 </div>
                 {/* Property Image */}
-                <div className="mb-4 flex items-center space-x-2">
+                <div className="mb-4 flex items-center space-x-2" style={{display:'block'}}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
                     </svg>
@@ -479,7 +464,7 @@ const handleDurationChange = (e) => {
                         src={propertyimage}
                         alt="Selected"
                         className="max-w-full h-auto rounded-lg shadow"
-                        style={{height:"50px",width:"100px"}}
+                        style={{height:"100px",width:"100px"}}
                     />
                   
                 </div>
@@ -487,7 +472,30 @@ const handleDurationChange = (e) => {
             
             { propertyimageerror && <div className="text-red-500 text-sm mt-2">{propertyimageerror}</div>}
                 </div>
+
+                <div className="mb-4">
+                  <label style={{fontSize:'1.5em'}}>Check In Time</label>
+                  <input
+                    type="time"
+                    id="checkin"
+                    placeholder="Check-In Time"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                  />
+                   
+                </div>
+
+                <div className="mb-4">
+                <label style={{fontSize:'1.5em'}}>Check Out Time</label>
+                  <input
+                    type="time"
+                    id="checkout"
+                    placeholder="Check Out time"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                  />
+                   
+                </div>
               </div>
+              
 
  
 
@@ -497,7 +505,7 @@ const handleDurationChange = (e) => {
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
-                  onClick={()=>handleClick('Next')}
+                  onClick={handleClick}
                 >
                   Next
                 </button>
@@ -505,9 +513,10 @@ const handleDurationChange = (e) => {
                 <button
                   type="submit"
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
-                  onClick={()=>handleClick('Skip')}
+                   
                 >
-                  Skip
+                  <Link to ='/about-us'>Skip</Link>
+                
                   
                 </button>
               </div>
@@ -520,9 +529,9 @@ const handleDurationChange = (e) => {
 
         {/* Right Side - Subscription Summary */}
         <div className="w-1/2">
-          <div className="bg-white rounded-lg shadow-sm p-6 mt-20" style={{marginTop:'0px'}}>
+          <div className="bg-white rounded-lg shadow-sm p-6 mt-20" style={{marginTop:'0px',width:'18rem'}}>
             <h2 className="text-purple-500 text-2xl mb-6" style={{color:'rgb(139 92 246 / var(--tw-text-opacity))',
-                                                                fontWeight:'700',fontSize:'1.25em'}}>Subscription Summary</h2>
+                                                                fontWeight:'700',fontSize:'1.75em'}}>Subscription Summary</h2>
             
             
             
@@ -559,16 +568,16 @@ const handleDurationChange = (e) => {
             <div className="flex gap-6 mb-6" style={{display:'block'}}>
               <table>
               <tbody>
-                  <tr>
+                  <tr style={{gap:'3em'}}>
                     <td>Base price</td>
                     <td> </td>
-                    <td>{summary.basePrice > 0 ? summary.basePrice : null}</td>
+                    <td style={{justifyContent:'right',alignItems:'right'}}>{summary.basePrice > 0 ? summary.basePrice : null}</td>
                   
                   </tr>
                   <tr>
                     <td>Taxes</td>
                     <td> </td>
-                    <td>{summary.taxes > 0 ? summary.taxes : null}</td>
+                    <td style={{display:'flex',justifyContent:'right'}}>{summary.taxes > 0 ? summary.taxes : null}</td>
                   </tr>
                   <tr>
                     <td>Discount</td>
@@ -592,6 +601,7 @@ const handleDurationChange = (e) => {
           </div>
         </div>
       </div>
+    </div>
     </div>
 
     </>
