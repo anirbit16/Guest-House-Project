@@ -4,6 +4,8 @@ import {Menu, MenuButton, MenuItem, MenuItems, Dialog, DialogBackdrop, DialogPan
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
 import SignUpForm from './SignUpForm';
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,18 +25,60 @@ const Navbar = () => {
    
      
   }
+
+
+  const handleSubmitLogin = async (e) => {  // Add 'async' keyword here
+    e.preventDefault();
+  
+    const loginformdata = new FormData();
+    loginformdata.append("mobile", contactnumber);
+    loginformdata.append("password", password);
+    loginformdata.append("role", role);
+   
+  
+    if (!contactnumber) {
+      alert("Please enter your contact number");
+      return;
+    } else if (!password) {
+      alert("Please enter your password");
+      return; // Add return statement here to exit function
+    } else {
+      try {
+        const response = await axios.post('http://192.168.1.6:3000/api/user/login', loginformdata, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const decoded = jwtDecode(response.data.token)
+      
+        console.log("ffff",decoded)
+        localStorage.setItem('role',decoded.role)
+        localStorage.setItem('user',decoded.name)
+
+        
+        
+        
+        if(decoded.role=='user'){
+         window.location.href = 'http://192.168.1.6:5173/userhome' 
+        } else if(decoded.role==='admin'){
+        window.location.href ='http://192.168.1.6:5173/admindashboard' 
+        console.log("first",localStorage.getItem('user'))
+        }else{
+          alert("This is for the super-admin page.")
+        }
+        
+        alert(`Successfully logged in as ',${role}`);
+
+      } catch (error) {
+        // Handle error response
+        console.error('Login error:', error);
+        alert('Login failed. Please try again.');
+      }
+    }
+  };
   const handleSubmit= async(e) => {
-        e.preventDefault();
-        const formdata = new FormData();
-        console.log(contactnumber)
-        console.log(password)
-        console.log(role)
-        formdata.append("contactnumber",contactnumber)
-        formdata.append("password",password)
-        formdata.append("role",role)
-        console.log("ABCD")
-         
-       D
+        
+ 
         
   }
  const navigate = useNavigate();
@@ -91,7 +135,7 @@ const Navbar = () => {
             <a
               href="#"
               className="login-dropdown block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-              onClick={()=>handleLoginClick('User')} 
+              onClick={()=>handleLoginClick('user')} 
             >
               User
             </a>
@@ -100,7 +144,7 @@ const Navbar = () => {
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-              onClick={()=>handleLoginClick('Admin')}    style={{color:'black'}}        
+              onClick={()=>handleLoginClick('admin')}    style={{color:'black'}}        
             >
               Admin
             </a>
@@ -217,7 +261,7 @@ const Navbar = () => {
             <button
               type="submit"
               className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
-              onClick={handleSubmit}
+              onClick={handleSubmitLogin}
             >
               Submit
             </button>

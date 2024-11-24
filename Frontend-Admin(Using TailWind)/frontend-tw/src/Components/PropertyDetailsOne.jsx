@@ -2,6 +2,7 @@
 import {React,useState,useEffect,useRef} from 'react'
 import {Link} from 'react-router-dom'
 import SubFormImg from '../assets/SubFormimg.png'
+import axios from 'axios'
 
 
 const PropertyDetailsOne = () => {
@@ -36,6 +37,9 @@ const [propertyimage,setPropertyImage]=useState('');
 const [propertyimageerror,setPropertyImageError]=useState('');
 const [ownerimageerror,setOwnerImageError]=useState('');
 
+const [checkintime,setCheckInTime]=useState('');
+const [checkouttime,setCheckOutTime]=useState('');
+
 const [checkintimeerror,setCheckInTimeError]=useState('');
 const [checkouttimeerror,setCheckOutTimeError]=useState('');
 
@@ -46,11 +50,12 @@ const [summary, setSummary] = useState({ basePrice: 0, taxes: 0, discount: 0, to
 
 /*Regex Checkers*/
 const contactNumberRegex = /^\d{10}$/; //Only numbers,no special characters,less than 10
-const propertynameregex = /^[a-zA-Z0-9]+$/;//Only letters and numbers,no special characters
-const propertyaddressregex = /^[a-zA-Z0-9]+$/;//Only letters and numbers,no special characters
+const propertynameregex = /^[a-zA-Z0-9, ]+$/;//Only letters and numbers,no special characters
+const propertyaddressregex =/^[a-zA-Z0-9,. ]+$/;
+/; ////Only letters,numbers and commas,no special characters
 const nameRegex = /^[A-Za-z\s]+$/;//Only letters,no numbers and special characters
-const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
-const gstRegex = /^[a-zA-Z0-9]{1,10}$/;
+const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+const gstRegex = /^[a-zA-Z0-9]{10}$/;
 const zipRegex = /^\d{6}$/; //Only numbers,no special characters,less than 6
 
 
@@ -89,100 +94,9 @@ const handlePropertyH1Click = () => {
 /*Checker function*/
 const handleCheck = ()=>{
   /*Property Name Error Check*/
-   if(!propertyname){
-    setPropertyNameError('Property Name Required');
-    
-   }else if(!propertynameregex.test(propertyname)){
-    setPropertyNameError('Property name can contain only letters and numbers.');
-   }else{
-    setPropertyNameError('');
-   }
-
-   /*Property Address Error Check*/
-   if(!propertyaddress){
-    setPropertyAddressError('Property Address Required')
-  
-   }else if(!propertyaddressregex.test(propertyaddress)){
-    setPropertyAddressError('Property address can contain only letters and numbers.');
-   }else{
-    setPropertyAddressError('');
-   }
-
-  
-   /*Property Contact Number Check*/
-   if(!propertycontactno){
-    setPropertyContactNoError('Property Contact Number Required')
- 
-   }else if(!contactNumberRegex.test(propertycontactno)){
-    setPropertyContactNoError('Contact Number cannot contain letters or special characters,or more than 10 digits');
-   }
-
-   if(!ownername){
-    setOwnerNameError('Owner Name Required')
- 
-   }else if(!nameRegex.test(ownername)){
-    setOwnerNameError('Name cannot contain number or special characters.');
-   }else{
-    setOwnerNameError('');
-   }
-   /*Owner contact number Check*/
-   if(!ownercontact){
-    setOwnerContactError('Owner Contact Number Required')
    
-   }else if(!contactNumberRegex.test(ownercontact)){
-    setOwnerContactError('Contact Number cannot contain letters or special characters');
-   }else{
-    setOwnerContactError('')
-   }
-   /*PAN Check*/
 
-   if(!pan){
-    setPanError('PAN Number Required')
- 
-   }else if(!panRegex.test(pan)){
-    setPanError('Pan card cannot special characters,gaps,or more than 10 characters');
-   }else{
-    setPanError('');
-   }
- 
 
-   if(!propertyimage){
-    setPropertyImageError("Property Image is required")
-   }else{
-    setPropertyImageError('')
-   }
-
-   if(!ownerimage){
-    setOwnerImageError("Owner mage is required")
-   }else{
-    setOwnerImageError('')
-   }
-
-   /*ZIP Check */
-   if(!zip){
-    setZiperror("ZIP Code is required")
-   }else if(!zipRegex.test(zip)){
-    setZiperror('Zip can contain only numbers,not more than 10')
-   }else{
-    setZiperror('')
-   }
-   /*GST Check*/
-
-   if(!gst){
-    setGstError('GST ID is requried')
-   }else if(!gstRegex.test(gst)){
-    setGstError('GST ID cannot special characters,gaps,or more than 10 characters')
-   }else{
-    setGstError('')
-   }
-
-/*Rooms Check*/
-
-if(!rooms){
- setRoomsError('Rooms cannot be empty')
- } else{
-  setRoomsError('')
- }
 
 
     
@@ -194,11 +108,198 @@ if(!rooms){
 }
  
 /*Handle Click Function*/
-const handleClick =  async (e)=>{
-  e.preventDefault();  
-  handleCheck();
+const handleClick = async (e) => {
+  e.preventDefault();
 
-}
+  let isValid = true; // Flag to track overall form validity
+
+  // Property Name Error Check
+  if (!propertyname) {
+    setPropertyNameError('Property Name Required');
+    isValid = false;
+  } else if (!propertynameregex.test(propertyname)) {
+    setPropertyNameError('Only letters and numbers allowed');
+    isValid = false;
+  } else {
+    setPropertyNameError('');
+  }
+
+  // Property Address Error Check
+  if (!propertyaddress) {
+    setPropertyAddressError('Property Address Required');
+    isValid = false;
+  } else if (!propertyaddressregex.test(propertyaddress)) {
+    setPropertyAddressError('Special characters not allowed');
+    isValid = false;
+  } else {
+    setPropertyAddressError('');
+  }
+
+  // Property Contact Number Check
+  if (!propertycontactno) {
+    setPropertyContactNoError('Property Contact Number Required');
+    isValid = false;
+  } else if (!contactNumberRegex.test(propertycontactno)) {
+    setPropertyContactNoError('Only 10 digit numbers allowed.');
+    isValid = false;
+  } else {
+    setPropertyContactNoError('');
+  }
+
+  // Owner Name Error Check
+  if (!ownername) {
+    setOwnerNameError('Owner Name Required');
+    isValid = false;
+  } else if (!nameRegex.test(ownername)) {
+    setOwnerNameError('Number and special characters not allowed');
+    isValid = false;
+  } else {
+    setOwnerNameError('');
+  }
+
+  // Owner Contact Number Check
+  if (!ownercontact) {
+    setOwnerContactError('Owner Contact Number Required');
+    isValid = false;
+  } else if (!contactNumberRegex.test(ownercontact)) {
+    setOwnerContactError('Contact Number cannot contain letters or special characters');
+    isValid = false;
+  } else {
+    setOwnerContactError('');
+  }
+
+  // PAN Error Check
+  if (!pan) {
+    setPanError('PAN Number Required');
+    isValid = false;
+  } else if (!panRegex.test(pan)) {
+    setPanError('PAN card cannot have special characters, gaps, or more than 10 characters');
+    isValid = false;
+  } else {
+    setPanError('');
+  }
+
+  // Property Image Error Check
+  if (!propertyimage) {
+    setPropertyImageError("Property Image is required");
+    isValid = false;
+  } else {
+    setPropertyImageError('');
+  }
+
+  // Owner Image Error Check
+  if (!ownerimage) {
+    setOwnerImageError("Owner Image is required");
+    isValid = false;
+  } else {
+    setOwnerImageError('');
+  }
+
+  // ZIP Error Check
+  if (!zip) {
+    setZiperror("ZIP Code is required");
+    isValid = false;
+  } else if (!zipRegex.test(zip)) {
+    setZiperror('Zip can contain only numbers, not more than 10');
+    isValid = false;
+  } else {
+    setZiperror('');
+  }
+
+  // GST Error Check
+  if (!gst) {
+    setGstError('GST ID is required');
+    isValid = false;
+  } else if (!gstRegex.test(gst)) {
+    setGstError('GST ID cannot have special characters, gaps, or more than 10 characters');
+    isValid = false;
+  } else {
+    setGstError('');
+  }
+
+  // Rooms Error Check
+  if (!rooms) {
+    setRoomsError('Rooms cannot be empty');
+    isValid = false;
+  } else {
+    setRoomsError('');
+  }
+
+  // Check-In Time Error Check
+  if (!checkintime) {
+    setCheckInTimeError('Check-In Time required!');
+    isValid = false;
+  } else {
+    setCheckInTimeError('');
+  }
+
+  // Check-Out Time Error Check
+  if (!checkouttime) {
+    setCheckOutTimeError('Check-Out Time required!');
+    isValid = false;
+  } else {
+    setCheckOutTimeError('');
+  }
+
+  // If any validation fails, stop execution
+  if (!isValid) {
+    return;
+  }else{
+    try{
+      
+      const formdata = new FormData()
+      console.log('propertyname',propertyname)
+      console.log('propertyaddress',propertyaddress)
+      console.log('properycontactno',propertycontactno)
+      console.log('zip',zip)
+      console.log('rooms',rooms)
+      console.log('subplan',subplan)
+      console.log('taxes',taxes)
+      console.log('ownername',ownername)
+      console.log('ownercontact',ownercontact)
+      console.log('gst',gst)
+      console.log('pan',pan)
+      console.log('ownerimage',ownerimage)
+      console.log('propertyimage',propertyimage)
+      console.log('duration',duration)
+      /************************ */
+      console.log('propertyname',propertyname)
+      formdata.append('propertyaddress',propertyaddress)
+      formdata.append('properycontactno',propertycontactno)
+      formdata.append('zip',zip)
+      formdata.append('rooms',rooms)
+      formdata.append('subplan',subplan)
+      formdata.append('taxes',taxes)
+      formdata.append('ownername',ownername)
+      formdata.append('ownercontact',ownercontact)
+      formdata.append('gst',gst)
+      formdata.append('pan',pan)
+      formdata.append('ownerimage',ownerimage)
+      formdata.append('propertyimage',propertyimage)
+      formdata.append('duration',duration)
+      formdata.append('taxes',taxes)
+ 
+      const response = await axios.post('http://192.168.1.8:8080/props/registerProperty', formdata, {
+          'Content-Type': 'multipart/form-data'
+      });
+      if(response.status === 200 ){
+        alert('Upload Successful')
+      }
+
+
+
+      
+
+      
+
+    }catch(error){
+      console.log(error)
+      alert(error)
+    }
+  }
+
+  
+};
 
  
 /*Plans Array*/
@@ -378,6 +479,7 @@ const handleDurationChange = (e) => {
                     type="text"
                     id="ownName"
                     placeholder="Owner Name"
+                    value={ownername}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                     onChange={(e)=>setOwnerName(e.target.value)}
                       />
@@ -390,6 +492,7 @@ const handleDurationChange = (e) => {
                     id="ownNo"
                     placeholder="Owner Contact Number"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={ownercontact}
                     onChange={(e)=>setOwnerContact(e.target.value)}
                  />
                   { ownercontacterror && <div className="text-red-500 text-sm mt-2">{ownercontacterror}</div>}
@@ -400,7 +503,9 @@ const handleDurationChange = (e) => {
                     type="text"
                     id="panNo"
                     placeholder="PAN No"
+                    value={pan}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={(e)=>setPan(e.target.value)}
                   />
                    { panerror && <div className="text-red-500 text-sm mt-2">{panerror}</div>}
                 </div>
@@ -410,7 +515,9 @@ const handleDurationChange = (e) => {
                     type="text"
                     id="gstNo"
                     placeholder="GST No"
+                    value={gst}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={(e)=>setGst(e.target.value)}
                   />
                    { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
                 </div>
@@ -425,6 +532,7 @@ const handleDurationChange = (e) => {
                     type="file"
                     accept="image/*"
                     ref={ownerFileInputRef}
+                
                     className="hidden"
                     onChange={handleOwnerImgChange}
                   />
@@ -454,6 +562,7 @@ const handleDurationChange = (e) => {
                     type="file"
                     accept="image/*"
                     ref={propertyFileInputRef}
+                 
                     className="hidden"
                     onChange={handlePropertyImgChange}
                   />
@@ -470,7 +579,7 @@ const handleDurationChange = (e) => {
                 </div>
             )}
             
-            { propertyimageerror && <div className="text-red-500 text-sm mt-2">{propertyimageerror}</div>}
+            {  propertyimageerror && <div className="text-red-500 text-sm mt-2">{propertyimageerror}</div>}
                 </div>
 
                 <div className="mb-4">
@@ -479,8 +588,11 @@ const handleDurationChange = (e) => {
                     type="time"
                     id="checkin"
                     placeholder="Check-In Time"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={checkintime}
+                    className="w-full border border-gray-300 round`ed py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={(e) => setCheckInTime(e.target.value)}
                   />
+                  { checkintimeerror && <div className="text-red-500 text-sm mt-2">{checkintimeerror}</div>}
                    
                 </div>
 
@@ -490,8 +602,11 @@ const handleDurationChange = (e) => {
                     type="time"
                     id="checkout"
                     placeholder="Check Out time"
+                    value={checkouttime}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={(e) => setCheckOutTime(e.target.value)}
                   />
+                   { checkouttimeerror && <div className="text-red-500 text-sm mt-2">{checkouttimeerror}</div>}
                    
                 </div>
               </div>
@@ -534,7 +649,9 @@ const handleDurationChange = (e) => {
                                                                 fontWeight:'700',fontSize:'1.75em'}}>Subscription Summary</h2>
             
             
-            
+            <div className="checkboxes" style={{display:'flex',gap:'0.75em'}}>
+               
+            </div>
             
             <div className="checkboxes" style={{display:'flex',gap:'0.75em'}}>
  
