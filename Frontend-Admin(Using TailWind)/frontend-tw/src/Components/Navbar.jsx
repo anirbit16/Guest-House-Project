@@ -5,7 +5,8 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
 import SignUpForm from './SignUpForm';
 import axios from 'axios';
-import { jwtDecode } from "jwt-decode"
+import {jwtDecode} from "jwt-decode";
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,21 +52,26 @@ const Navbar = () => {
         });
         const decoded = jwtDecode(response.data.token)
       
-        console.log("ffff",decoded)
-        localStorage.setItem('role',decoded.role)
-        localStorage.setItem('user',decoded.name)
+       
 
         
         
         
-        if(decoded.role=='user'){
-         window.location.href = 'http://192.168.1.6:5173/userhome' 
-        } else if(decoded.role==='admin'){
-        window.location.href ='http://192.168.1.6:5173/admindashboard' 
-        console.log("first",localStorage.getItem('user'))
-        }else{
-          alert("This is for the super-admin page.")
-        }
+        localStorage.setItem('role', role);
+        localStorage.setItem('user', decoded.name);
+        alert(`Successfully logged in as ${role}`);
+        
+        // Redirect after storing data
+        setTimeout(() => {
+          const rolePathMap = {
+            user: `http://192.168.1.6:5173/userhome?role=${role}&user=${encodeURIComponent(decoded.name)}`,
+            admin: `http://192.168.1.6:5173/admindashboard?role=${role}&user=${encodeURIComponent(decoded.name)}`,
+            'sys-admin': '/sysadminpage'
+          };
+          const redirectPath = rolePathMap[decoded.role] || '/';
+          window.location.href = redirectPath;
+        }, 500); // Delay to ensure storage completes
+        
         
         alert(`Successfully logged in as ',${role}`);
 
@@ -116,7 +122,7 @@ const Navbar = () => {
 
         {/* Right Links - Aligned to the end */}
         <div className="hidden md:flex space-x-14">
-        <button class="bg-#006699-500" style={{backgroundColor:'#00699',color:'#fff',border:'0.5px solid yellow',padding:'10px',borderRadius:'5px'}} onClick={()=>handleSignUpClick()}>Subscribe Now</button>
+        <button type="button" class="bg-#006699-500" style={{backgroundColor:'#00699',color:'#fff',border:'0.5px solid yellow',padding:'10px',borderRadius:'5px'}} onClick={()=>handleSignUpClick()}>Subscribe Now</button>
            
           <Menu as="div" className="relative inline-block text-left">
       <div>

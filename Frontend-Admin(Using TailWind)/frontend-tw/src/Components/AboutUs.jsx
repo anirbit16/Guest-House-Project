@@ -16,7 +16,7 @@ import Navbar from './Navbar';
  
 const AboutUs = () => {
 
-
+ 
   return (
     <>
      {/* Header Banner */}
@@ -78,7 +78,7 @@ const AboutUs = () => {
 
 
        <p>We believe that managing rooms should be effortless, and our platform is designed to provide exactly that: intuitive, flexible, and customizable solutions that cater to your unique needs.</p>
-           <button className='btn2'>More About Us</button>
+           <button className='btn2' style={{width:'12rem'}}>More About Us</button>
            <bi bi-check-all></bi>
          </div>
          <div className='right row'>

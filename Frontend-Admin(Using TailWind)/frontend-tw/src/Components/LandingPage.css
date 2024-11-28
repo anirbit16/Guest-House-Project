@@ -733,6 +733,10 @@ button[type="next"] {
 button[type="next"]:hover {
   background-color: #553c9a;
 }
+input {
+  width: 18em;
+  font-size: 12px;
+}
 @media (max-width: 1024px) {
   #root {
     flex-direction: row;

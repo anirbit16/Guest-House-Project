@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import { AppProvider } from '../src/Components/AppContext.jsx';
 import Navbar from './Components/Navbar';
 import AboutUs from './Components/AboutUs';
 import ContactUs from './Components/ContactUs';
@@ -10,6 +11,7 @@ import Intro from './Components/Intro.jsx';
 import OurPlans from './Components/OurPlans.jsx';
 import SignUpForm from './Components/SignUpForm.jsx';
 import PropertyDetailsOne  from './Components/PropertyDetailsOne.jsx';
+
 
 function App() {
   return (
@@ -23,8 +25,10 @@ function App() {
           <Route path='/pricing-page' element={<PricingPage />} /> 
           <Route path='/intro-page' element={<Intro/>} /> 
           <Route path='/our-plans' element={<OurPlans/>} /> 
-          <Route path='/sign-up' element={<SignUpForm/>} /> 
-          <Route path='/property-details' element={<PropertyDetailsOne/>} /> 
+    
+              <Route path='/sign-up' element={<SignUpForm/>} /> 
+              <Route path='/property-details' element={<PropertyDetailsOne/>} /> 
+      
         </Routes>
         <Footer/>
       </BrowserRouter>

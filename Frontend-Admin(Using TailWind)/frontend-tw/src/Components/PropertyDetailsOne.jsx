@@ -1,5 +1,5 @@
 
-import {React,useState,useEffect,useRef} from 'react'
+import {React,useState,useEffect,useRef,useContext} from 'react'
 import {Link} from 'react-router-dom'
 import SubFormImg from '../assets/SubFormimg.png'
 import axios from 'axios'
@@ -7,6 +7,10 @@ import axios from 'axios'
 
 const PropertyDetailsOne = () => {
 
+  // Form Values
+
+ 
+                                             
   /*States*/
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
@@ -15,12 +19,14 @@ const [propertyaddress,setPropertyAddress]=useState('')
 const [propertyaddresserror,setPropertyAddressError]=useState('')
 const [propertycontactno,setPropertyContactNo]=useState('')
 const [propertycontactnoerror,setPropertyContactNoError]=useState('')
+
 const [zip,setZip]=useState('');
 const [ziperror,setZiperror]=useState('');
+
  
 const [roomserror,setRoomsError]=useState('');
  
-const [taxes,setTaxes]=useState('');
+const [taxes,setTaxes]=useState(40);
  
 const [ownername,setOwnerName]=useState('');
 const [ownernameerror,setOwnerNameError]=useState('');
@@ -37,27 +43,128 @@ const [propertyimage,setPropertyImage]=useState('');
 const [propertyimageerror,setPropertyImageError]=useState('');
 const [ownerimageerror,setOwnerImageError]=useState('');
 
-const [checkintime,setCheckInTime]=useState('');
-const [checkouttime,setCheckOutTime]=useState('');
+const [checkin,setCheckIn]=useState('');
+const [checkout,setCheckOut]=useState('');
 
-const [checkintimeerror,setCheckInTimeError]=useState('');
-const [checkouttimeerror,setCheckOutTimeError]=useState('');
-
+const [checkinerror,setCheckInError]=useState('');
+const [checkouterror,setCheckOutError]=useState('');
+const [ownerimagepreview, setOwnerImagePreview] = useState('');
+const [propertyimagepreview, setPropertyImagePreview] = useState('');
 const [rooms, setRooms] = useState("");
 const [subplan, setSubPlan] = useState("");
 const [duration, setDuration] = useState("6 Months");
 const [summary, setSummary] = useState({ basePrice: 0, taxes: 0, discount: 0, total: 0 });
 
 /*Regex Checkers*/
-const contactNumberRegex = /^\d{10}$/; //Only numbers,no special characters,less than 10
-const propertynameregex = /^[a-zA-Z0-9, ]+$/;//Only letters and numbers,no special characters
-const propertyaddressregex =/^[a-zA-Z0-9,. ]+$/;
-/; ////Only letters,numbers and commas,no special characters
-const nameRegex = /^[A-Za-z\s]+$/;//Only letters,no numbers and special characters
-const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-const gstRegex = /^[a-zA-Z0-9]{10}$/;
-const zipRegex = /^\d{6}$/; //Only numbers,no special characters,less than 6
+const contactNumberRegex = /^\d{10}$/;  
+const propertynameregex = /^[a-zA-Z0-9, ]+$/;
+ 
+const propertyaddressregex = /^[a-zA-Z0-9\s,.'/-]{3,}$/;
+ 
+const nameRegex =  /^[a-zA-Z0-9, ]+$/; 
+const panRegex =  /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}[Z]{1}[A-Z0-9]{1}$/;
+const zipRegex =/^[0-9]*$/;
 
+
+
+
+// Change handlers for form
+ 
+const handleLoginClick=async(selectedrole)=>{
+  setOpen(true)
+  setRole(selectedrole)
+ 
+   
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Log In as admin if already having an account*/
+// const handleSubmitLogin = async (e) => {  // Add 'async' keyword here
+//   e.preventDefault();
+
+//   const loginformdata = new FormData();
+//   loginformdata.append("mobile", contactnumber);
+//   loginformdata.append("password", password);
+//   loginformdata.append("role", role);
+ 
+
+//   if (!contactnumber) {
+//     alert("Please enter your contact number");
+//     return;
+//   } else if (!password) {
+//     alert("Please enter your password");
+//     return; // Add return statement here to exit function
+//   } else {
+//     try {
+//       const response = await axios.post('http://192.168.1.6:3000/api/user/login', loginformdata, {
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }
+//       });
+//       const decoded = jwtDecode(response.data.token)
+    
+     
+
+      
+      
+      
+//       localStorage.setItem('role', role);
+//       localStorage.setItem('user', decoded.name);
+//       alert(`Successfully logged in as ${role}`);
+      
+//       // Redirect after storing data
+//       setTimeout(() => { 
+//         const rolePathMap = {
+//           user: `http://192.168.1.6:5173/userhome?role=${role}&user=${encodeURIComponent(decoded.name)}`,
+//           admin: `http://192.168.1.6:5173/admindashboard?role=${role}&user=${encodeURIComponent(decoded.name)}`,
+//           'sys-admin': '/sysadminpage'
+//         };
+//         const redirectPath = rolePathMap[decoded.role] || '/';
+//         window.location.href = redirectPath;
+//       }, 500); // Delay to ensure storage completes
+      
+      
+//       alert(`Successfully logged in as ',${role}`);
+
+//     } catch (error) {
+//       // Handle error response
+//       console.error('Login error:', error);
+//       alert('Login failed. Please try again.');
+//     }
+//   }
+// };
 
  
 
@@ -69,18 +176,28 @@ const propertyFileInputRef = useRef(null);
 
 const handleOwnerImgChange = (e) => {
   const file = e.target.files[0];
-  if (file) {
-    const imageURL = URL.createObjectURL(file);
-    setOwnerImage(imageURL);
-  }
+  setOwnerImage(file);
+        
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setOwnerImagePreview(reader.result);
+        };
+        if (file) {
+            reader.readAsDataURL(file);
+        }
 };
 /*Property Image Change function */
 const handlePropertyImgChange = (e) => {
   const file = e.target.files[0];
-  if (file) {
-    const imageURL = URL.createObjectURL(file);
-    setPropertyImage(imageURL);
-  }
+  setPropertyImage(file);
+        
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPropertyImagePreview(reader.result);
+        };
+        if (file) {
+            reader.readAsDataURL(file);
+        }
 };
 /*Owner Image Click */
 const handleOwnerH1Click = () => {
@@ -117,9 +234,6 @@ const handleClick = async (e) => {
   if (!propertyname) {
     setPropertyNameError('Property Name Required');
     isValid = false;
-  } else if (!propertynameregex.test(propertyname)) {
-    setPropertyNameError('Only letters and numbers allowed');
-    isValid = false;
   } else {
     setPropertyNameError('');
   }
@@ -128,19 +242,13 @@ const handleClick = async (e) => {
   if (!propertyaddress) {
     setPropertyAddressError('Property Address Required');
     isValid = false;
-  } else if (!propertyaddressregex.test(propertyaddress)) {
-    setPropertyAddressError('Special characters not allowed');
-    isValid = false;
-  } else {
+  }  else {
     setPropertyAddressError('');
   }
 
   // Property Contact Number Check
   if (!propertycontactno) {
     setPropertyContactNoError('Property Contact Number Required');
-    isValid = false;
-  } else if (!contactNumberRegex.test(propertycontactno)) {
-    setPropertyContactNoError('Only 10 digit numbers allowed.');
     isValid = false;
   } else {
     setPropertyContactNoError('');
@@ -150,9 +258,6 @@ const handleClick = async (e) => {
   if (!ownername) {
     setOwnerNameError('Owner Name Required');
     isValid = false;
-  } else if (!nameRegex.test(ownername)) {
-    setOwnerNameError('Number and special characters not allowed');
-    isValid = false;
   } else {
     setOwnerNameError('');
   }
@@ -161,10 +266,7 @@ const handleClick = async (e) => {
   if (!ownercontact) {
     setOwnerContactError('Owner Contact Number Required');
     isValid = false;
-  } else if (!contactNumberRegex.test(ownercontact)) {
-    setOwnerContactError('Contact Number cannot contain letters or special characters');
-    isValid = false;
-  } else {
+   } else {
     setOwnerContactError('');
   }
 
@@ -172,10 +274,7 @@ const handleClick = async (e) => {
   if (!pan) {
     setPanError('PAN Number Required');
     isValid = false;
-  } else if (!panRegex.test(pan)) {
-    setPanError('PAN card cannot have special characters, gaps, or more than 10 characters');
-    isValid = false;
-  } else {
+  }   else {
     setPanError('');
   }
 
@@ -199,10 +298,7 @@ const handleClick = async (e) => {
   if (!zip) {
     setZiperror("ZIP Code is required");
     isValid = false;
-  } else if (!zipRegex.test(zip)) {
-    setZiperror('Zip can contain only numbers, not more than 10');
-    isValid = false;
-  } else {
+  }  else {
     setZiperror('');
   }
 
@@ -210,10 +306,7 @@ const handleClick = async (e) => {
   if (!gst) {
     setGstError('GST ID is required');
     isValid = false;
-  } else if (!gstRegex.test(gst)) {
-    setGstError('GST ID cannot have special characters, gaps, or more than 10 characters');
-    isValid = false;
-  } else {
+  }   else {
     setGstError('');
   }
 
@@ -226,19 +319,19 @@ const handleClick = async (e) => {
   }
 
   // Check-In Time Error Check
-  if (!checkintime) {
-    setCheckInTimeError('Check-In Time required!');
+  if (!checkin) {
+    setCheckInError('Check-In Time is required');
     isValid = false;
   } else {
-    setCheckInTimeError('');
+    setCheckInError('');
   }
 
   // Check-Out Time Error Check
-  if (!checkouttime) {
-    setCheckOutTimeError('Check-Out Time required!');
+  if (!checkout) {
+    setCheckOutError('Check-Out Time is required!');
     isValid = false;
   } else {
-    setCheckOutTimeError('');
+    setCheckOutError('');
   }
 
   // If any validation fails, stop execution
@@ -248,6 +341,7 @@ const handleClick = async (e) => {
     try{
       
       const formdata = new FormData()
+      setTaxes(40)
       console.log('propertyname',propertyname)
       console.log('propertyaddress',propertyaddress)
       console.log('properycontactno',propertycontactno)
@@ -263,7 +357,7 @@ const handleClick = async (e) => {
       console.log('propertyimage',propertyimage)
       console.log('duration',duration)
       /************************ */
-      console.log('propertyname',propertyname)
+      formdata.append('propertyname',propertyname)
       formdata.append('propertyaddress',propertyaddress)
       formdata.append('properycontactno',propertycontactno)
       formdata.append('zip',zip)
@@ -277,7 +371,9 @@ const handleClick = async (e) => {
       formdata.append('ownerimage',ownerimage)
       formdata.append('propertyimage',propertyimage)
       formdata.append('duration',duration)
-      formdata.append('taxes',taxes)
+      formdata.append('checkin',checkin)
+      formdata.append('checkout',checkout)
+       
  
       const response = await axios.post('http://192.168.1.8:8080/props/registerProperty', formdata, {
           'Content-Type': 'multipart/form-data'
@@ -324,9 +420,9 @@ const plans = {
 /*Update plan and summary*/
 const updatePlanAndSummary = (rooms) => {
   let selectedPlan = "";
-  if (rooms >= 5 && rooms < 10) selectedPlan = "Silver";
-  else if (rooms >= 10 && rooms < 20) selectedPlan = "Gold";
-  else if (rooms >= 20) selectedPlan = "Platinum";
+  if (rooms >= 1 && rooms <= 10) selectedPlan = "Silver";
+  else if (rooms >= 11 && rooms <= 20) selectedPlan = "Gold";
+  else if (rooms > 20) selectedPlan = "Platinum";
 
   const planDetails = plans[selectedPlan]?.[duration] || { basePrice: 0, taxes: 0, discount: 0 };
   setSubPlan(selectedPlan);
@@ -335,11 +431,11 @@ const updatePlanAndSummary = (rooms) => {
     total: planDetails.basePrice + planDetails.taxes - planDetails.discount,
   });
 };
-/*Handle Room Change*/
+/*Handle Room Form Upload*/
 const handleRoomChange = (e) => {
   const value = parseInt(e.target.value, 10) || 0;
   setRooms(value);
-  if (value >= 5) {
+  if (value >= 1) {
     updatePlanAndSummary(value);
   } else {
     setSubPlan("");
@@ -347,7 +443,7 @@ const handleRoomChange = (e) => {
   }
 };
 
-/*Handle Duration Change*/
+/*Handle Duration Form Upload*/
 const handleDurationChange = (e) => {
   const selectedDuration = e.target.value;
   setDuration(selectedDuration);
@@ -360,9 +456,120 @@ const handleDurationChange = (e) => {
   }
 };
 
-
+// Property Name Upload 
+const handlePropertyNameChange = (e) => {
+  const value = e.target.value;
+  const propertynameregex =  /^[a-zA-Z0-9, ]+$/; 
+  
+  if (propertynameregex.test(value)) {
+    setPropertyName(value);
+    setPropertyNameError(""); // Clear error if input is valid
+  } else {
+    setPropertyNameError('Invalid property name');
+  }
+};
 
  
+
+// Property Address Upload 
+const handlePropertyAddressChange = (e) => {
+  const value = e.target.value;
+  const propertyaddressregex =/^[a-zA-Z0-9\s,.'#-/]+$/;
+  
+  if (propertyaddressregex.test(value)) {
+    setPropertyAddress(value);
+    setPropertyAddressError(''); // Clear error if input is valid
+  } else {
+    setPropertyAddressError('Invalid property address');
+  }
+}
+//  Contact Number Form Upload
+
+
+const handlePropertyContactChange = (e) => {
+  const value = e.target.value;
+  const contactNumberRegex = /^\d{0,10}$/;  
+  
+  if ( contactNumberRegex.test(value)) {
+    setPropertyContactNo(value);
+    setPropertyContactNoError(''); // Clear error if input is valid
+  } else {
+    setPropertyContactNoError('Invalid contact number');
+  }
+}
+
+// Zip form uplad
+const handleZipChange = (e) => {
+  const value = e.target.value;
+  const zipRegex = /^[1-9][0-9]{0,5}$/;    
+  
+  if (zipRegex.test(value)) {
+     setZip(value);
+     setZiperror(''); // Clear error if input is valid
+  } else {
+    setZiperror('Invalid zip code');
+  }
+}
+//Owner name form upload
+const handleOwnerNameChange = (e) => {
+  const value = e.target.value;
+  const nameRegex =  /^[a-zA-Z0-9, ]+$/;   
+  
+  if (nameRegex.test(value)) {
+     setOwnerName(value);
+     setOwnerNameError(''); // Clear error if input is valid
+  } else {
+    setOwnerNameError('Invalid name format');
+  }
+}
+
+
+const handleOwnerContactChange = (e) => {
+  const value = e.target.value;
+  const contactNumberRegex =  /^\d{0,10}$/;   
+  
+  if ( contactNumberRegex.test(value)) {
+     setOwnerContact(value);
+     setOwnerContactError(''); // Clear error if input is valid
+  } else {
+    setOwnerContactError('Invalid contact number');
+  }
+}
+
+
+
+const handlePANChange = (e) => {
+  const value = e.target.value;
+  const panRegex =  /^[A-Z]{0,5}[0-9]{0,4}[A-Z]{0,1}$/; 
+  
+  if (panRegex.test(value)) {
+     setPan(value);
+     setPanError(''); // Clear error if input is valid
+  } else {
+    setPanError('Invalid PAN ID');
+  }
+}
+
+const handleGSTChange = (e) => {
+  const value = e.target.value;
+  const gstRegex =   /^[0-9]{0,2}[A-Z]{0,5}[0-9]{0,4}[A-Z]{0,1}[A-Z0-9]{0,1}[Z]{0,1}[A-Z0-9]{0,1}$/; 
+  
+  if ( gstRegex.test(value)) {
+        setGst(value); 
+        setGstError(''); // Clear error if input is valid
+  } else {
+        setGstError('Invalid GST ID');
+  }
+}
+
+
+
+
+
+
+
+
+
 
 
     
@@ -388,63 +595,96 @@ const handleDurationChange = (e) => {
               </div>
               
               <div className="grid grid-cols-2 gap-4">
+          
                 <div className="mb-4">
+                  <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Property Name</label>
                   <input
                     type="text"
                     id="propname"
-                    placeholder="Property Name"
+                    placeholder="Enter property name "
                     value={propertyname}
                     className="w-full border border-gray-300 
                                 rounded py-2 px-3 
                                 leading-tight focus:border-gray-900 
                                 focus:ring-2 focus:ring-gray-500"
-                                onChange={(e) => setPropertyName(e.target.value)}        
+                                onChange={handlePropertyNameChange}        
                   />
                      { propertynameerror && <div className="text-red-500 text-sm mt-2">{propertynameerror}</div>}
                 </div>
 
+
                 <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Property Contact</label>
+                  <input
+                    type="text"
+                    id="cont"
+                    placeholder="Enter property contact Number"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={propertycontactno}
+                    onChange={handlePropertyContactChange}   
+                  />
+                   { propertycontactnoerror && <div className="text-red-500 text-sm mt-2">{propertycontactnoerror}</div>}
+                </div>
+                  
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Property Address</label>
                   <input
                     type="text"
                     id="propadd"
-                    placeholder="Property Address"
+                    placeholder="Enter property address here"
                     className="w-full border border-gray-300 rounded py-2 px-3 
                                leading-tight focus:border-gray-900 focus:ring-2 
                                focus:ring-gray-500"
                     value={propertyaddress}
-                    onChange={(e) => setPropertyAddress(e.target.value)}   
+                    onChange={handlePropertyAddressChange}   
                   />
                    {propertyaddresserror && <div className="text-red-500 text-sm mt-2">{propertyaddresserror}</div>}
                 </div>
-
                 <div className="mb-4">
-                  <input
-                    type="text"
-                    id="cont"
-                    placeholder="Property Contact Number"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    value={propertycontactno}
-                    onChange={(e) => setPropertyContactNo(e.target.value)}   
-                  />
-                   { propertycontactnoerror && <div className="text-red-500 text-sm mt-2">{propertycontactnoerror}</div>}
-                </div>
-
-                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>ZIP Code</label>
                   <input
                     type="text"
                     id="zip"
-                    placeholder="Zip Code"
+                    placeholder="Enter Zip Code"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                     value={zip}
-                    onChange={(e) => setZip(e.target.value)}                     
+                    onChange={handleZipChange}                     
                   />
                      {ziperror && <div className="text-red-500 text-sm mt-2">{ziperror}</div>}
 
                 </div>
 
                 <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Owner Name</label>
+                  <input
+                    type="text"
+                    id="ownName"
+                    placeholder="Enter Owner Name"
+                    value={ownername}
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={handleOwnerNameChange}
+                      />
+                      {ownernameerror && <div className="text-red-500 text-sm mt-2">{ownernameerror}</div>}
+                </div>
+
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Owner Contact</label>
+                  <input
+                    type="text"
+                    id="ownNo"
+                    placeholder="Owner Contact Number"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={ownercontact}
+                    onChange={handleOwnerContactChange}
+                 />
+                  { ownercontacterror && <div className="text-red-500 text-sm mt-2">{ownercontacterror}</div>}
+                </div>
+
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Rooms</label>
                 <input
                   type="number"
+                  min="0"
                   value={rooms}
                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                   onChange={handleRoomChange}
@@ -458,10 +698,11 @@ const handleDurationChange = (e) => {
       </div>
 
       <div className="mb-4">
+      <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Subscription Plan</label>
         <input
           type="text"
           id="subp"
-          placeholder="Subscription Plan"
+          placeholder="Enter Subscription Plan"
           value={subplan}
           readOnly
           className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
@@ -474,50 +715,30 @@ const handleDurationChange = (e) => {
 
       
       
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    id="ownName"
-                    placeholder="Owner Name"
-                    value={ownername}
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={(e)=>setOwnerName(e.target.value)}
-                      />
-                      {ownernameerror && <div className="text-red-500 text-sm mt-2">{ownernameerror}</div>}
-                </div>
+             
 
                 <div className="mb-4">
-                  <input
-                    type="text"
-                    id="ownNo"
-                    placeholder="Owner Contact Number"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    value={ownercontact}
-                    onChange={(e)=>setOwnerContact(e.target.value)}
-                 />
-                  { ownercontacterror && <div className="text-red-500 text-sm mt-2">{ownercontacterror}</div>}
-                </div>
-
-                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>PAN No</label>
                   <input
                     type="text"
                     id="panNo"
-                    placeholder="PAN No"
+                    placeholder="Enter PAN No"
                     value={pan}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={(e)=>setPan(e.target.value)}
+                    onChange={handlePANChange}
                   />
                    { panerror && <div className="text-red-500 text-sm mt-2">{panerror}</div>}
                 </div>
 
                 <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>GST No</label>
                   <input
                     type="text"
                     id="gstNo"
-                    placeholder="GST No"
+                    placeholder="Enter GST No"
                     value={gst}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={(e)=>setGst(e.target.value)}
+                    onChange={handleGSTChange}
                   />
                    { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
                 </div>
@@ -537,17 +758,16 @@ const handleDurationChange = (e) => {
                     onChange={handleOwnerImgChange}
                   />
 
-          {ownerimage && (
-                <div className="mt-4">
-                    <img
-                        src={ownerimage}
-                        alt="Selected"
-                        className="max-w-full h-auto rounded-lg shadow"
-                         style={{height:"100px",width:"100px"}}
-                    />
-                   
-                </div>
-            )}
+                      {ownerimagepreview && (
+                            <div className="image-preview">
+                                <img 
+                                    src={ownerimagepreview} 
+                                    alt="Preview" 
+                                    style={{ width: '200px', height: '180px', marginTop: '10px' }} 
+                                />
+                            </div>
+                        )}
+
              { ownerimageerror && <div className="text-red-500 text-sm mt-2">{ownerimageerror}</div>}
                       
                 </div>
@@ -567,46 +787,46 @@ const handleDurationChange = (e) => {
                     onChange={handlePropertyImgChange}
                   />
 
-          {propertyimage && (
-                <div className="mt-4">
-                    <img
-                        src={propertyimage}
-                        alt="Selected"
-                        className="max-w-full h-auto rounded-lg shadow"
-                        style={{height:"100px",width:"100px"}}
-                    />
-                  
-                </div>
-            )}
+{          propertyimagepreview && (
+                            <div className="image-preview">
+                                <img 
+                                    src={propertyimagepreview} 
+                                    alt="Preview" 
+                                    style={{ width: '200px', height: '180px', marginTop: '10px' }} 
+                                />
+                            </div>
+                        )}
             
             {  propertyimageerror && <div className="text-red-500 text-sm mt-2">{propertyimageerror}</div>}
                 </div>
 
                 <div className="mb-4">
-                  <label style={{fontSize:'1.5em'}}>Check In Time</label>
+                  <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Check In Time</label>
                   <input
                     type="time"
                     id="checkin"
                     placeholder="Check-In Time"
-                    value={checkintime}
+                    step="1"
                     className="w-full border border-gray-300 round`ed py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={(e) => setCheckInTime(e.target.value)}
+                    
+                    onChange={(e) => setCheckIn(e.target.value)}
                   />
-                  { checkintimeerror && <div className="text-red-500 text-sm mt-2">{checkintimeerror}</div>}
+                  { checkinerror && <div className="text-red-500 text-sm mt-2">{checkinerror}</div>}
                    
                 </div>
 
                 <div className="mb-4">
-                <label style={{fontSize:'1.5em'}}>Check Out Time</label>
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Check Out Time</label>
                   <input
                     type="time"
                     id="checkout"
+                    step="1"
                     placeholder="Check Out time"
-                    value={checkouttime}
+                    value={checkout}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={(e) => setCheckOutTime(e.target.value)}
+                    onChange={(e) => setCheckOut(e.target.value)}
                   />
-                   { checkouttimeerror && <div className="text-red-500 text-sm mt-2">{checkouttimeerror}</div>}
+                   { checkouterror && <div className="text-red-500 text-sm mt-2">{checkouterror}</div>}
                    
                 </div>
               </div>
@@ -617,13 +837,13 @@ const handleDurationChange = (e) => {
                 
 
               <div className="mt-6 mx-20" style={{display:'flex',gap:'10px'}}>
-                <button
+                {/* <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
                   onClick={handleClick}
                 >
                   Next
-                </button>
+                </button> */}
 
                 <button
                   type="submit"
@@ -712,7 +932,7 @@ const handleDurationChange = (e) => {
 
             </div>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 
-               rounded focus:outline-none focus:shadow-outline" onClick={()=>knowsub()}>
+               rounded focus:outline-none focus:shadow-outline" onClick={handleClick}>
               Make Payment
             </button>
           </div>
