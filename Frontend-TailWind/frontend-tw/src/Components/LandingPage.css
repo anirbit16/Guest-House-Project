@@ -1,0 +1,760 @@
+ 
+ 
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+
+
+ 
+
+
+ 
+
+/* About Us */
+/*
+/*Hero Generic Template
+.hero {
+    position: relative;
+    background-repeat: no-repeat;
+    background-position:  center;
+    background-size: cover;
+    height: 40vh;
+    width: 100%;
+    z-index: 1;
+    text-align: center;
+    font-family: 'Poppins';
+    font-size: 20px;
+  }
+
+  .hero .container {
+    position: relative;
+    padding-top: 50px;
+    z-index: 3; /* Ensure the text is above the overlay */
+  /* } */
+  
+  /*.hero h1 {
+    color: #fff;
+    font-size: 40px;
+    z-index: 3;
+   margin-left: 200px;
+   margin-right: 200px;
+  }
+  
+  .hero p {
+    text-align: center;
+    color: #fff;
+    opacity: 0.8;
+    z-index: 3;
+   margin-left: 200px;
+   font-size: 15px;
+   margin-right: 200px;
+   margin-bottom: 200px;
+   word-wrap: break-word;
+  }*/
+  /* Hero Section For About Us Starts */
+  .hero {
+   position: relative;
+   height: 100vh; /* Full viewport height for hero section */
+   background-color: #f8f9fa; /* Light background */
+   
+   justify-content: center;
+   align-items: center;
+   overflow: hidden;
+ }
+ 
+ .carousel-item img {
+
+   object-position: top;
+   height: 642px; /* Make the carousel images fill the hero section */
+   object-fit: contain; /* Ensure images maintain aspect ratio and cover the space */
+   width: 100%;
+
+ }
+ 
+ .carousel-caption {
+  margin-bottom: 300px;
+  margin-left: 200px;
+  width:40%;
+   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for captions */
+   padding: 1rem;
+   border-radius: 5px;
+ }
+ 
+ .carousel-control-prev-icon,
+ .carousel-control-next-icon {
+  margin-bottom: 300px;
+   background-color: rgba(0, 0, 0, 0.5); /* Dark background for carousel arrows */
+   border-radius: 50%;
+   padding: 10px;
+ }
+ 
+ @media (max-width: 768px) {
+   .hero {
+     height: 80vh; /* Adjust height for smaller screens */
+   }
+   
+   .carousel-caption h5 {
+     font-size: 1.25rem; /* Smaller font size on mobile */
+   }
+   
+   .carousel-caption p {
+     font-size: 0.875rem;
+   }
+ }
+ 
+  
+  /* Back Section*/
+  .back {
+    font-family: 'Poppins';
+    font-weight: 100;
+  }
+  /* About Us Section */
+  /* About Us Section */
+.about {
+   padding: 60px 40px; /* Reduced padding for a cleaner layout */
+   background-color: #f9f9f9;
+   font-family: 'Poppins', sans-serif;
+}
+
+.about .container {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 40px; /* Add gap between text and image */
+   max-width: 1200px; /* Limit the total width of the container */
+   margin: 0 auto; /* Center the container on the page */
+}
+
+.about .left {
+   flex: 1;
+   padding-right: 20px;
+}
+
+.about .right {
+   flex: 1;
+   display: flex;
+   justify-content: center;
+}
+
+.about .heading {
+   text-align: left;
+   margin-bottom: 20px;
+}
+
+.about .heading h1 {
+   font-size: 32px;
+   margin-bottom: 10px;
+   font-weight: 600;
+   color: #333;
+}
+
+.about .heading p {
+   font-size: 18px;
+   color: #666;
+   margin-bottom: 20px;
+}
+
+.about p {
+   font-size: 15px;
+   color: #444;
+   line-height: 1.6;
+   margin-bottom: 20px;
+}
+
+.about button.btn2 {
+   padding: 10px 30px;
+   width: 30%;
+   background-color: #006699;
+   color: #fff;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+    
+}
+
+.about button.btn2:hover {
+   background-color: #0d6cd8;
+}
+
+.about .right img {
+   max-width: 100%; /* Make sure the image doesn't exceed the container's width */
+   height: auto; /* Maintain aspect ratio */
+   border-radius: 10px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+#whychooseusimg{
+   max-width: 100%; /* Make sure the image doesn't exceed the container's width */
+   height: auto; /* Maintain aspect ratio */
+   border-radius: 10px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Responsive adjustments */
+@media screen and (max-width: 992px) {
+   .about .container {
+       flex-direction: column; /* Stack text and image vertically on smaller screens */
+   }
+
+   .about .right img {
+       width: 100%; /* Make the image take full width of its container */
+       height: auto; /* Maintain the aspect ratio */
+       margin-top: 20px; /* Add space above the image */
+   }
+}
+/* Contact Us(Find-Us Section) */
+/* Container for the find us section */
+
+
+
+ 
+
+ 
+/*Navbar*/
+.navbar {
+ 
+   background-color: #006699 !important;
+}
+
+.navbar a {
+
+ 
+}
+ 
+ 
+ 
+ 
+
+ 
+
+/* Wrapper around the form */
+.form-wrapper {
+   width: 100%; /* Make the wraQpper take the full width of the page */
+   display: flex;
+   /* Push the form to the right */
+   padding-right: 2rem; /* Optional: Adjust this to control how far right the form is */
+ }
+ 
+ /* Overall section styling */
+ 
+ .addressandform {
+   padding: 2rem;
+   background-color: #f9f9f9;
+   text-align: center;
+ }
+ 
+ .addressandform h2 {
+   font-size: 2rem;
+   color: #333;
+   margin-bottom: 1.5rem;
+   font-family: 'Poppins', sans-serif;
+   text-transform: uppercase;
+   letter-spacing: 1.2px;
+ }
+ 
+ .contact__form .form-control {
+   padding: 1.375rem;
+   line-height:1.1;
+   /* color: var(--text-color);
+   background-color: var(--bg-color); */
+   border-radius: 5px !important;
+   /* border: 1px solid var(--secondary-color); */
+   border: 1px solid rgb(207, 206, 206);
+}
+
+.contact__form input.form-control {
+   padding-top: 20px;
+   padding-bottom: 20px;
+   margin-bottom: 2em;
+   height: calc(2.5em + .75rem + 2px);
+}
+.bi {
+   
+   margin-right: 5px;
+   background-color: #efb805fe;
+   padding: 1px 5px;
+   border-radius: 3px;
+
+}
+
+.sec_sp {
+   display: flex;
+   align-items: stretch; /* Ensures that both columns stretch to the same height */
+ }
+ 
+ .contact__form {
+   display: flex;
+   flex-direction: column; /* Ensure that form elements are stacked vertically */
+ }
+ 
+ .form-group {
+   margin-bottom: 1rem; /* Optional: Add some space between form fields */
+ }
+ 
+ input {
+   height: 30px;
+ }
+
+ .info-item h3 {
+   font-size: 20px;
+   font-weight: 500;
+   font-family: 'Poppins';
+ }
+ .info-item p {
+  font-size: 15px;
+}
+/* Pricing Page */
+
+
+/* .container {
+  max-width: 960px;
+}
+
+.pricing-header {
+  max-width: 700px;
+}
+
+.card-deck .card {
+  min-width: 220px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+} */
+/* Base styles */
+/* Plans Section */
+.card-deck {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.pricingheader {
+  display: flex;
+  flex-direction: column; /* Align items vertically */
+  justify-content: center; /* Centers items along the main axis */
+  align-items: center; /* Centers items along the cross axis */
+  text-align: center; /* Centers text within the section */
+  padding: 20px; /* Add some padding for spacing */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 1200px) {
+  .card-deck {
+    gap: 50px; /* Decrease gap between cards */
+  }
+}
+
+@media (max-width: 992px) {
+  .card-deck {
+    flex-direction: column; /* Stack cards vertically */
+    gap: 20px; /* Adjust gap for smaller screens */
+  }
+  
+  .pricingheader {
+    padding: 15px; /* Reduce padding for smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .card-deck {
+    gap: 10px; /* Further decrease gap */
+  }
+  
+  .pricingheader {
+    padding: 10px; /* Further reduce padding */
+    font-size: 14px; /* Adjust font size for better readability */
+  }
+}
+
+@media (max-width: 576px) {
+  .pricingheader {
+    font-size: 12px; /* Make text smaller for very small screens */
+  }
+}
+
+/* IntroPage */
+/* Forms */
+/*The Modal
+/* Modal Container */
+
+.signup-modal {
+ 
+  width: 60vw !important;   
+  max-width: 60vw !important;;
+} 
+.modal-dialog {
+  max-width: 600px; /* Adjust the width to suit your needs */
+  margin-bottom: 500px;
+
+}
+
+/* Modal Header */
+.modal-header {
+  justify-content: center;
+  background-color: #f8f9fa; /* Light gray background for the header */
+  border-bottom: 1px solid #dee2e6;
+  padding: 15px;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.close {
+  font-size: 1.2rem;
+  color: #000;
+  opacity: 0.6;
+}
+
+.close:hover {
+  opacity: 1;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 20px;
+}
+
+.imgholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.upload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.upload input[type="file"] {
+  display: none; /* Hide the file input */
+}
+
+.upload i {
+  font-size: 2rem; /* Icon size */
+  color: #007bff; /* Primary blue color */
+  transition: color 0.3s ease;
+}
+
+.upload:hover i {
+  color: #0056b3; /* Darker blue on hover */
+}
+
+.img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+/* Input Fields */
+.inputField {
+ 
+  margin-top: 20px;
+}
+
+.inputField label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+  color: #495057;
+}
+
+.inputField input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.inputField input[type="text"]:focus {
+  border-color: #80bdff;
+  outline: none;
+}
+
+/* Required Field Star */
+.star {
+  color: #dc3545; /* Red color for the required field indicator */
+}
+
+/* Modal Footer */
+.modal-footer {
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  padding: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.modal-footer .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.modal-footer .btn-primary:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+
+/* Payment-Page */
+.paymentpage{
+  .row{
+    justify-content: center;
+    align-items: center;
+  }
+  
+
+.payment-container {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-style: 'Poppins';
+}
+
+.container {
+  max-width: 1000px;
+}
+
+h3 {
+  text-align: center;
+}
+
+form {
+  background-color: #e1e1e1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  width: 100%;
+}
+
+.card {
+  margin-top: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btn {
+  
+  background-color: #006699;
+  width: 40%;
+  margin-left: 90px;
+  margin-top: 50px;
+ 
+}
+.payment-container{
+  width: 50%;
+}
+
+}
+
+/* Form asterisks */
+.mandatory-star {
+  padding-right: 5px;
+  color:red;
+}
+
+.container-logintxt{
+  display: flex;
+  justify-content: center;
+}
+a.dropdown-item {
+  color: #333 !important;
+}
+
+/*Footer Section */
+
+.footerContact {
+  background-color: #27ae60;
+  padding: 40px 0;
+  color: #fff;
+}
+.footerContact h1 {
+  font-family: 'poppins';
+  display: block;
+  font-size: 40px;
+}
+footer {
+ 
+  background-color: #006699;
+  padding: 50px 0;
+  color: #fff;
+}
+footer .container {
+  margin-left: 50px;
+  display: grid;
+  grid-template-columns: 6fr 2fr 2fr 1fr;
+  grid-gap: 20px;
+}
+footer img {
+  width: 150px;
+}
+footer h2 {
+  font-weight: 500;
+}
+footer p {
+  color: #fff;
+  margin: 20px 0;
+}
+footer input {
+  background-color: #fff;
+  padding: 17px;
+  width: 100%;
+  border-radius: 5px;
+}
+footer h3 {
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+footer ul {
+  display: block;
+}
+footer ul li {
+  display: block;
+  color: rgb(255, 255, 255);
+  margin-bottom: 12px;
+}
+.legal {
+  text-align: center;
+  padding: 20px;
+  background: #006699;
+  color: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.box {
+  line-height: 0.5px;
+}
+@media screen and (max-width: 800px) {
+  footer .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+ /* Subscribe Noew */
+ .signupform {
+
+ #root {
+  display: flex;
+  min-height: 80vh;
+  padding: 2rem;
+  background-color: #f9f5f5;
+  gap: 4rem;
+}
+
+.left-part{
+  flex:1;
+  display:flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 2rem;
+  padding-left: 3.5rem;
+}
+.left-part h1{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 2rem;
+  font-style: normal;
+  color: #8131ac;
+  margin: 200;
+  padding: 0;
+  font-weight: 30;
+}
+.image{
+  width: 180%;
+  max-width: 500px;
+}
+
+.image img{
+  width:100%;
+  height:auto;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.form {
+  /* flex: 0 1 35%; */
+   /* Adjust flex basis to control width */
+  width: 800px;
+  height: fit-content;
+  margin-top: 6rem; /* Align with left content */
+  margin-left: 5rem; /* Add some space from the right edge */
+  padding: 6rem;
+  border-radius: 3rem;
+}
+
+form h1{
+  font-size: 2rem;
+  color:#8131ac;
+  margin-bottom: 2rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+inpur,textarea{
+  width: 25%;
+  resize: none;
+}
+
+.flex.items-center.justify-between{
+  justify-content: center;
+  margin-top: 2rem;
+
+}
+
+button[type="next"] {
+  background-color: #6b46c1;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+button[type="next"]:hover {
+  background-color: #553c9a;
+}
+input {
+  width: 18em;
+  font-size: 12px;
+}
+@media (max-width: 1024px) {
+  #root {
+    flex-direction: row;
+    padding: 1rem;
+    gap: 2rem;
+  }
+  form, .left-part {
+    max-width: 50%;
+  }
+
+
+  
+
+}
+
+
+}
+/* form h6{
+  color: #12031a;
+  align-items: center;
+} */
