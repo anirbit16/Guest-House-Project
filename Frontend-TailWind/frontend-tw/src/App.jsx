@@ -1,6 +1,7 @@
-import React from 'react';
+import React,{useState} from 'react';
 import './index.css';
-import { AppProvider } from '../src/Components/AppContext.jsx';
+ 
+ 
 import Navbar from './Components/Navbar';
 import AboutUs from './Components/AboutUs';
 import ContactUs from './Components/ContactUs';
@@ -14,9 +15,13 @@ import PropertyDetailsOne  from './Components/PropertyDetailsOne.jsx';
 
 
 function App() {
+
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
   return (
     <>
-    <AppProvider>
+    
+ 
       <BrowserRouter>
         <Navbar /> {/* Navbar outside of Routes */}
         <Routes>
@@ -26,14 +31,14 @@ function App() {
           <Route path='/pricing-page' element={<PricingPage />} /> 
           <Route path='/intro-page' element={<Intro/>} /> 
           <Route path='/our-plans' element={<OurPlans/>} /> 
-    
-              <Route path='/sign-up' element={<SignUpForm/>} /> 
-              <Route path='/property-details' element={<PropertyDetailsOne/>} /> 
+          <Route path='/sign-up' element={<SignUpForm/>}      /> 
+          <Route path='/property-details'element={<PropertyDetailsOne/>} /> 
       
         </Routes>
         <Footer/>
       </BrowserRouter>
-      </AppProvider>
+ 
+ 
     </>
   );
 }

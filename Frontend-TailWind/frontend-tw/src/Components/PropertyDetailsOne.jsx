@@ -1,18 +1,24 @@
 
-import {React,useState,useEffect,useRef,useContext} from 'react'
-import { AppContext } from './AppContext'
+import {useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import {Link} from 'react-router-dom'
 import SubFormImg from '../assets/SubFormimg.png'
 import axios from 'axios'
+ 
+
+
 import './Landingpage.css'
 
 const PropertyDetailsOne = () => {
 
   // Form Values
 
- 
-                                             
+                                 
   /*States*/
+const location = useLocation();
+const [firstname, setFirstName] = useState(location.state.firstname);
+const [lastname,  setLastName] = useState(location.state.lastname);
+ 
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
 
@@ -68,10 +74,12 @@ const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}[Z]{1}[A-Z0-9]{1}$
 const zipRegex =/^[0-9]*$/;
 
 
-const { sharedValue } = useContext(AppContext)
-
+ 
+ 
 
 // Change handlers for form
+
+
  
 const handleLoginClick=async(selectedrole)=>{
   setOpen(true)
@@ -458,16 +466,9 @@ const handleZipChange = (e) => {
   }
 }
 //Owner name form upload
-const handleOwnerNameChange = (e) => {
-  const value = e.target.value;
-  const nameRegex =  /^[a-zA-Z0-9, ]+$/;   
-  
-  if (nameRegex.test(value)) {
-     setOwnerName(value);
-     setOwnerNameError(''); // Clear error if input is valid
-  } else {
-    setOwnerNameError('Invalid name format');
-  }
+const handleOwnerNameChange = () => {
+ 
+  setOwnerName(`${firstname}${lastname}`)  
 }
 
 
@@ -607,9 +608,9 @@ const handleGSTChange = (e) => {
                     type="text"
                     id="ownName"
                     placeholder="Enter Owner Name"
-                    value={sharedValue}
+                    value={ownername}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    readOnly
+                    onChange={handleOwnerNameChange}
                       />
                       {ownernameerror && <div className="text-red-500 text-sm mt-2">{ownernameerror}</div>}
                 </div>

@@ -17,10 +17,8 @@ const SignUpForm=()=> {
 // const [passworderror,setPasswordError] = useState('');
  
  
-
-  const [firstname, setFirstName] = useState('');
-  const [lastname, setLastName] = useState('');
-
+  const [firstname, setFirstName]=useState('');
+  const [lastname, setLastName]=useState('');
   const [email,setEmail]=useState('');
   const [contactno,setContactNo]=useState('');
   const [password,setPassword]=useState('');
@@ -222,7 +220,7 @@ const SignUpForm=()=> {
 
     // Validation flag
     let isValid = true;
- 
+   
 
     // First name validation
     if (!firstname.trim()) {
@@ -294,13 +292,18 @@ const SignUpForm=()=> {
 
     // Proceed with API call if the form is valid
     try {
+        console("firstname", firstname);
+        console("lastname", lastname);
+        console("email", email);
+        console("contactno", contactno);
+        console("password", password);
         const formdata = new FormData();
         formdata.append("firstname", firstname);
         formdata.append("lastname", lastname);
         formdata.append("email", email);
         formdata.append("contactno", contactno);
         formdata.append("password", password);
-        formdata.append("role", role);
+  
 
         const response = await axios.post(
             'http://192.168.1.7:8080/signups/insertDetails',
@@ -314,8 +317,7 @@ const SignUpForm=()=> {
 
         if (response.status === 200) {
             alert("Data submitted successfully!");
-            navigate('/property-details', { state: { firstname, lastname } });
-
+            navigate('/property-details')
             setFirstName("");
             setLastName("");
             setEmail("");
@@ -324,7 +326,7 @@ const SignUpForm=()=> {
             setConfirmPassword("");
         }
     } catch (error) {
-        console.log("Error submitting the form:",error);
+        console.error("Error submitting the form:", error.response?.data?.error || error.message);
         alert("Failed to submit the form. Please try again.");
     }
 };
