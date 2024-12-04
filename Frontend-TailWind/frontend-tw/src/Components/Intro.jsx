@@ -1,4 +1,10 @@
 import React from 'react';
+import Aboutusimg from '../assets/Aboutusimg.jpg'
+import Ourexpertise from '../assets/Ourexpertise.jpg'
+import { Carousel } from "@material-tailwind/react";
+import IntroC_1 from '../assets/IntroC_1.png'
+import IntroC_2 from '../assets/IntroC_2.png'
+import IntroC_3 from '../assets/IntroC_3.png'
 import Intro_1 from '../assets/Intro_1.jpg';
 import Intro_2 from '../assets/Intro_2.png';
 import Intro_3 from '../assets/Intro_3.png';
@@ -7,7 +13,7 @@ import Intro_5 from '../assets/Intro_5.jpg';
 import { FieldTimeOutlined,ImportOutlined,FundProjectionScreenOutlined,SettingOutlined,
   CloudSyncOutlined,FileProtectOutlined,CustomerServiceOutlined,ApiOutlined,StockOutlined } from "@ant-design/icons";
 import { Swiper, SwiperSlide } from 'swiper/react';
-
+import  {useNavigate} from 'react-router-dom'
 import { Pagination } from 'swiper/modules';
 
 const cardData = [
@@ -85,8 +91,28 @@ const cardDataFour = [
 
 
 const Intro = () => {
+ 
   return (
     <div>
+       <section className="hero">
+        <Carousel className="rounded-xl" autoplay="true" loop="true">
+          <img
+            src={IntroC_1}
+            alt="image 1"
+            className="h-full w-full object-cover"
+          />
+          <img
+            src={IntroC_2}
+            alt="image 2"
+            className="h-full w-full object-cover"
+          />
+          <img
+            src={IntroC_3}
+            alt="image 3"
+            className="h-full w-full object-cover"
+          />
+        </Carousel>
+      </section>
       <section className='about'>
         <div className='container d-flex gap-3'>
           <div className='left row'>
@@ -130,6 +156,33 @@ const Intro = () => {
           ))}
         </div>
       </section>
+
+            <section className='about'>
+       
+        
+       <div className='container d-flex gap-3'>
+           
+         <div className='left row'>
+         <div className="heading">
+                <span className='abtus' style={{fontSize:'20px'}}>About Us</span>
+               <h1> Who We Are?</h1>
+               <p>Check out our company story and work process</p>
+         </div>
+
+         <p>At RoomMaster, we started with a simple mission: to simplify the complexities of room management. Our journey began when we realized how outdated and cumbersome traditional systems were, often leading to missed bookings, overbookings, and inefficient space utilization.</p>
+
+
+       <p>We believe that managing rooms should be effortless, and our platform is designed to provide exactly that: intuitive, flexible, and customizable solutions that cater to your unique needs.</p>
+           <button className='btn2' style={{width:'12rem'}} >
+            <a href="/about-us"> More About Us</a>
+           </button>
+           <bi bi-check-all></bi>
+         </div>
+         <div className='right row'>
+           <img src={Aboutusimg} alt='' />
+         </div>
+       </div>
+     </section>
    
       <section className='about'>
         <div className='container d-flex gap-3'>
@@ -145,6 +198,47 @@ const Intro = () => {
           </div>
         </div>
       </section>
+
+      <section className='about'>
+      
+       
+      <div className='container d-flex gap-3'>
+          
+        <div className='left row'>
+        <div className="heading">
+               <span className='abtus' style={{fontSize:'20px'}}>Our Expertise</span>
+              <h1>Check our expertise</h1>
+              
+        </div>
+        <h3 style={{fontSize:'15px'}}>Room Management</h3>
+        <p style={{fontSize:'12px'}}>Efficiently manage room availability, assignments, and maintenance schedules with a centralized system that ensures optimal room utilization and quick turnarounds between bookings.</p>
+        <h3 style={{fontSize:'15px'}}>Customer Management</h3>
+        <p style={{fontSize:'12px'}}>Keep track of guest profiles, preferences, booking history, and special requests with ease. RoomMaster enables personalized guest experiences by maintaining detailed customer records and communication logs.</p>
+        <h3 style={{fontSize:'15px'}}>Booking and Reservation Management</h3>
+        <p style={{fontSize:'12px'}}>Handle all aspects of reservations, including bookings, cancellations, and modifications. Our system allows both direct and third-party booking integrations, providing a seamless experience for guests and property managers alike.</p>
+        <h3 style={{fontSize:'15px'}}>Inventory and Resource Management</h3>
+        <p style={{fontSize:'12px'}}>Track and manage inventory, such as room supplies, toiletries, and other amenities. Stay informed about low stock levels and avoid shortages that may impact guest experience.</p>
+        <h3 style={{fontSize:'15px'}}>Billing and Payment Processing</h3>
+        <p style={{fontSize:'12px'}}>Generate accurate invoices, handle multiple payment methods, and process payments securely. RoomMaster integrates with leading payment gateways to streamline billing and financial management.</p>
+        <h3 style={{fontSize:'15px'}}>Housekeeping and Maintenance Management</h3>
+        <p style={{fontSize:'12px'}}>Manage housekeeping schedules, assign tasks to staff, and monitor room readiness in real-time. Ensure timely maintenance by tracking repair requests and overseeing task completion to enhance guest satisfaction.</p>
+        <h3 style={{fontSize:'15px'}}>Multi-Property Management</h3>
+        <p style={{fontSize:'12px'}}>If you manage multiple properties, RoomMaster enables centralized control across locations, making it easier to oversee bookings, staff assignments, and operational tasks across different sites.</p>
+        <h3 style={{fontSize:'15px'}}>Reporting and Analytics</h3>
+        <p style={{fontSize:'12px'}}>Generate detailed reports on room occupancy, revenue, customer preferences, and operational efficiency. Make informed decisions with data-driven insights that help you optimize room availability and boost profitability.</p>
+        
+
+        
+        </div>
+        <div className='right row'>
+          <img src={Ourexpertise} alt='' />
+        </div>
+        {/* Select Your Package */}
+      </div>
+    </section>
+
+
+
       <section className="features">
       <div className="cards" style={{justifyContent: 'center', paddingBottom: '50px',display:'flex' }}>
         <div className="section-1" style={{display:'flex'}}>
@@ -212,7 +306,12 @@ const Intro = () => {
         </div>
 
       </section>
-      <section className="customer-reviews" style={{marginTop:'100px',marginBottom:'100px'}}>
+
+
+
+
+
+      {/* <section className="customer-reviews" style={{marginTop:'100px',marginBottom:'100px'}}>
 
       <Swiper
       modules={[Pagination]}
@@ -251,7 +350,7 @@ const Intro = () => {
 
 
 
-      </section>
+      </section> */}
     </div>
   );
 }

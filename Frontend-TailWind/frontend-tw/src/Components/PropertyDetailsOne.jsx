@@ -18,6 +18,7 @@ const PropertyDetailsOne = () => {
 const location = useLocation();
 const [firstname, setFirstName] = useState(location.state.firstname);
 const [lastname,  setLastName] = useState(location.state.lastname);
+const [contactno,setContactNo]= useState(location.state.contactno);
  
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
@@ -36,8 +37,9 @@ const [roomserror,setRoomsError]=useState('');
 const [taxes,setTaxes]=useState(40);
  
 const [ownername,setOwnerName]=useState('');
-const [ownernameerror,setOwnerNameError]=useState('');
 const [ownercontact,setOwnerContact]=useState('');
+const [ownernameerror,setOwnerNameError]=useState('');
+
 const [ownercontacterror,setOwnerContactError]=useState('');
 const [gst,setGst]=useState('');
 const [gsterror,setGstError]=useState('');
@@ -164,20 +166,7 @@ const handlePropertyH1Click = () => {
 };
 
 /*Checker function*/
-const handleCheck = ()=>{
-  /*Property Name Error Check*/
-   
-
-
-
-
-    
-
-
-
-
-   
-}
+ 
  
 /*Handle Click Function*/
 const handleClick = async (e) => {
@@ -314,7 +303,7 @@ const handleClick = async (e) => {
       /************************ */
       formdata.append('propertyname',propertyname)
       formdata.append('propertyaddress',propertyaddress)
-      formdata.append('properycontactno',propertycontactno)
+      formdata.append('propertycontactno',propertycontactno)
       formdata.append('zip',zip)
       formdata.append('rooms',rooms)
       formdata.append('subplan',subplan)
@@ -330,7 +319,7 @@ const handleClick = async (e) => {
       formdata.append('checkout',checkout)
        
  
-      const response = await axios.post('http://192.168.1.8:8080/props/registerProperty', formdata, {
+      const response = await axios.post('http://192.168.1.7:8080/props/registerProperty', formdata, {
           'Content-Type': 'multipart/form-data'
       });
       if(response.status === 200 ){
@@ -473,17 +462,17 @@ const handleOwnerNameChange = () => {
 
 
 const handleOwnerContactChange = (e) => {
-  const value = e.target.value;
-  const contactNumberRegex =  /^\d{0,10}$/;   
+  // const value = e.target.value;
+  // const contactNumberRegex =  /^\d{0,10}$/;   
   
-  if ( contactNumberRegex.test(value)) {
-     setOwnerContact(value);
-     setOwnerContactError(''); // Clear error if input is valid
-  } else {
-    setOwnerContactError('Invalid contact number');
-  }
+  // if ( contactNumberRegex.test(value)) {
+  //    setOwnerContact(value);
+  //    setOwnerContactError(''); // Clear error if input is valid
+  // } else {
+  //   setOwnerContactError('Invalid contact number');
+  // }
+  setOwnerContact(`${contactno}`)
 }
-
 
 
 const handlePANChange = (e) => {
@@ -711,7 +700,7 @@ const handleGSTChange = (e) => {
                                 <img 
                                     src={ownerimagepreview} 
                                     alt="Preview" 
-                                    style={{ width: '200px', height: '180px', marginTop: '10px' }} 
+                                    style={{ width: '100px', height: '80px', marginTop: '10px' }}   
                                 />
                             </div>
                         )}
@@ -740,7 +729,7 @@ const handleGSTChange = (e) => {
                                 <img 
                                     src={propertyimagepreview} 
                                     alt="Preview" 
-                                    style={{ width: '200px', height: '180px', marginTop: '10px' }} 
+                                    style={{ width: '100px', height: '80px', marginTop: '10px' }}  
                                 />
                             </div>
                         )}

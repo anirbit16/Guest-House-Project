@@ -12,6 +12,8 @@ import Intro from './Components/Intro.jsx';
 import OurPlans from './Components/OurPlans.jsx';
 import SignUpForm from './Components/SignUpForm.jsx';
 import PropertyDetailsOne  from './Components/PropertyDetailsOne.jsx';
+import TandC from './Components/TandC.jsx';
+import Privacy from './Components/Privacy.jsx';
 
 
 function App() {
@@ -33,6 +35,9 @@ function App() {
           <Route path='/our-plans' element={<OurPlans/>} /> 
           <Route path='/sign-up' element={<SignUpForm/>}      /> 
           <Route path='/property-details'element={<PropertyDetailsOne/>} /> 
+          <Route path='/t-and-c'element={<TandC/>} />
+          <Route path='/privacy-policy'element={<Privacy/>} />
+
       
         </Routes>
         <Footer/>

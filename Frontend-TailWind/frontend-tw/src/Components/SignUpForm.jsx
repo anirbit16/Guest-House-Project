@@ -26,6 +26,7 @@ const SignUpForm=()=> {
   const [password,setPassword]=useState('');
   const [showPassword, setShowPassword] = useState('');
   const [confirmpassword,setConfirmPassword]=useState('');
+  const [showConfirmpassword,setShowConfirmPassword]=useState('');
   const [errorfirstname,setErrorFirstName]=useState('');
   const [errorlastname,setErrorLastName]=useState('');
   const [errorpassword,setErrorPassword]=useState('');
@@ -50,95 +51,131 @@ const SignUpForm=()=> {
   // First Name Upload
   const handlefnamechng=(e)=>{
   const value = e.target.value;
-  setFirstName(value);
+ 
   const nameRegex =  /^[a-zA-Z0-9, ]+$/;   
 
     
   if(value === ""){
+    setFirstName('')
     setErrorFirstName('');
     return;
   }
 
   
-  if (!nameRegex.test(value)) {
-     setErrorFirstName('Invalid Name Format');  
+  if (nameRegex.test(value)) {
+     setFirstName(value)
+     setErrorFirstName('');  
      return;
   } else {
-    setErrorFirstName('');
+    setErrorFirstName('Invalid Character for name');
   }
   }
   //Last Name Upload
   const handlelnamechng = (e) => {
     const value = e.target.value;
-    setLastName(value);
+   
   
     const nameRegex = /^[a-zA-Z0-9, ]+$/;
   
     // Handle empty input explicitly and exit
     if (value === "") {
+      setLastName("")
       setErrorLastName("");
       return; // Exit early to avoid further validation
     }
   
     // Check if the value matches the regex
-    if (!nameRegex.test(value)) {
-      setErrorLastName("Invalid Name Format");
+    if (nameRegex.test(value)) {
+       setLastName(value)
+       setErrorLastName('');
     } else {
-      setErrorLastName("");
+      setErrorLastName('Invalid Character for name');
     }
   };
   // Email Upload
   const handleemailchng=(e)=>{
-  const value = e.target.value;
-  setEmail(value);
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const value = e.target.value;
+    const emailRegex =  /^[a-zA-Z0-9@._-]*$/;
 
-
-    
-  if(value === ""){
-    setErrorEmail('');
-    return;
-  }
-      if (!emailRegex.test(value)) {
-        
-        setErrorEmail('Invalid E-mail Format');  
-        return;
+    // Check if the input value matches allowed characters
+    if (emailRegex.test(value)) {
+      setEmail(value);
+      setErrorEmail("");
     } else {
-      setErrorEmail('');
+      setErrorEmail("Invalid character for e-mail");
     }
   }
   const handlecntctchng=(e)=>{
     const value = e.target.value;
         
-    setContactNo(value);
+
     const contactNumberRegex = /^\d{0,10}$/;
     if(value === ""){
       setErrorCntct('');
     }
 
-    if (!contactNumberRegex.test(value)) {
-      setErrorCntct('Invalid Contact Number');
+    if (contactNumberRegex.test(value)) {
+       setContactNo(value)
+       setErrorCntct('')
       return;
    } else {
-    setErrorCntct('');
+    setErrorCntct('Invalid Contact Number');
    }
   }
 //  Upload Password
   const handlepwdchng=(e)=>{
     const value = e.target.value;
         
-    setPassword(value);
+    /*
+    Explanation of the Regex:
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      /^:
+
+      Ensures the match starts at the beginning of the string.
+      (?=.*[a-z]):
+
+      Asserts that at least one lowercase letter is present.
+      (?=.*[A-Z]):
+
+      Asserts that at least one uppercase letter is present.
+      (?=.*\d):
+
+      Asserts that at least one digit (0-9) is present.
+      (?=.*[@$!%*?&]):
+
+      Asserts that at least one special character from the set @$!%*?& is present.
+      [A-Za-z\d@$!%*?&]{8,}:
+
+      Matches a string that is at least 8 characters long and contains only:
+      Uppercase letters (A-Z)
+      Lowercase letters (a-z)
+      Digits (0-9)
+      Special characters from the set @$!%*?&
+      $:
+
+      Ensures the match ends at the end of the string.
+      What It Validates:
+      A valid password must:
+
+      Be at least 8 characters long.
+      Contain at least one lowercase letter.
+      Contain at least one uppercase letter.
+      Contain at least one digit.
+      Contain at least one special character from the set @$!%*?&.
+    */
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    setPassword(value);
     if(value === ""){
       setErrorPassword('');
       return;
     }
 
-    if (!passwordRegex.test(value)) {
-      setErrorPassword('Invalid Password');
+    if (passwordRegex.test(value)) {
+      
+      setErrorPassword('');
       return;
    } else {
-    setErrorPassword('');
+    setErrorPassword('Invalid character for password.');
    }
   }
   
@@ -314,7 +351,7 @@ const SignUpForm=()=> {
 
         if (response.status === 200) {
             alert("Data submitted successfully!");
-            navigate('/property-details', { state: { firstname, lastname } });
+            navigate('/property-details', { state: { firstname, lastname, contactno } });
 
             setFirstName("");
             setLastName("");
@@ -335,7 +372,7 @@ const togglePasswordVisibility = () => {
 };
 
 const toggleConfirmPasswordVisibility = () => {
-  setConfirmPassword((prevCnfPassword) => !prevCnfPassword);
+  setShowConfirmPassword((prevCnfPassword) => !prevCnfPassword);
 };
  
   return (
@@ -459,7 +496,7 @@ const toggleConfirmPasswordVisibility = () => {
                    Confirm Password
                   </label>
                   <input
-                    type={confirmpassword ? "text" : "password"}
+                    type={showConfirmpassword ? "text" : "password"}
                     id="conf_passwd"
                     value={confirmpassword}
                     placeholder="Confirm your password"
@@ -474,7 +511,7 @@ const toggleConfirmPasswordVisibility = () => {
                    
                     >
                   
-                    {confirmpassword ?   <EyeOutlined />:<EyeInvisibleOutlined />}
+                    {showConfirmpassword ?   <EyeOutlined />:<EyeInvisibleOutlined />}
                   </button>
                   <div className="text-red-500 text-sm mt-2" style={{ minHeight: '1.75rem' }}>
                     {errorcnfpwd}
@@ -498,7 +535,7 @@ const toggleConfirmPasswordVisibility = () => {
           <div className="text-center mt-4">
             <h6 className="text-gray-600">Already have an account?<span className="Login" 
                                                                   style={{color:'blue'}} onClick={()=>handleLoginClick('admin')} 
-                                                                  onMouseOver={(e) => e.target.style.cursor = 'pointer'}>Login</span></h6>
+                                                                  onMouseOver={(e) => e.target.style.cursor = 'pointer'}>Login as an admin</span></h6>
           </div>
         </form>
         </section>

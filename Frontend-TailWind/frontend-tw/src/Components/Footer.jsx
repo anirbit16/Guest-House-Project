@@ -5,11 +5,11 @@ import { RightOutlined } from '@ant-design/icons'
 export const footerData = [
   {
     title: "USEFUL LINKS",
-    text: [{ list: "Home" }, { list: "About Us" }, { list: "Contact Us" },{ list: "Our Plans" }],
+    text: [{ list: "Home",link:"intro-page"}, { list: "About Us",link:"about-us" }, { list: "Contact Us",link:"contact-us"},{ list: "Our Plans",link:"our-plans" }],
   },
   {
     title: "OTHER SECTIONS",
-    text: [{ list: "Terms & Conditions" }, { list: "Privacy Policy" }],
+    text: [{ list: "Terms & Conditions",link:"t-and-c"}, { list: "Privacy Policy",link:"privacy-policy"}],
   }
 ]
 
@@ -52,7 +52,7 @@ const Footer = () => {
               <h3 style={{ color: val.title === "ALL SECTIONS" ? "#006699" : "#fff" }}>{val.title}</h3>
               <ul>
                 {val.text.map((item, idx) => (
-                  <li key={idx}><RightOutlined style={{color:'yellow' ,paddingRight:'5px'}}/>{item.list}</li>
+                  <li key={idx}><RightOutlined style={{color:'yellow' ,paddingRight:'5px'}} /><a href={item.link}>{item.list}</a></li>
                 ))}
               </ul>
             </div>

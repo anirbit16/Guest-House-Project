@@ -5,8 +5,11 @@ import { Carousel,Typography,Button} from "@material-tailwind/react";
 import CarouselImg1 from "../assets/CarouselImg1.jpg";
 import CarouselImg2 from "../assets/CarouselImg2.jpg";
 import CarouselImg3 from "../assets/CarouselImg3.jpg";
+import aboutus_new from '../assets/aboutus_new.png'
+
 
 import Aboutusimg from "../assets/Aboutusimg.jpg";
+import IntroC_1 from "../assets/IntroC_1.png";
 import Whychooseus from "../assets/Whychooseus.jpeg";
 import Ourexpertise from  "../assets/Ourexpertise.jpg";
 import AboutUs_1 from '../assets/AboutUs_1.png'
@@ -31,14 +34,15 @@ const AboutUs = () => {
       {/* <nav>
         <Navbar/>
       </nav> */}
-     <section className="hero">
-     <Carousel className="rounded-xl">
-      <img
-        src={AboutUs_1}
-        alt="image 1"
-        className=" object-cover"
+<section className="hero">
+   
+<Carousel className="rounded-xl" autoplay="true" loop="">
+     <img
+        src={aboutus_new}
+        className="h-full w-full object-cover"
+       
       />
-      <img
+      {/* <img
         src={AboutUs_2}
         alt="image 2"
         className="h-{full} w-{full} object-cover"
@@ -47,7 +51,7 @@ const AboutUs = () => {
         src={AboutUs_3}
         alt="image 3"
         className="h-{full} w-{full}object-cover"
-      />
+      /> */}
     </Carousel>
     </section>
        

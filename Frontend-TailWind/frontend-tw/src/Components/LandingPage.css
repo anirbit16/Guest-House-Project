@@ -56,7 +56,7 @@
   /* Hero Section For About Us Starts */
   .hero {
    position: relative;
-   height: 100vh; /* Full viewport height for hero section */
+   height: 70vh; /* Full viewport height for hero section */
    background-color: #f8f9fa; /* Light background */
    
    justify-content: center;
@@ -212,7 +212,9 @@
  
 /*Navbar*/
 .navbar {
- 
+   position: sticky;
+   top: 0;
+   z-index: 1000;
    background-color: #006699 !important;
 }
 
@@ -739,19 +741,69 @@ input {
 }
 @media (max-width: 1024px) {
   #root {
-    flex-direction: row;
+    flex-direction: column;
     padding: 1rem;
     gap: 2rem;
   }
+
   form, .left-part {
-    max-width: 50%;
+    max-width: 100%;
+    padding: 2rem;
   }
 
-
-  
-
+  .form {
+    margin-top: 2rem;
+    margin-left: 0;
+    padding: 4rem;
+  }
 }
 
+@media (max-width: 768px) {
+  .form {
+    padding: 2rem;
+  }
+
+  input, textarea {
+    width: 80%;
+  }
+
+  button[type="next"] {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .image {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .left-part {
+    padding: 1rem;
+  }
+
+  .form {
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  form h1 {
+    font-size: 1.5rem;
+  }
+
+  input, textarea {
+    width: 100%;
+  }
+
+  button[type="next"] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
 
 }
 /* form h6{
