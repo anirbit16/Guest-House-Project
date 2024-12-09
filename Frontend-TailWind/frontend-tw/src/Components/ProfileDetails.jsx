@@ -1,5 +1,6 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import {useNavigate,useLocation } from 'react-router-dom'
+import axios from 'axios';
 import {
   Card,
   CardHeader,
@@ -10,39 +11,15 @@ import {
 } from "@material-tailwind/react";
 
 const ProfileDetails = () => {
-    // propertyname, propertyaddress, 
-    // propertycontactno, zip, rooms, 
-    // subplan, taxes, ownername, 
-    // ownercontact,  gst, pan,
-    // ownerimage, propertyimage, duration,
-    // checkin,checkout 
-    const location = useLocation();
-    const navigate = useNavigate();
-    
-    const[propertyname] = useState(location.state.propertyname)
-    const [propertyaddress] = useState(location.state.propertyaddress)
-    const [propertycontactno] = useState(location.state.propertycontactno)
-    const [zip] = useState(location.state.zip)
-    const [rooms ]= useState(location.state.rooms)
-    const [subplan] = useState(location.state.subplan)
-    const [taxes] = useState(location.state.taxes)
-    const [ownername] = useState(location.state.ownername)
-    const [ownercontact] = useState(location.state.ownercontact)
-    const [email] = useState(location.state.email)
-    const [gst] = useState(location.state.gst)
-    const [pan] = useState(location.state.pan)
-    const [ownerimage] = useState(location.state.ownerimage)
-    const [propertyimage] = useState(location.state.propertyimage)
-    const[ duration] = useState(location.state.duration)
-    const [checkin] = useState(location.state.checkin)
-    const [checkout] = useState(location.state.checkout)
- 
-    
-    const handleClick=()=>{
-      console.log(propertyname)
-    }
- 
-
+ useEffect(()=>{
+  const data = axios.get('http://192.168.1.7:8080/signups/getAllsignups')
+  console.log(data)
+ })
+ const location = useLocation();
+const respemail = useState(location.state.recemail)
+const pan = useState(location.state.pan)
+console.log(respemail)
+console.log(pan)
 
   return (
     <>
@@ -65,7 +42,7 @@ const ProfileDetails = () => {
                 type="text"
                 id="name1"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={ownername}
+                 
               />
             </div>
             <div>
@@ -77,7 +54,7 @@ const ProfileDetails = () => {
                 id="email1"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
-                value={propertycontactno}
+                 
               />
             </div>
             <div>
@@ -89,7 +66,7 @@ const ProfileDetails = () => {
                 id="email1"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
-                value={rooms}
+                
               />
             </div>
             <div>
@@ -101,7 +78,7 @@ const ProfileDetails = () => {
                 id="email1"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
-                value={gst}
+               
               />
             </div>
  
@@ -121,7 +98,7 @@ const ProfileDetails = () => {
                 id="name2"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your name"
-                value={{email}}
+              
               />
             </div>
             <div>
@@ -133,7 +110,7 @@ const ProfileDetails = () => {
                 id="email2"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
-                value={propertyaddress}
+            
               />
             </div>
 
@@ -146,8 +123,7 @@ const ProfileDetails = () => {
                 id="email1"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
-                value={subplan}
-
+                 
               />
             </div>
 
@@ -155,19 +131,10 @@ const ProfileDetails = () => {
               <label className="block text-gray-600 mb-1" htmlFor="email1">
              Owner Image
               </label>
-              <input
-                type="email"
-                id="email1"
-                className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Enter your email"
-                value={ownerimage}
-              />
+
             </div>
 
-            <div style={{display:'flex',justifyContent:'center'}}>
-               <button className='btn btn-primary' style={{backgroundColor:'#006699',padding:'5px 40px 5px 40px' ,borderRadius:'5px',color:'#fff'}}>Edit</button>
-            </div>
-
+        
 
           </form>
         </div>
@@ -188,7 +155,7 @@ const ProfileDetails = () => {
                 id="name3"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your name"
-                value={propertyname}
+               
               />
             </div>
             <div>
@@ -200,7 +167,7 @@ const ProfileDetails = () => {
                 id="email3"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
-                value={zip}
+              
               />
             </div>
             <div>
@@ -212,20 +179,14 @@ const ProfileDetails = () => {
                 id="email1"
                 className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
-                value={pan}
+             
               />
             </div>
             <div>
               <label className="block text-gray-600 mb-1" htmlFor="email1">
              Property Image
               </label>
-              <input
-                type="email"
-                id="email1"
-                className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Enter your email"
-                value={propertyimage}
-              />
+        
             </div>
 
 

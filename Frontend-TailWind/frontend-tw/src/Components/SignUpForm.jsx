@@ -32,7 +32,10 @@ const SignUpForm=()=> {
   const [errorpassword,setErrorPassword]=useState('');
   const [erroremail,setErrorEmail]=useState('');
   const [errorcnfpwd,setErrorCnfPwd]=useState('');
-  const [errorcntct,setErrorCntct]=useState('')
+  const [errorcntct,setErrorCntct]=useState('');
+  const [apiresemail,setAPIresemail]=useState('');
+  
+  
  
   
   const [open, setOpen] = useState(false)
@@ -352,8 +355,10 @@ const SignUpForm=()=> {
 
         if (response.status === 200) {
             alert("Data submitted successfully!");
-            navigate('/property-details', { state: { firstname, lastname, contactno,email,contactno,password} });
-
+            setAPIresemail(response.data.email)
+            console.log("APIRESEMAIL",apiresemail);
+            navigate('/property-details', { state: { firstname, lastname, contactno,email,contactno,password,apiresemail} });
+            console.log("Response from API: ",response.data.email)
             setFirstName("");
             setLastName("");
             setEmail("");

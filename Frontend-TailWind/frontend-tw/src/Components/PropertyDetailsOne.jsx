@@ -21,8 +21,9 @@ const navigate = useNavigate();
 const [firstname, setFirstName] = useState(location.state.firstname);
 const [lastname,  setLastName] = useState(location.state.lastname);
 const [contactno,setContactNo]= useState(location.state.contactno);
-const [email,setEmail]= useState(location.state.email);
- 
+const responseemail = useState(location.state.apiresemail);
+console.log(responseemail)
+const [recemail,setRecemail]=useState('') 
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
 
@@ -175,7 +176,7 @@ const handleShortcut=()=>{
     subplan, taxes, ownername, 
     ownercontact,  gst, pan,
     ownerimage, propertyimage, duration,
-    checkin,checkout 
+    checkin,checkout,
   } })
 }
 /*Checker function*/
@@ -337,13 +338,15 @@ const handleClick = async (e) => {
       });
       if(response.status === 200 ){
         alert('Upload Successful')
+        setRecemail(responseemail)
+        console.log(recemail)
         navigate('/profile-details', { state: { 
                                               propertyname, propertyaddress, 
                                               propertycontactno, zip, rooms, 
                                               subplan, taxes, ownername, 
                                               ownercontact,  gst, pan,
                                               ownerimage, propertyimage, duration,
-                                              checkin,checkout 
+                                              checkin,checkout,recemail
                                             } })
       }
 
