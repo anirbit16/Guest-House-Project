@@ -82,7 +82,7 @@ const AboutUs = () => {
 
 
        <p>We believe that managing rooms should be effortless, and our platform is designed to provide exactly that: intuitive, flexible, and customizable solutions that cater to your unique needs.</p>
-           <button className='btn2' style={{width:'12rem'}}>More About Us</button>
+           {/* <button className='btn2' style={{width:'12rem'}}>More About Us</button> */}
            <bi bi-check-all></bi>
          </div>
          <div className='right row'>
@@ -130,7 +130,7 @@ const AboutUs = () => {
     <section className='about'>
       
        
-      <div className='container d-flex gap-3'>
+      {/* <div className='container d-flex gap-3'>
           
         <div className='left row'>
         <div className="heading">
@@ -162,7 +162,7 @@ const AboutUs = () => {
           <img src={Ourexpertise} alt='' />
         </div>
         {/* Select Your Package */}
-      </div>
+      {/* </div> */}
     </section>
      
 

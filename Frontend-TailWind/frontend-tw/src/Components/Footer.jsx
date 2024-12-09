@@ -38,8 +38,10 @@ const Footer = () => {
               <img src='../images/logo-light.png' alt='' />
               <h2 style={{fontSize:'25px',}}>VUCS Pvt Ltd</h2>
               <p>in Street No. 1111 (Major Arterial Road Mouza) –</p>
-              <p>Noapara</p>
-              <p>J.L, Plot No. IID/31/1,, NH12, Newtown, Kolkata,</p>
+              
+              <p>J.L, Plot No. IID/31/1,, NH12, </p>
+              <p>Noapara, Newtown,</p>
+              <p>Kolkata - 700156</p>
               <p>Phone: +91 9163227342</p>
               <p>Email: connect@vucspvtltd.com</p>
 

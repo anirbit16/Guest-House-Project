@@ -1,9 +1,10 @@
 
 import {useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import {Link} from 'react-router-dom'
-import SubFormImg from '../assets/SubFormimg.png'
+import Dummy_6 from '../assets/Dummy_6.jpg'
 import axios from 'axios'
+import SignUpPage_img from '../assets/SignUpPage_img.png'
  
 
 
@@ -16,9 +17,11 @@ const PropertyDetailsOne = () => {
                                  
   /*States*/
 const location = useLocation();
+const navigate = useNavigate();
 const [firstname, setFirstName] = useState(location.state.firstname);
 const [lastname,  setLastName] = useState(location.state.lastname);
 const [contactno,setContactNo]= useState(location.state.contactno);
+const [email,setEmail]= useState(location.state.email);
  
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
@@ -59,8 +62,8 @@ const [checkinerror,setCheckInError]=useState('');
 const [checkouterror,setCheckOutError]=useState('');
 const [ownerimagepreview, setOwnerImagePreview] = useState('');
 const [propertyimagepreview, setPropertyImagePreview] = useState('');
-const [rooms, setRooms] = useState("");
-const [subplan, setSubPlan] = useState("");
+const [rooms, setRooms] = useState('');
+const [subplan, setSubPlan] = useState('');
 const [duration, setDuration] = useState("6 Months");
 const [summary, setSummary] = useState({ basePrice: 0, taxes: 0, discount: 0, total: 0 });
 
@@ -165,6 +168,16 @@ const handlePropertyH1Click = () => {
   propertyFileInputRef.current.click();
 };
 
+const handleShortcut=()=>{
+  navigate('/profile-details', { state: { 
+    propertyname, propertyaddress, 
+    propertycontactno, zip, rooms, 
+    subplan, taxes, ownername, 
+    ownercontact,  gst, pan,
+    ownerimage, propertyimage, duration,
+    checkin,checkout 
+  } })
+}
 /*Checker function*/
  
  
@@ -324,6 +337,14 @@ const handleClick = async (e) => {
       });
       if(response.status === 200 ){
         alert('Upload Successful')
+        navigate('/profile-details', { state: { 
+                                              propertyname, propertyaddress, 
+                                              propertycontactno, zip, rooms, 
+                                              subplan, taxes, ownername, 
+                                              ownercontact,  gst, pan,
+                                              ownerimage, propertyimage, duration,
+                                              checkin,checkout 
+                                            } })
       }
 
 
@@ -363,7 +384,7 @@ const plans = {
 /*Plan and room handling function*/
 /*Update plan and summary*/
 const updatePlanAndSummary = (rooms) => {
-  let selectedPlan = "";
+  let selectedPlan = '';
   if (rooms >= 1 && rooms <= 10) selectedPlan = "Silver";
   else if (rooms >= 11 && rooms <= 20) selectedPlan = "Gold";
   else if (rooms > 20) selectedPlan = "Platinum";
@@ -382,7 +403,7 @@ const handleRoomChange = (e) => {
   if (value >= 1) {
     updatePlanAndSummary(value);
   } else {
-    setSubPlan("");
+    setSubPlan('');
     setSummary({ basePrice: 0, taxes: 0, discount: 0, total: 0 });
   }
 };
@@ -404,12 +425,21 @@ const handleDurationChange = (e) => {
 const handlePropertyNameChange = (e) => {
   const value = e.target.value;
   const propertynameregex =  /^[a-zA-Z0-9, ]+$/; 
+  if(value === ''){
+    setPropertyName('');
+    setPropertyNameError('');
+    return;
+  }
+  
+  
   
   if (propertynameregex.test(value)) {
     setPropertyName(value);
-    setPropertyNameError(""); // Clear error if input is valid
+    setPropertyNameError(''); // Clear error if input is valid
+    return;
   } else {
     setPropertyNameError('Invalid property name');
+    return;
   }
 };
 
@@ -419,12 +449,19 @@ const handlePropertyNameChange = (e) => {
 const handlePropertyAddressChange = (e) => {
   const value = e.target.value;
   const propertyaddressregex =/^[a-zA-Z0-9\s,.'#-/]+$/;
+  if(value === ''){
+     setPropertyAddress('');
+     setPropertyAddressError('');
+     return;
+  }
   
   if (propertyaddressregex.test(value)) {
-    setPropertyAddress(value);
-    setPropertyAddressError(''); // Clear error if input is valid
+        setPropertyAddress(value);
+        setPropertyAddressError(''); // Clear error if input is valid
+        return;
   } else {
     setPropertyAddressError('Invalid property address');
+    return;
   }
 }
 //  Contact Number Form Upload
@@ -432,32 +469,51 @@ const handlePropertyAddressChange = (e) => {
 
 const handlePropertyContactChange = (e) => {
   const value = e.target.value;
-  const contactNumberRegex = /^\d{0,10}$/;  
+  const contactNumberRegex = /^\d{0,10}$/;
+  if(value === ''){
+      setPropertyContactNo('');
+      setPropertyAddressError('');
+    return;
+ }
+
   
   if ( contactNumberRegex.test(value)) {
-    setPropertyContactNo(value);
-    setPropertyContactNoError(''); // Clear error if input is valid
+        setPropertyContactNo(value);
+        setPropertyContactNoError(''); // Clear error if input is valid
+        return;
+
   } else {
     setPropertyContactNoError('Invalid contact number');
+    return;
   }
 }
 
 // Zip form uplad
 const handleZipChange = (e) => {
   const value = e.target.value;
-  const zipRegex = /^[1-9][0-9]{0,5}$/;    
+  const zipRegex = /^[1-9][0-9]{0,5}$/; 
+  
+  if(value===''){
+    setZip('');
+    setZiperror('');
+    return;
+  }
   
   if (zipRegex.test(value)) {
      setZip(value);
      setZiperror(''); // Clear error if input is valid
+     return;
+     
   } else {
     setZiperror('Invalid zip code');
+    return;
   }
 }
 //Owner name form upload
 const handleOwnerNameChange = () => {
  
-  setOwnerName(`${firstname}${lastname}`)  
+  setOwnerName(`${firstname}${lastname}`)
+  return;  
 }
 
 
@@ -472,30 +528,44 @@ const handleOwnerContactChange = (e) => {
   //   setOwnerContactError('Invalid contact number');
   // }
   setOwnerContact(`${contactno}`)
+  return;
 }
 
 
 const handlePANChange = (e) => {
   const value = e.target.value;
   const panRegex =  /^[A-Z]{0,5}[0-9]{0,4}[A-Z]{0,1}$/; 
-  
+  if(value===''){
+     setPan('');
+     setPanError('');
+     return;
+  }
   if (panRegex.test(value)) {
      setPan(value);
      setPanError(''); // Clear error if input is valid
+     return;
   } else {
     setPanError('Invalid PAN ID');
+    return;
+
   }
 }
 
 const handleGSTChange = (e) => {
   const value = e.target.value;
   const gstRegex =   /^[0-9]{0,2}[A-Z]{0,5}[0-9]{0,4}[A-Z]{0,1}[A-Z0-9]{0,1}[Z]{0,1}[A-Z0-9]{0,1}$/; 
+  if(value===''){
+    setGst('');
+    setGstError('');
+  }
   
   if ( gstRegex.test(value)) {
         setGst(value); 
         setGstError(''); // Clear error if input is valid
+        return;
   } else {
         setGstError('Invalid GST ID');
+        return;
   }
 }
 
@@ -517,15 +587,15 @@ const handleGSTChange = (e) => {
       <h1 className="font-bold text-center text-purple-500 text-4xl mb-6">Register Your Property</h1>
     </div>
     <div className="container mx-4 mt-8 my-4" 
-          style={{display:'flex', justifyContent:'center'}}>
-            <div className="image">
-          <img src ={SubFormImg} alt="Img"/>
+          style={{display:'flex', justifyContent:'center',gap:'4em'}}>
+            <div className="image"  >
+          <img src ={SignUpPage_img} alt="Img"/>
         </div>
       <div className="flex gap-8 relative"> {/* Added relative positioning */}
         {/* Left Side - Property Form */}
         <div className="w-2/3">
           
-          <div className="bg-white rounded-lg shadow-sm">
+          <div className="bg-white rounded-lg shadow-lg">
             <form className="px-6 pt-6 pb-8">
               <div className="mb-6 text-center">
                 <h2 className="font-bold text-violet-500 text-xl">Property Details</h2>
@@ -627,7 +697,7 @@ const handleGSTChange = (e) => {
                   onChange={handleRoomChange}
                   placeholder="Enter number of rooms"
                 />
-                {rooms < 5 && rooms !== "" && (
+                {rooms < 5 && rooms !== '' && (
                   <p style={{ color: "red" }}>Enter a value of 5 or more</p>
                 )}
           {roomserror && <div className="text-red-500 text-sm mt-2">{roomserror}</div>}           
@@ -774,14 +844,16 @@ const handleGSTChange = (e) => {
 
                 
 
-              <div className="mt-6 mx-20" style={{display:'flex',gap:'10px'}}>
-                {/* <button
+              <div className="mt-6 mx-20" style={{display:'flex',justifyContent:'left'}}>
+                <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
-                  onClick={handleClick}
+                  onClick={handleShortcut}
+                  style={{backgroundColor:'#fff'}}
+                   
                 >
                   Next
-                </button> */}
+                </button>
 
                 <button
                   type="submit"
@@ -802,7 +874,7 @@ const handleGSTChange = (e) => {
 
         {/* Right Side - Subscription Summary */}
         <div className="w-1/2">
-          <div className="bg-white rounded-lg shadow-sm p-6 mt-20" style={{marginTop:'0px',width:'18rem'}}>
+          <div className="bg-white rounded-lg shadow-lg p-6 mt-20" style={{marginTop:'0px',width:'18rem'}}>
             <h2 className="text-purple-500 text-2xl mb-6" style={{color:'rgb(139 92 246 / var(--tw-text-opacity))',
                                                                 fontWeight:'700',fontSize:'1.75em'}}>Subscription Summary</h2>
             

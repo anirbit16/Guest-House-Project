@@ -29,9 +29,9 @@ const OurPlans = () => {
       ];
 
 const plans = [
-        { title: "Silver", price: 500, feature: featureBox1, btnTitle: "Sign up", btnClass: "btn-outline-primary" },
-        { title: "Gold", price: 1000, feature: featureBox2, btnTitle: "Sign Up", btnClass: "btn-primary" },
-        { title: "Business", price: 1500, feature: featureBox3, btnTitle: "Sign Up", btnClass: "btn-primary" }
+        { title: "Silver", price: 500, feature: featureBox1, btnTitle: "See more", btnClass: "btn-outline-primary" },
+        { title: "Gold", price: 1000, feature: featureBox2, btnTitle: "See more", btnClass: "btn-primary" },
+        { title: "Platinum", price: 1500, feature: featureBox3, btnTitle: "See more", btnClass: "btn-primary" }
       ];
   return (
 
@@ -74,12 +74,12 @@ const plans = [
         className="max-w-sm w-full lg:w-1/4 p-4 mb-6 shadow-lg rounded-lg text-center"
       >
         <div
-          className={`py-4 text-white rounded-t-lg ${
+          className={`py-4 text-white rounded-lg ${
             plan.title === 'Silver'
               ? 'bg-gray-400'
               : plan.title === 'Gold'
               ? 'bg-yellow-500'
-              : plan.title === 'Business'
+              : plan.title === 'Platinum'
               ? 'bg-blue-800'
               : 'bg-gray-200'
           }`}
@@ -98,16 +98,13 @@ const plans = [
               </li>
             ))}
           </ul>
-          {/* <button
+          <button
             type="button"
             className="btn-primary w-full mt-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-200"
-            onClick={() => {
-              setShowSignUpModal();
-              handleSignUpClick(plan.title);
-            }}
+            style={{ backgroundColor: '#006699' }}
           >
             {plan.btnTitle}
-          </button> */}
+          </button>
         </div>
       </div>
     ))}

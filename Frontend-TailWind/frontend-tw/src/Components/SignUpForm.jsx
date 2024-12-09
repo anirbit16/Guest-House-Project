@@ -63,11 +63,12 @@ const SignUpForm=()=> {
 
   
   if (nameRegex.test(value)) {
-     setFirstName(value)
+     setFirstName(value);
      setErrorFirstName('');  
      return;
   } else {
     setErrorFirstName('Invalid Character for name');
+    return;
   }
   }
   //Last Name Upload
@@ -183,7 +184,7 @@ const SignUpForm=()=> {
 
  
   const shortcutfunc=()=>{
-    navigate('/property-details')
+    navigate('/property-details',{ state: { firstname, lastname, contactno, email } })
   }
 
   const handleLoginClick=async(selectedrole)=>{
@@ -351,7 +352,7 @@ const SignUpForm=()=> {
 
         if (response.status === 200) {
             alert("Data submitted successfully!");
-            navigate('/property-details', { state: { firstname, lastname, contactno } });
+            navigate('/property-details', { state: { firstname, lastname, contactno,email,contactno,password} });
 
             setFirstName("");
             setLastName("");
@@ -385,18 +386,19 @@ const toggleConfirmPasswordVisibility = () => {
         </div>
       </section>
       <section className="content" style={{display:'flex'}}>
+         
       <div className="left-part">
        
         <div className="image">
-          <img src ={SubFormimg} alt="Img"/>
+          <img src ={SubFormimg} alt="Img" style={{height:'400px',width:'600px'}}/>
         </div>
       </div>    
        {/* Form Section */}
-       <form className="rounded px-48 pt-6 pb-8 mb-4">
+       <form className="rounded px-48  mb-4">
           <div className="text-center mt-4">
             <h1 className="text-violet-600">Let's work together</h1>
            </div>
-
+         <div className="rounded pt-6 pb-8 px-5 py-5 shadow-lg" >
           <div className="flex gap-4 mb-4">
             <div className="w-1/2">
               <label className="block text-sm font-bold mb-2" htmlFor="fname"  style={{color:'grey',fontWeight:'500'}}>
@@ -531,6 +533,7 @@ const toggleConfirmPasswordVisibility = () => {
             </button>
 
             <button style={{marginLeft:'40px',color:'#fff'}} onClick={shortcutfunc}>SC</button>
+            </div>
           </div>
           <div className="text-center mt-4">
             <h6 className="text-gray-600">Already have an account?<span className="Login" 

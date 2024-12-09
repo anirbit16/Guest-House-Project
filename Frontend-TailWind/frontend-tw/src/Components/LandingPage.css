@@ -453,7 +453,7 @@
   display: block;
   max-width: 100%;
   height: auto;
-  border-radius: 5px;
+  border-radius: 0px;
   margin-top: 15px;
 }
 
@@ -739,71 +739,7 @@ input {
   width: 18em;
   font-size: 12px;
 }
-@media (max-width: 1024px) {
-  #root {
-    flex-direction: column;
-    padding: 1rem;
-    gap: 2rem;
-  }
-
-  form, .left-part {
-    max-width: 100%;
-    padding: 2rem;
-  }
-
-  .form {
-    margin-top: 2rem;
-    margin-left: 0;
-    padding: 4rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .form {
-    padding: 2rem;
-  }
-
-  input, textarea {
-    width: 80%;
-  }
-
-  button[type="next"] {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  .image {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  #root {
-    padding: 1rem;
-  }
-
-  .left-part {
-    padding: 1rem;
-  }
-
-  .form {
-    padding: 1.5rem;
-    margin-top: 1rem;
-  }
-
-  form h1 {
-    font-size: 1.5rem;
-  }
-
-  input, textarea {
-    width: 100%;
-  }
-
-  button[type="next"] {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
+ 
 
 }
 /* form h6{
