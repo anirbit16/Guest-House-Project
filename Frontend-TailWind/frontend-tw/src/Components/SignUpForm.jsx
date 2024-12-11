@@ -33,7 +33,7 @@ const SignUpForm=()=> {
   const [erroremail,setErrorEmail]=useState('');
   const [errorcnfpwd,setErrorCnfPwd]=useState('');
   const [errorcntct,setErrorCntct]=useState('');
-  const [apiresemail,setAPIresemail]=useState('');
+
   
   
  
@@ -187,7 +187,7 @@ const SignUpForm=()=> {
 
  
   const shortcutfunc=()=>{
-    navigate('/property-details',{ state: { firstname, lastname, contactno, email } })
+    navigate('/property-details', { state: {firstname,lastname,email,contactno} });
   }
 
   const handleLoginClick=async(selectedrole)=>{
@@ -355,10 +355,7 @@ const SignUpForm=()=> {
 
         if (response.status === 200) {
             alert("Data submitted successfully!");
-            setAPIresemail(response.data.email)
-            console.log("APIRESEMAIL",apiresemail);
-            navigate('/property-details', { state: { firstname, lastname, contactno,email,contactno,password,apiresemail} });
-            console.log("Response from API: ",response.data.email)
+            navigate('/property-details', { state: {firstname,lastname,email,contactno} });
             setFirstName("");
             setLastName("");
             setEmail("");

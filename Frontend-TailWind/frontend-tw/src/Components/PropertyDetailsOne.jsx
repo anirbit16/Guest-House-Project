@@ -12,18 +12,23 @@ import './Landingpage.css'
 
 const PropertyDetailsOne = () => {
 
+const location = useLocation();
+const navigate = useNavigate();
+ 
+const receivedemail = useState(location.state.email)
+const [firstname, setFirstName] = useState(location.state.firstname);
+const [lastname,  setLastName] = useState(location.state.lastname);
+const [contactno,setContactNo]= useState(location.state.contactno);
+const sentemail = receivedemail[0];
+console.log("Sent Email: ",sentemail)
+
   // Form Values
 
                                  
   /*States*/
-const location = useLocation();
-const navigate = useNavigate();
-const [firstname, setFirstName] = useState(location.state.firstname);
-const [lastname,  setLastName] = useState(location.state.lastname);
-const [contactno,setContactNo]= useState(location.state.contactno);
-const responseemail = useState(location.state.apiresemail);
-console.log(responseemail)
-const [recemail,setRecemail]=useState('') 
+
+ 
+ 
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
 
@@ -39,7 +44,7 @@ const [ziperror,setZiperror]=useState('');
 const [roomserror,setRoomsError]=useState('');
  
 const [taxes,setTaxes]=useState(40);
- 
+
 const [ownername,setOwnerName]=useState('');
 const [ownercontact,setOwnerContact]=useState('');
 const [ownernameerror,setOwnerNameError]=useState('');
@@ -338,15 +343,9 @@ const handleClick = async (e) => {
       });
       if(response.status === 200 ){
         alert('Upload Successful')
-        setRecemail(responseemail)
-        console.log(recemail)
+       
         navigate('/profile-details', { state: { 
-                                              propertyname, propertyaddress, 
-                                              propertycontactno, zip, rooms, 
-                                              subplan, taxes, ownername, 
-                                              ownercontact,  gst, pan,
-                                              ownerimage, propertyimage, duration,
-                                              checkin,checkout,recemail
+                                               pan,sentemail
                                             } })
       }
 
@@ -518,8 +517,6 @@ const handleOwnerNameChange = () => {
   setOwnerName(`${firstname}${lastname}`)
   return;  
 }
-
-
 const handleOwnerContactChange = (e) => {
   // const value = e.target.value;
   // const contactNumberRegex =  /^\d{0,10}$/;   

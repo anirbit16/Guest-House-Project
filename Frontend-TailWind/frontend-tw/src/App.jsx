@@ -16,6 +16,7 @@ import PropertyDetailsOne  from './Components/PropertyDetailsOne.jsx';
 import TandC from './Components/TandC.jsx';
 import Privacy from './Components/Privacy.jsx';
 import ProfileDetails from './Components/ProfileDetails.jsx';
+import Rough from './Components/Rough.jsx';
 
 
 const App = () => {
@@ -31,7 +32,7 @@ const RouterContent = () => {
   const location = useLocation();
 
   // Paths where Navbar and Footer should be hidden
-  const hideNavbarFooter = location.pathname === '/profile-details';
+  const hideNavbarFooter = location.pathname === '/profile-details' || location.pathname === '/rough-page';
 
   return (
     <>
@@ -48,6 +49,7 @@ const RouterContent = () => {
         <Route path='/t-and-c' element={<TandC />} />
         <Route path='/privacy-policy' element={<Privacy />} />
         <Route path='/profile-details' element={<ProfileDetails />} />
+        <Route path='/rough-page' element={<Rough/>} />
       </Routes>
       {!hideNavbarFooter && <Footer />} {/* Conditionally render Footer */}
     </>
