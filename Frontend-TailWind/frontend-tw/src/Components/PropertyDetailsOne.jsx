@@ -197,8 +197,8 @@ const handleShortcut=()=>{
 /*Checker function*/
  
  
-/*Handle Click Function*/
-const handleClick = async (e) => {
+/*Handle Submit Function*/
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   let isValid = true; // Flag to track overall form validity
@@ -223,7 +223,10 @@ const handleClick = async (e) => {
   if (!propertycontactno) {
     setPropertyContactNoError('Property Contact Number Required');
     isValid = false;
-  } else {
+  } else if(propertycontactno.length < 10){
+    setPropertyContactNoError('Contact Number Should Be of 10 digits');
+    isValid = false;
+  } else{
     setPropertyContactNoError('');
   }
 
@@ -245,9 +248,13 @@ const handleClick = async (e) => {
 
   // PAN Error Check
   if (!pan) {
-    setPanError('PAN Number Required');
-    isValid = false;
-  }   else {
+      setPanError('PAN Number Required');
+      isValid = false;
+  } else if(pan.length < 10){
+      setPanError('PAN Number should of 10 characters.')
+      isValid = false;
+  }
+    else {
     setPanError('');
   }
 
@@ -271,7 +278,11 @@ const handleClick = async (e) => {
   if (!zip) {
     setZiperror("ZIP Code is required");
     isValid = false;
-  }  else {
+  } if(zip.length < 6){
+    setZiperror("ZIP Code should be of 6 digits.");
+    isValid = false;
+
+  } else {
     setZiperror('');
   }
 
@@ -356,7 +367,7 @@ const handleClick = async (e) => {
       formdata.append('tan',tan)
        
  
-      const response = await axios.post('http://192.168.1.16:8080/props/registerProperty', formdata, {
+      const response = await axios.post('http://127.0.0.1:8080/props/registerProperty', formdata, {
           'Content-Type': 'multipart/form-data'
       });
       if(response.status === 200 ){
@@ -444,23 +455,7 @@ const handleDurationChange = (e) => {
 // Property Name Upload 
 const handlePropertyNameChange = (e) => {
   const value = e.target.value;
-  const propertynameregex =  /^[a-zA-Z0-9, ]+$/; 
-  if(value === ''){
-    setPropertyName('');
-    setPropertyNameError('');
-    return;
-  }
-  
-  
-  
-  if (propertynameregex.test(value)) {
-    setPropertyName(value);
-    setPropertyNameError(''); // Clear error if input is valid
-    return;
-  } else {
-    setPropertyNameError('Invalid property name');
-    return;
-  }
+  setPropertyName(value);
 };
 
  
@@ -503,11 +498,46 @@ const handlePropertyContactChange = (e) => {
         return;
 
   } else {
-    setPropertyContactNoError('Invalid contact number');
+    setPropertyContactNoError('');
     return;
   }
 }
 
+const handleTabpressPC =(e)=>{
+  if (e.key === 'Tab' && propertycontactno.length < 10) {
+    setPropertyContactNoError(' 10 digits required.');
+  }
+
+}
+
+const handleTabpressOC =(e)=>{
+  if (e.key === 'Tab' && ownercontact.length < 10) {
+    setPropertyContactNoError(' 10 digits required.');
+  }
+
+}
+
+ 
+
+const handleTabpressZIP =(e)=>{
+  if (e.key === 'Tab' && zip.length < 6) {
+    setZiperror(' 6 digits required.');
+  }
+
+}
+
+const handleTabpressPAN =(e)=>{
+  if (e.key === 'Tab' && pan.length < 10) {
+    setPanError(' 10 characters required.');
+  }
+
+}
+const handleTabpressGST =(e)=>{
+  if (e.key === 'Tab' && gst.length < 15) {
+    setGstError(' 15 characters required.');
+  }
+
+}
 // Zip form uplad
 const handleZipChange = (e) => {
   const value = e.target.value;
@@ -525,7 +555,7 @@ const handleZipChange = (e) => {
      return;
      
   } else {
-    setZiperror('Invalid zip code');
+    setZiperror('');
     return;
   }
 }
@@ -563,7 +593,7 @@ const handlePANChange = (e) => {
      setPanError(''); // Clear error if input is valid
      return;
   } else {
-    setPanError('Invalid PAN ID');
+    setPanError('');
     return;
 
   }
@@ -613,7 +643,7 @@ const handleGSTChange = (e) => {
         setGstError(''); // Clear error if input is valid
         return;
   } else {
-        setGstError('Invalid GST ID');
+        setGstError('');
         return;
   }
 }
@@ -648,12 +678,14 @@ const handleTANChange = (e) => {
     setTAN(value);
     setTANError('');
   } else {
-    setTANError('Invalid TAN Number Format.');
+    setTANError('');
   }
 };
 
 
-
+const skipbtn=()=>{
+  navigate('/about-us')
+}
 
 
 
@@ -670,19 +702,26 @@ const handleTANChange = (e) => {
     <div className="container mx-4 my-6 mt-10">
       <h1 className="font-bold text-center text-purple-500 text-4xl mb-6">Register Your Property</h1>
     </div>
-    <div className="container mx-4 mt-8 my-4" 
+    <div className="container mx-40 mt-8 my-2" 
           style={{display:'flex', justifyContent:'center',gap:'4em'}}>
-            <div className="image"  >
+            {/* <div className="image"  >
           <img src ={SignUpPage_img} alt="Img"/>
-        </div>
-      <div className="flex gap-8 relative"> {/* Added relative positioning */}
+        </div> */}
+      <div className="flex gap-8 relative w-3/4" style={{width:'500em'}}> {/* Added relative positioning */}
         {/* Left Side - Property Form */}
         <div className="w-2/3">
           
-          <div className="bg-white rounded-lg shadow-lg">
+          <div className="bg-white rounded-lg shadow-2xl">
             <form className="px-6 pt-6 pb-8">
-              <div className="mb-6 text-center">
+            <div className="mb-6 text-center" style={{display:'flex',justifyContent:'right'}}>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white  py-1 px-4 rounded" onClick={skipbtn}>
+             Skip
+            </button>
+               
+              </div>
+              <div className="mb-6 text-center" style={{display:'flex',justifyContent:'center'}}>
                 <h2 className="font-bold text-violet-500 text-xl">Property Details</h2>
+               
               </div>
               
               <div className="grid grid-cols-2 gap-4">
@@ -713,6 +752,7 @@ const handleTANChange = (e) => {
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                     value={propertycontactno}
                     onChange={handlePropertyContactChange}   
+                    onKeyDown={handleTabpressPC}
                   />
                    { propertycontactnoerror && <div className="text-red-500 text-sm mt-2">{propertycontactnoerror}</div>}
                 </div>
@@ -739,11 +779,45 @@ const handleTANChange = (e) => {
                     placeholder="Enter Zip Code"
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                     value={zip}
-                    onChange={handleZipChange}                     
+                    onChange={handleZipChange}     
+                    onKeyDown={handleTabpressZIP}                
                   />
                      {ziperror && <div className="text-red-500 text-sm mt-2">{ziperror}</div>}
 
                 </div>
+
+                
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Rooms</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={rooms}
+                   className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                  onChange={handleRoomChange}
+                  placeholder="Enter number of rooms"
+                />
+                {rooms < 5 && rooms !== '' && (
+                  <p style={{ color: "red" }}>Enter a value of 5 or more</p>
+                )}
+          {roomserror && <div className="text-red-500 text-sm mt-2">{roomserror}</div>}           
+
+      </div>
+
+      <div className="mb-4">
+      <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Subscription Plan</label>
+        <input
+          type="text"
+          id="subp"
+          placeholder="Enter Subscription Plan"
+          value={subplan}
+          readOnly
+          className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+          
+        />
+         
+       
+      </div>
 
                 <div className="mb-4">
                 <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Owner Name</label>
@@ -767,6 +841,7 @@ const handleTANChange = (e) => {
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                     value={ownercontact}
                     onChange={handleOwnerContactChange}
+                    onKeyDown={handleTabpressOC}
                  />
                   { ownercontacterror && <div className="text-red-500 text-sm mt-2">{ownercontacterror}</div>}
                 </div>
@@ -817,6 +892,7 @@ const handleTANChange = (e) => {
                     value={pan}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                     onChange={handlePANChange}
+                    onKeyDown={handleTabpressPAN}
                   />
                    { panerror && <div className="text-red-500 text-sm mt-2">{panerror}</div>}
                 </div>
@@ -830,6 +906,7 @@ const handleTANChange = (e) => {
                     value={gst}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
                     onChange={handleGSTChange}
+                    onKeyDown={handleTabpressGST}
                   />
                    { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
                 </div>
@@ -972,15 +1049,7 @@ const handleTANChange = (e) => {
                   Next
                 </button> */}
 
-                <button
-                  type="submit"
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
-                   
-                >
-                  <Link to ='/about-us'>Skip</Link>
-                
-                  
-                </button>
+
               </div>
             </form>
           </div>
@@ -1059,7 +1128,7 @@ const handleTANChange = (e) => {
 
             </div>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 
-               rounded focus:outline-none focus:shadow-outline" onClick={handleClick}>
+               rounded focus:outline-none focus:shadow-outline" onClick={handleSubmit}>
               Make Payment
             </button>
 

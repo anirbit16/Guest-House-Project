@@ -39,6 +39,7 @@ const SignUpForm=()=> {
   const [errorcnfpwd,setErrorCnfPwd]=useState('');
   const [errorcntct,setErrorCntct]=useState('');
   const [countrycode, setCountryCode] = React.useState('');
+  const [country, setCountry] = useState('');
 
 
 
@@ -48,17 +49,16 @@ const SignUpForm=()=> {
   
   const [open, setOpen] = useState(false)
   const [role,setRole] = useState(false)
- 
+  /*Regex Checkers*/
+  const nameRegex =  /^[a-zA-Z0-9, ]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const contactNumberRegex = /^\d{0,10}$/; 
 
 
   const navigate = useNavigate();
   
-  const contactNumberRegex = /^\d{10}$/;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const nameRegex = /^[A-Za-z\s]+$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-  const handleCountryCodeChange = (event) => {
+ const handleCountryCodeChange = (event) => {
     setCountryCode(event.target.value);
   };
  
@@ -67,7 +67,7 @@ const SignUpForm=()=> {
   const handlefnamechng=(e)=>{
   const value = e.target.value;
  
-  const nameRegex =  /^[a-zA-Z0-9, ]+$/;   
+
 
     
   if(value === ""){
@@ -111,33 +111,52 @@ const SignUpForm=()=> {
   // Email Upload
   const handleemailchng=(e)=>{
     const value = e.target.value;
-    const emailRegex =  /^[a-zA-Z0-9@._-]*$/;
+    setEmail(value);
 
-    // Check if the input value matches allowed characters
-    if (emailRegex.test(value)) {
-      setEmail(value);
-      setErrorEmail("");
-    } else {
-      setErrorEmail("");
-    }
+
+
+ 
   }
-  const handlecntctchng=(e)=>{
-    const value = e.target.value;
-        
 
-    const contactNumberRegex = /^\d{0,10}$/;
-    if(value === ""){
+
+  const handleTabPressEmail = (e) => {
+    const value=e.target.value;
+
+    if (e.key === 'Tab' && !(emailRegex.test(value))) {
+      setErrorEmail('Invalid E-mail Format');
+    }else {
+      setErrorEmail('')
+    }
+
+
+}
+  const handlecntctchng = (e) => {
+    const value = e.target.value;
+  
+  
+    if (value === "") {
       setErrorCntct('');
     }
-
+  
     if (contactNumberRegex.test(value)) {
-       setContactNo(value)
-       setErrorCntct('')
+      setContactNo(value);
+      setErrorCntct('');
       return;
-   } else {
-    setErrorCntct('');
-   }
-  }
+    } else {
+      setErrorCntct('');
+    }
+  };
+  
+  const handleTabPress = (e) => {
+    if (e.key === 'Tab' && contactno.length < 10) {
+      setErrorCntct('At least 10 digits required.');
+    }
+  };
+
+  const handleCountryChange = (event) => {
+    setCountry(event.target.value); // Update the state when the selection changes
+  };
+  
 //  Upload Password
 const handlepwdchng = (e) => {
   const value = e.target.value;
@@ -147,7 +166,7 @@ const handlepwdchng = (e) => {
   Updated Regex:
   Password must be exactly 8 characters long.
   */
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+ 
 
   if (value === "") {
     setPassword("");
@@ -282,7 +301,7 @@ const handlepwdchng = (e) => {
     }
   };
   // Sign In Form
-  const handleClick = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Stop form's default behavior
 
     // Validation flag
@@ -293,9 +312,6 @@ const handlepwdchng = (e) => {
     if (!firstname.trim()) {
         setErrorFirstName('First name is mandatory');
         isValid = false;
-    } else if (!/^[a-zA-Z0-9, ]+$/.test(firstname)) {
-        setErrorFirstName('Invalid First Name Format');
-        isValid = false;
     } else {
         setErrorFirstName('');
     }
@@ -303,9 +319,6 @@ const handlepwdchng = (e) => {
     // Last name validation
     if (!lastname.trim()) {
         setErrorLastName('Last name is mandatory');
-        isValid = false;
-    } else if (!/^[a-zA-Z0-9, ]+$/.test(lastname)) {
-        setErrorLastName('Invalid Last Name Format');
         isValid = false;
     } else {
         setErrorLastName('');
@@ -315,19 +328,22 @@ const handlepwdchng = (e) => {
     if (!email.trim()) {
         setErrorEmail('Email is mandatory');
         isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        setErrorEmail('Invalid Email');
+    }  else if(!(emailRegex.test(email))){
+        setErrorEmail('Invalid E-mail Format');
         isValid = false;
-    } else {
-        setErrorEmail('');
+
+    }else{
+      setErrorEmail('');
     }
 
     // Contact number validation
     if (!contactno.trim()) {
         setErrorCntct('Contact number is mandatory');
         isValid = false;
-    } else {
-        setErrorCntct('');
+    } else if(contactno.length <10 ) {
+        setErrorCntct('Atleast 10 digits required.');
+    } else{
+      setErrorCntct('');
     }
 
     // Password validation
@@ -335,7 +351,7 @@ const handlepwdchng = (e) => {
         setErrorPassword('Password is mandatory');
         isValid = false;
     } else if (password.length < 8) {
-        setErrorPassword('');
+        setErrorPassword('Atleast 8 Characters required');
         isValid = false;
     } else {
         setErrorPassword('');
@@ -368,7 +384,7 @@ const handlepwdchng = (e) => {
         formdata.append("role", role);
 
         const response = await axios.post(
-            'http://192.168.1.16:8080/signups/insertDetails',
+            'http://127.0.0.1:8080/signups/insertDetails',
             formdata,
             {
                 headers: {
@@ -401,6 +417,12 @@ const togglePasswordVisibility = () => {
 const toggleConfirmPasswordVisibility = () => {
   setShowConfirmPassword((prevCnfPassword) => !prevCnfPassword);
 };
+
+const onTabPress = (e) =>{
+  if(e.key === "Tab"){
+    e.preventDefault()
+  }
+}
  
   return (
     <>
@@ -469,15 +491,20 @@ const toggleConfirmPasswordVisibility = () => {
                 value={email}
                 className=" appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
                 onChange={handleemailchng}
+                onKeyDown={handleTabPressEmail}
               />
                {erroremail && <div className="text-red-500 text-sm mt-2">{erroremail}</div>}
                
             </div>
             <div className="w-1/2">
+            
               <label className="block  text-sm font-bold mb-2" htmlFor="phno"  style={{color:'grey',fontWeight:'500'}}>
                Contact Number
               </label>
-    
+
+                  
+  
+              
   
               <input
                 type="text"
@@ -486,6 +513,7 @@ const toggleConfirmPasswordVisibility = () => {
                 value={contactno}
                 className=" appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
                 onChange={handlecntctchng}
+                onKeyDown={handleTabPress}
               />
                {errorcntct && <div className="text-red-500 text-sm mt-2">{errorcntct}</div>}
             </div>
@@ -579,7 +607,7 @@ const toggleConfirmPasswordVisibility = () => {
             <button
               type="next"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={handleClick}
+              onClick={handleSubmit}
             >
               Next
             </button>
