@@ -16,12 +16,22 @@ const ProfileDetails = () => {
   const location = useLocation();
   const receivedemail = useState(location.state.sentemail)
   const receivedpan = useState(location.state.pan)
+  const receivedcontact = useState(location.state.sentcontactno)
   const emailvalue = receivedemail[0];
   const panvalue = receivedpan[0];
+ console.log("ewwerwer",receivedcontact);
+  
+ 
   const [adminData, setAdminData] = useState(null);
   const [propertyData, setPropertyData] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [imageSourceUrl, setImageSourceUrl] = useState("");
+  const [rcownerimage,setRcOwnerImage] = useState('');
+  const [rcpropimage,setRcPropImage] = useState('');
   console.log("Email Value: ",emailvalue)
+  console.log("Contact No Array Value: ",receivedcontact)
+  const  contactstring = receivedcontact[0];
+  console.log("Contact String: ",contactstring);
   console.log("PAN Value: ",panvalue)
   const [formData, setFormData] = useState({
     firstname: '',
@@ -40,56 +50,75 @@ const ProfileDetails = () => {
     gst: '',
     pan: '',
     ownerimage: '',
-    checkin: '',
+    propertyimage: '',
+    checkin: '',      
     checkout: '',
   });
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const propertyResponse = await axios.get(`http://192.168.1.7:8080/props/getInfoByPan/${panvalue}`);
-        const adminResponse = await axios.get(`http://192.168.1.7:8080/signups/getAllsignupsByEmailId/${emailvalue}`);
+        const propertyResponse = await axios.get(`http://192.168.1.16:8080/props/getInfoByPan/${panvalue}`);
+        const adminResponse = await axios.get(`http://192.168.1.16:8080/signups/getAllsignupsByContactNo/${contactstring}`)
         
         setPropertyData(propertyResponse.data);
         setAdminData(adminResponse.data);
+        const formattedOwnerImgPath = propertyResponse.data.ownerimage.replace(/\\/g, '/');
+        const formattedPropImgPath = propertyResponse.data.propertyimage.replace(/\\/g, '/');
+
+        const baseURL = "http://192.168.1.16:8080";
+        const fullOwnerImageURL = `${baseURL}/${formattedOwnerImgPath}`;
+        const fullPropImageURL = `${baseURL}/${formattedPropImgPath}`;
+  
+        setRcOwnerImage(fullOwnerImageURL);
+        setRcPropImage(fullPropImageURL);
+       
+
+
+    
   
         console.log("Property Data", propertyResponse.data);
-        console.log("Property Owner", propertyResponse.data.ownername);
+   
+        console.log("Contact Value: ", propertyResponse.data.ownername);
+     
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
   
     fetchData();
-  }, [emailvalue]); // Removed dependency on adminData to avoid unnecessary fetch calls.
+  }, [panvalue,emailvalue]); // Removed dependency on adminData to avoid unnecessary fetch calls.
   console.log("Admin Data: ",adminData)
   console.log("Property Data: ",propertyData)
   useEffect(() => {
     if (adminData && propertyData) {
       setFormData({
-        firstname: adminData.firstname || '',
-        lastname: adminData.lastname || '',
-        email: adminData.email || '',
-        contactno: adminData.contactno || '',
-        propertyname: propertyData.propertyname || '',
-        propertyaddress: propertyData.propertyaddress || '',
-        propertycontactno: propertyData.propertycontactno || '',
-        zip: propertyData.zip || '',
-        rooms: propertyData.rooms || '',
-        subplan: propertyData.subplan || '',
-        taxes: propertyData.taxes || '',
-        ownername: propertyData.ownername || '',
-        ownercontact: propertyData.ownercontact || '',
-        gst: propertyData.gst || '',
-        pan: propertyData.pan || '',
-        ownerimage: propertyData.ownerimage || '',
-        checkin: propertyData.checkin || '',
-        checkout: propertyData.checkout || '',
+       firstname: adminData.firstname || '',
+       lastname: adminData.lastname || '',
+       email: adminData.email || '',
+       contactno: adminData.contactno || '',
+      propertyname: propertyData.propertyname || '',
+       propertyaddress: propertyData.propertyaddress || '',
+       propertycontactno: propertyData.propertycontactno || '',
+       zip: propertyData.zip || '',
+       rooms: propertyData.rooms || '',
+       subplan: propertyData.subplan || '',
+       taxes: propertyData.taxes || '',
+       ownername: propertyData.ownername || '',
+       ownercontact: propertyData.ownercontact || '',
+       gst: propertyData.gst || '',
+       pan: propertyData.pan || '',
+       ownerimage: propertyData.ownerimage || '',
+      //  propertyimage: propertyData.propertyimage || '',
+       checkin: propertyData.checkin || '',
+       checkout: propertyData.checkout || '',
       });
     }
+    console.log("Owner Img: ",formData.ownerimage)
+    
   }, [adminData, propertyData]); // Update formData when adminData or propertyData changes.
  
-  console.log("FormData",formData)
+  
    
  
  
@@ -99,20 +128,164 @@ const ProfileDetails = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+   
+   
+    setFormData({ ...FormData, [e.target.name]: e.target.value });
+    console.log("N:",e.target.name)
+    console.log("V: ",e.target.value)
+   
+ 
   };
 
+  const handleOwnerImgChange=(e)=>{
+    const file = e.target.files[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setRcOwnerImage(imageURL);
+    }
+
+  }
+
+  
+  const handlePropertyImgChange=(e)=>{
+    const file = e.target.files[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setRcPropImage(imageURL);
+    }
 
 
-  const handleSave = async () => {
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Sent FD: ", formData);
+  
     try {
-      await axios.patch(`http://192.168.1.7:8080/props/editaProperty/`, propertyData);
-      await axios.patch(`http://192.168.1.7:8080/props/editaProperty/`, adminData);
-      setEditMode(false); // Exit edit mode
+      // Create a single FormData instance for both text and file data
+      const textPayload = new FormData();
+      const imgPayload = new FormData();
+      
+      // Append all text fields
+      textPayload.append('firstname', formData.firstname);
+      textPayload.append('lastname', formData.lastname);
+      textPayload.append('email', formData.email);
+      textPayload.append('contactno', formData.contactno);
+      textPayload.append('propertyname', formData.propertyname);
+      textPayload.append('propertyaddress', formData.propertyaddress);
+      textPayload.append('propertycontactno', formData.propertycontactno);
+      textPayload.append('zip', formData.zip);
+      textPayload.append('rooms', formData.rooms);
+      textPayload.append('subplan', formData.subplan);
+      textPayload.append('taxes', formData.taxes);
+      textPayload.append('ownername', formData.ownername);
+      textPayload.append('ownercontact', formData.ownercontact);
+      textPayload.append('gst', formData.gst);
+      textPayload.append('pan', formData.pan);
+      textPayload.append('tan', formData.tan);
+ 
+      // Append file fields only if they exist
+      if (formData.ownerimage) {
+         imgPayload.append('ownerimage', formData.ownerimage);
+      }
+      if (formData.propertyimage) {
+         imgPayload.append('propertyimage', formData.propertyimage);
+      }
+    
+      const patchRequests = [
+        axios.patch(
+          `http://192.168.1.16:8080/signups/editSignUPdetails/${contactstring}`,
+          textPayload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        ),
+        axios.patch(
+          `http://192.168.1.16:8080/props/updateProperty/${panvalue}`,
+          imgPayload,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        ),
+      ];
+    
+      // Execute all requests simultaneously
+      const responses = await Promise.all(patchRequests);
+      
+      // Check if all requests were successful
+      if (responses.every(response => response.status === 200)) {
+        console.log("All patches success");
+        alert("Data Edit Successful");
+      } else {
+        throw new Error("One or more requests failed");
+      }
     } catch (error) {
-      console.error("Error saving data: ", error);
+      console.error("Error details:", error);
+      alert("Error editing data: " + (error.response?.data?.message || error.message));
+    } finally {
+      setEditMode(false);
     }
   };
+ 
+
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   console.log("Sent FD: ",formData)
+   
+  //   try{
+  //     const patchRequests = [
+
+
+  //       axios.patch(`http://192.168.1.16:8080/signups/editSignUPdetails/${contactstring}`, formData,{
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         }
+  //       }),
+
+  //       axios.patch(`http://192.168.1.16:8080/props/editaProperty/${panvalue}`, formData,{
+  //         headers: {
+  //           'Content-Type': 'application/json',yupu
+  //         }
+  //       }),
+  //       axios.patch(`http://192.168.1.16:8080/props/editOwnerImage/${panvalue}`, formData,{
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         }
+  //       }),
+
+  //       axios.patch(`http://192.168.1.16:8080/props/editPropertyImage/${panvalue}`, formData,{
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         }
+  //       })
+        
+  //     ];
+  //     await Promise.all(patchRequests);
+  //     console.log("Both patches success");
+  //     setEditMode(false);
+  //     alert('Edit Successfull');
+  //   } catch(error){
+  //     console.log('Error saving data',error);
+  //     alert("Error editing data.");
+  //   }
+  // };
+
+
+
+  // const handleSave = async () => {
+  //   try {
+  //     await axios.patch(`http://192.168.1.16:8080/props/editaProperty/`, propertyData);
+  //     await axios.patch(`http://192.168.1.16:8080/props/editaProperty/`, adminData);
+  //     setEditMode(false); // Exit edit mode
+  //   } catch (error) {
+  //     console.error("Error saving data: ", error);
+  //   }
+  // };
 
   
 
@@ -157,9 +330,10 @@ const handleEditChange = (e)=>{
               <input
                 type="text"
                 id="name1"
+                name="firstname"
                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 value={formData.firstname}
-                //  onChange={(e) => handleInputChange(e, setAdminData)}
+                onChange={handleChange}
                 disabled={!editMode}
                  
               />
@@ -171,10 +345,11 @@ const handleEditChange = (e)=>{
               <input
                 type="email"
                 id="email1"
+                name="contactno"
                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your email"
                 value={formData.contactno}
-                // onChange={(e) => handleInputChange(e,setAdminData)}
+                onChange={handleChange}
                 disabled={!editMode}
                 
                  
@@ -187,10 +362,11 @@ const handleEditChange = (e)=>{
               <input
                 type="text"
                 id="zip"
+                name="zip"
                className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your email"
                 value={formData.zip}
-                // onChange={(e) => handleInputChange(e,setPropertyData)}
+                onChange={handleChange}
                 disabled={!editMode}
                 
               />
@@ -202,10 +378,11 @@ const handleEditChange = (e)=>{
               <input
                 type="text"
                 id="gst"
-               className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
+                name="gst"
+                className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your email"
                 value={formData.gst}
-                // onChange={(e) => handleInputChange(e, "gst", setPropertyData)}
+                onChange={handleChange}
                 disabled={!editMode}
                
               />
@@ -227,8 +404,9 @@ const handleEditChange = (e)=>{
                 id="name2"
                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your name"
+                name="lastname"
                 value={formData.lastname}
-                // onChange={(e) => handleInputChange(e, "lastname", setAdminData)}
+                onChange={handleChange}
                 disabled={!editMode}
               />
             </div>
@@ -239,11 +417,11 @@ const handleEditChange = (e)=>{
               <input
                 type="email"
                 id="email2"
+                name="propertyname"
                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your email"
                 value={formData.propertyname}
-              
-                // onChange={(e) => handleInputChange(e, "propertyname", setPropertyData)}
+                onChange={handleChange}
                 disabled={!editMode}
             
               />
@@ -256,20 +434,51 @@ const handleEditChange = (e)=>{
               <input
                 type="text"
                 id="propcontact"
+                name="propertycontactno"
                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your email"
                 value={formData.propertycontactno}
-                // onChange={(e) => handleInputChange(e, "propertycontact", setPropertyData)}
+                onChange={handleChange}
                 disabled={!editMode}
               />
             </div>
 
             <div>
-              <label className="block text-gray-600 mb-1" htmlFor="email1">
-             Owner Image
+            <label className="block text-gray-600 mb-1" htmlFor="name3">
+               Owner Image
               </label>
+ 
+                    <div style={{ position: 'relative', display: 'inline-block', height: '100px', width: '100px' }}>
+                    {/* Display the image */}
+                    <img
+                      src={rcownerimage}// Placeholder if no image is selected
+                      alt="Owner"
+                      style={{ height: '100%', width: '100%', objectFit: 'cover' }}
+                    />
+                    {/* Invisible input for file selection */}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleOwnerImgChange}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        height: '100%',
+                        width: '100%',
+                        opacity: 0,
+                        cursor: 'pointer' 
+                      }}
+                      disabled={!editMode}
+                    />
+                  </div>
+          
+           
+           
+      
+          </div>
 
-            </div>
+
 
         
 
@@ -290,9 +499,12 @@ const handleEditChange = (e)=>{
               <input
                 type="text"
                 id="name3"
-                  className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
+                name="email"
+                className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your name"
+    
                 value={formData.email}
+                onChange={handleChange}
                 // onChange={(e) => handleInputChange(e, "email", setAdminData)}
                 disabled={!editMode}
               />
@@ -304,10 +516,11 @@ const handleEditChange = (e)=>{
               <input
                 type="text"
                 id="propaddress"
+                name="propertyaddress"
                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your email"
                 value={formData.propertyaddress}
-                // onChange={(e) => handleInputChange(e, "propertyaddress", setPropertyData)}
+                onChange={handleChange}
                 disabled={!editMode}
               />
             </div>
@@ -318,10 +531,11 @@ const handleEditChange = (e)=>{
               <input
                 type="text"
                 id="zip"
+                name="pan"
                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
                 placeholder="Enter your email"
                 value={formData.pan}
-                // onChange={(e) => handleInputChange(e, "pan", setPropertyData)}
+                onChange={handleChange}
                 disabled={!editMode}
              
               />
@@ -330,7 +544,10 @@ const handleEditChange = (e)=>{
               <label className="block text-gray-600 mb-1" htmlFor="email1">
              Property Image
               </label>
-              <img src={propertyData?.propertyimage || ''}/>
+              {rcpropimage && (
+        <img src={rcpropimage} alt="Owner"  style={{height:'100px',width:'100px'}} />
+              )}
+
         
             </div>
             
@@ -345,7 +562,7 @@ const handleEditChange = (e)=>{
               {editMode ? (
                 <button
                   className="btn btn-success mr-2"
-                  onClick={handleSave}
+                  onClick={handleSubmit}
                 >
                   Save
                 </button>
@@ -364,315 +581,4 @@ export default ProfileDetails
 
 
 
-// import React,{useEffect, useState} from 'react'
-// import {useNavigate,useLocation } from 'react-router-dom'
-// import axios from 'axios';
-// import {
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   CardFooter,
-//   Typography,
-//   Tooltip,
-// } from "@material-tailwind/react";
-
-// const ProfileDetails = () => {
-  
-//   const navigate = useNavigate();
-//   const location = useLocation();
-//   const receivedemail = useState(location.state.sentemail)
-//   const receivedpan = useState(location.state.pan)
-//   const emailvalue = receivedemail[0];
-//   const panvalue = receivedpan[0];
-//   const [adminData, setAdminData] = useState(null);
-//   const [propertyData, setPropertyData] = useState(null);
-//   const [editMode, setEditMode] = useState(false);
-//   console.log("Email Value: ",emailvalue)
-//   console.log("PAN Value: ",panvalue)
-  
  
-  
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const propertyResponse = await axios.get(`http://192.168.1.7:8080/props/getInfoByPan/${panvalue}`);
-//         const adminResponse = await axios.get(`http://192.168.1.7:8080/signups/getAllsignupsByEmailId/${emailvalue}`);
-        
-//         setPropertyData(propertyResponse.data);
-//         setAdminData(adminResponse.data);
-//         console.log("Property Data", propertyResponse.data);
-//         console.log("Property Owner", propertyResponse.data.ownername);
-//       } catch (error) {
-//         console.error("Error fetching data: ", error);
-//       }
-//     };
-  
-//     fetchData();
-//   }, [panvalue, emailvalue]);
-  
-
-//   const handleEditToggle = () => {
-//     setEditMode(!editMode);
-//   };
-
-
-//   const handleSave = async () => {
-//     try {
-//       await axios.patch(`http://192.168.1.7:8080/props/editaProperty/`, propertyData);
-//       await axios.patch(`http://192.168.1.7:8080/props/editaProperty/`, adminData);
-//       setEditMode(false); // Exit edit mode
-//     } catch (error) {
-//       console.error("Error saving data: ", error);
-//     }
-//   };
-  
-//   // const handleInputChange = (event, setData) => {
-//   //   const { name, value } = event.target;
-//   //   console.log(name)
-//   //   setData((prevData) => ({
-//   //     ...prevData,
-//   //     [name]: value, // Directly update the field
-//   //   }));
-//   // };
-  
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData({ ...formData, [name]: value });
-//   };
-
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSave(formData); // Send updated data to parent or API
-//   };
-
-//  const roughpage=()=>{
-//   navigate('/rough-page')
-//  }
- 
- 
- 
-//   return (
-//     <>
- 
-      
- 
-//  <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-       
-//       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-white p-6 shadow-md rounded-md">
-//         {/* Column 1 */}
-        
-  
-//         <div className="bg-white p-6">
-//           {/* <h2 className="text-xl font-semibold mb-4 text-center">Form 1</h2> */}
-//           <form className="space-y-4">
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="name1">
-//                 First Name
-//               </label>
-//               <input
-//                 type="text"
-//                 id="name1"
-//                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 value={FormData}
-//                  onChange={(e) => handleInputChange(e, setAdminData)}
-//                 disabled={!editMode}
-                 
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//               Contact Number
-//               </label>
-//               <input
-//                 type="email"
-//                 id="email1"
-//                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your email"
-//                 value={adminData?.contactno || ''}
-//                 onChange={(e) => handleInputChange(e,setAdminData)}
-//                 disabled={!editMode}
-                
-                 
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//              ZIP
-//               </label>
-//               <input
-//                 type="text"
-//                 id="zip"
-//                className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your email"
-//                 value={propertyData?.zip || ''}
-//                 onChange={(e) => handleInputChange(e,setPropertyData)}
-//                 disabled={!editMode}
-                
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//               GST No
-//               </label>
-//               <input
-//                 type="text"
-//                 id="gst"
-//                className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your email"
-//                 value={propertyData?.gst || ''}
-//                 onChange={(e) => handleInputChange(e, "gst", setPropertyData)}
-//                 disabled={!editMode}
-               
-//               />
-//             </div>
- 
-//           </form>
-//         </div>
-
-//         {/* Column 2 */}
-//         <div className="bg-white p-6">
-//           {/* <h2 className="text-xl font-semibold mb-4 text-center">Form 2</h2> */}
-//           <form className="space-y-4">
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="name2">
-//                 Last Name
-//               </label>
-//               <input
-//                 type="text"
-//                 id="name2"
-//                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your name"
-//                 value={adminData?.lastname || ''}
-//                 onChange={(e) => handleInputChange(e, "lastname", setAdminData)}
-//                 disabled={!editMode}
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email2">
-//                Property Name
-//               </label>
-//               <input
-//                 type="email"
-//                 id="email2"
-//                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your email"
-//                 value={propertyData?.propertyname || ''}
-              
-//                 onChange={(e) => handleInputChange(e, "propertyname", setPropertyData)}
-//                 disabled={!editMode}
-            
-//               />
-//             </div>
-
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//                Property Contact
-//               </label>
-//               <input
-//                 type="text"
-//                 id="propcontact"
-//                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your email"
-//                 value={propertyData?.propertycontactno || ''}
-//                 onChange={(e) => handleInputChange(e, "propertycontact", setPropertyData)}
-//                 disabled={!editMode}
-//               />
-//             </div>
-
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//              Owner Image
-//               </label>
-
-//             </div>
-
-        
-
-//           </form>
-//         </div>
-
-//         {/* Column 3 */}
-//         <div className="bg-white p-6">
-//           {/* <h2 className="text-xl font-semibold mb-4 text-center">Form 3</h2> */}
-          
-//           <form className="space-y-4">
-            
-//             <div>
-          
-//               <label className="block text-gray-600 mb-1" htmlFor="name3">
-//                 E-mail
-//               </label>
-//               <input
-//                 type="text"
-//                 id="name3"
-//                   className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your name"
-//                 value={adminData?.email || ''}
-//                 onChange={(e) => handleInputChange(e, "email", setAdminData)}
-//                 disabled={!editMode}
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//               Property Address
-//               </label>
-//               <input
-//                 type="text"
-//                 id="propaddress"
-//                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your email"
-//                 value={propertyData?.propertyaddress || ''}
-//                 onChange={(e) => handleInputChange(e, "propertyaddress", setPropertyData)}
-//                 disabled={!editMode}
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//                PAN
-//               </label>
-//               <input
-//                 type="text"
-//                 id="zip"
-//                 className="w-full border border-gray-500 p-6 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md"
-//                 placeholder="Enter your email"
-//                 value={propertyData?.pan || ''}
-//                 onChange={(e) => handleInputChange(e, "pan", setPropertyData)}
-//                 disabled={!editMode}
-             
-//               />
-//             </div>
-//             <div>
-//               <label className="block text-gray-600 mb-1" htmlFor="email1">
-//              Property Image
-//               </label>
-//               <img src={propertyData?.propertyimage || ''}/>
-        
-//             </div>
-            
-
-
- 
-//           </form>
-
-//         </div>
-//       </div>
-//       <div className="mt-4">
-//               {editMode ? (
-//                 <button
-//                   className="btn btn-success mr-2"
-//                   onClick={handleSave}
-//                 >
-//                   Save
-//                 </button>
-//               ) : null}
-//               <button className="rounded-md" onClick={handleEditToggle} style={{backgroundColor:'#006699',padding:'5px 25px 5px 25px',color:'#fff'}}> 
-//                 {editMode ? "Cancel" : "Edit"}
-//               </button>
-//             </div>
-//     </div>
-//     </>
-//   )
-// }
-
-// export default ProfileDetails

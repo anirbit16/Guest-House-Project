@@ -29,7 +29,7 @@ const Navbar = () => {
     // Function to fetch data
     const fetchData = async () => {
       try {         
-        const response = await axios.get("http://192.168.1.6:3000/api/gettotalroom"); // Replace with your API URL
+        const response = await axios.get("http://192.168.1.12:3000/api/gettotalroom"); // Replace with your API URL
         setRoom(response.data.rooms); // Store response data
         // console.log("room: ",response.data.rooms);
       } catch (err) {
@@ -56,6 +56,13 @@ const Navbar = () => {
     setIsForgotPassword(false);
   };
 
+  function MouseOver(event) {
+    event.target.style.background = 'red';
+    }
+    function MouseOut(event){
+        event.target.style.background="";
+     }
+
  
 
 
@@ -77,7 +84,7 @@ const Navbar = () => {
       return; // Add return statement here to exit function
     } else {
       try {
-        const response = await axios.post('http://192.168.1.6:3000/api/user/login', loginformdata, {
+        const response = await axios.post('http://192.168.1.12:3000/api/user/login', loginformdata, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -96,10 +103,10 @@ const Navbar = () => {
         // Redirect after storing data
         setTimeout(() => {
           const rolePathMap = {
-            user: `http://192.168.1.6:5173/userhome?role=${role}&user=${encodeURIComponent(decoded.name)}`,
-            admin: `http://192.168.1.6:5173/admindashboard?role=${role}&user=${encodeURIComponent(decoded.name)}`,
+            user: `http://192.168.1.12:5173/userhome?role=${role}&user=${encodeURIComponent(decoded.name)}`,
+            admin: `http://192.168.1.12:5173/admindashboard?role=${role}&user=${encodeURIComponent(decoded.name)}`,
             'sys-admin': '/sysadminpage',
-            admin1: `http://192.168.1.6:5173/admindashboard?role=${role}&user=${encodeURIComponent(decoded.name)}`
+            admin1: `http://192.168.1.12:5173/admindashboard?role=${role}&user=${encodeURIComponent(decoded.name)}`
           };
           const redirectPath = rolePathMap[decoded.role] || '/';
           window.location.href = redirectPath;
@@ -348,10 +355,12 @@ const Navbar = () => {
         type="password"
         id="password"
         name="password"
+        onMouseOver={MouseOver}
         placeholder="Enter your password"
         className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        onMouseOut={MouseOut}
         required
       />
     </div>

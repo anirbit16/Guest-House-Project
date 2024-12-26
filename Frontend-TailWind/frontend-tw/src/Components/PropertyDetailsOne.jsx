@@ -18,9 +18,13 @@ const navigate = useNavigate();
 const receivedemail = useState(location.state.email)
 const [firstname, setFirstName] = useState(location.state.firstname);
 const [lastname,  setLastName] = useState(location.state.lastname);
-const [contactno,setContactNo]= useState(location.state.contactno);
+const [receivedcontactno,setContactNo]= useState(location.state.contactno);
+console.log("Received Email: ",receivedemail)
+console.log("Received Contact No: ",receivedcontactno)
 const sentemail = receivedemail[0];
+const sentcontactno = receivedcontactno;
 console.log("Sent Email: ",sentemail)
+console.log("Sent Contact No: ",sentcontactno)
 
   // Form Values
 
@@ -39,6 +43,7 @@ const [propertycontactnoerror,setPropertyContactNoError]=useState('')
 
 const [zip,setZip]=useState('');
 const [ziperror,setZiperror]=useState('');
+const [tanerror,setTANError]=useState('');
 
  
 const [roomserror,setRoomsError]=useState('');
@@ -64,6 +69,8 @@ const [ownerimageerror,setOwnerImageError]=useState('');
 const [checkin,setCheckIn]=useState('12:30:00');
 const [checkout,setCheckOut]=useState('11:30:00');
 
+const [tan, setTAN] = useState('');
+
 const [checkinerror,setCheckInError]=useState('');
 const [checkouterror,setCheckOutError]=useState('');
 const [ownerimagepreview, setOwnerImagePreview] = useState('');
@@ -83,6 +90,9 @@ const nameRegex =  /^[a-zA-Z0-9, ]+$/;
 const panRegex =  /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}[Z]{1}[A-Z0-9]{1}$/;
 const zipRegex =/^[0-9]*$/;
+
+const tanRegex =/^[A-Z]{4}\d{5}[A-Z]$/;
+
 
 
  
@@ -297,6 +307,13 @@ const handleClick = async (e) => {
     setCheckOutError('');
   }
 
+  if(!tan){
+    setTANError('TAN Number is required.')
+    isValid = false;
+  } else {
+    setTANError('');
+  }
+
   // If any validation fails, stop execution
   if (!isValid) {
     return;
@@ -336,16 +353,17 @@ const handleClick = async (e) => {
       formdata.append('duration',duration)
       formdata.append('checkin',checkin)
       formdata.append('checkout',checkout)
+      formdata.append('tan',tan)
        
  
-      const response = await axios.post('http://192.168.1.7:8080/props/registerProperty', formdata, {
+      const response = await axios.post('http://192.168.1.16:8080/props/registerProperty', formdata, {
           'Content-Type': 'multipart/form-data'
       });
       if(response.status === 200 ){
         alert('Upload Successful')
        
         navigate('/profile-details', { state: { 
-                                               pan,sentemail
+                                               pan,sentemail,sentcontactno
                                             } })
       }
 
@@ -514,7 +532,7 @@ const handleZipChange = (e) => {
 //Owner name form upload
 const handleOwnerNameChange = () => {
  
-  setOwnerName(`${firstname}${lastname}`)
+  setOwnerName(`${firstname} ${lastname}`);
   return;  
 }
 const handleOwnerContactChange = (e) => {
@@ -527,7 +545,7 @@ const handleOwnerContactChange = (e) => {
   // } else {
   //   setOwnerContactError('Invalid contact number');
   // }
-  setOwnerContact(`${contactno}`)
+  setOwnerContact(`${receivedcontactno}`)
   return;
 }
 
@@ -551,10 +569,41 @@ const handlePANChange = (e) => {
   }
 }
 
+{/* 
+GST Regex Explanation:
+
+Regex: /^[0-9]{0,2}[A-Z]{0,5}[0-9]{0,4}[A-Z]{0,1}[A-Z0-9]{0,1}[Z]{0,1}[A-Z0-9]{0,1}$/
+1) ^ : Indicates the start of the string.
+2) [0-9]{0,2} :
+    Matches 0 to 2 digits (numerical characters 0-9).
+    Represents the first part of the GST ID, typically the state code.
+3) [A-Z]{0,5}:
+    Matches 0 to 5 uppercase letters (A-Z).
+    Likely to represent an alphanumeric identifier, such as PAN (Permanent Account Number), 
+    which has an alphabetical component.
+4) [0-9]{0,4}:
+     Matches 0 to 4 digits (0-9).
+     Could represent the numerical portion of a PAN or other part of the GST structure.
+5) [A-Z]{0,1}:
+     Matches 0 or 1 uppercase letter (A-Z).
+     Might represent a category or type identifier.
+6) [5A-Z0-9]{0,1}:
+    Matches 0 or 1 alphanumeric character (A-Z or 0-9).
+    Represents a flexible field that can accept either a letter or digit.
+7) [Z]{0,1}:
+    Matches 0 or 1 literal 'Z'.
+    In GST IDs, 'Z' often appears as a fixed value 
+    toward the end of the identifier.
+8) [A-Z0-9]{0,1}:
+    Matches 0 or 1 alphanumeric character (A-Z or 0-9).
+    Represents a check digit or additional field.
+9) $:
+    Indicates the end of the string.
+*/}
 const handleGSTChange = (e) => {
   const value = e.target.value;
   const gstRegex =   /^[0-9]{0,2}[A-Z]{0,5}[0-9]{0,4}[A-Z]{0,1}[A-Z0-9]{0,1}[Z]{0,1}[A-Z0-9]{0,1}$/; 
-  if(value===''){
+  if(value ===''){
     setGst('');
     setGstError('');
   }
@@ -568,6 +617,41 @@ const handleGSTChange = (e) => {
         return;
   }
 }
+
+{/* TANRegex
+  Regex String: ^[A-Z]{4}\d{5}[A-Z]$
+  Explanation:
+      1) ^ - Matches the start of the string.
+      2) [A-Z]{4} - Ensures the first 4 characters are uppercase English letters (A-Z), and exactly 4 of them.
+      3) \d{5} - Ensures the next 5 characters are digits (0-9), and exactly 5 of them.
+      4) [A-Z] - Ensures the last character is an uppercase English letter.
+      5) $ - Matches the end of the string.
+
+   
+*/}
+
+
+
+
+const handleTANChange = (e) => {
+  const value = e.target.value;
+  console.log(value);
+  const TANRegex =  /^[A-Z]{0,4}\d{0,5}[A-Z]?$/;
+
+  if (value === '') {
+    setTAN('');
+    setTANError('');
+    return; // Stop further execution for empty input
+  }
+
+  if (TANRegex.test(value)) {
+    setTAN(value);
+    setTANError('');
+  } else {
+    setTANError('Invalid TAN Number Format.');
+  }
+};
+
 
 
 
@@ -837,6 +921,39 @@ const handleGSTChange = (e) => {
                    { checkouterror && <div className="text-red-500 text-sm mt-2">{checkouterror}</div>}
                    
                 </div>
+                
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>TAN</label>
+                  <input
+                    type="text"
+                    id="TAN"
+                   
+                    placeholder="TAN Number"
+                    value={tan}
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={handleTANChange}
+                    required
+                  />
+                    {tanerror && <div className="text-red-500 text-sm mt-2">{tanerror}</div>}
+                   
+                </div>
+
+                
+                <div className="mb-4">
+                {/* <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Check Out Time</label>
+                  <input
+                    type="time"
+                    id="checkout"
+                    step="1"
+                    placeholder="Check Out time"
+                    value={checkout}
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={(e) => setCheckOut(e.target.value)}
+                    required
+                  /> */}
+                   { checkouterror && <div className="text-red-500 text-sm mt-2">{checkouterror}</div>}
+                   
+                </div>
               </div>
               
 
@@ -845,7 +962,7 @@ const handleGSTChange = (e) => {
                 
 
               <div className="mt-6 mx-20" style={{display:'flex',justifyContent:'left'}}>
-                <button
+                {/* <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
                   onClick={handleShortcut}
@@ -853,7 +970,7 @@ const handleGSTChange = (e) => {
                    
                 >
                   Next
-                </button>
+                </button> */}
 
                 <button
                   type="submit"
@@ -876,7 +993,7 @@ const handleGSTChange = (e) => {
         <div className="w-1/2">
           <div className="bg-white rounded-lg shadow-lg p-6 mt-20" style={{marginTop:'0px',width:'18rem'}}>
             <h2 className="text-purple-500 text-2xl mb-6" style={{color:'rgb(139 92 246 / var(--tw-text-opacity))',
-                                                                fontWeight:'700',fontSize:'1.75em'}}>Subscription Summary</h2>
+                                                                fontWeight:'700',fontSize:'1.165em'}}>Subscription Summary</h2>
             
             
             <div className="checkboxes" style={{display:'flex',gap:'0.75em'}}>
@@ -945,10 +1062,18 @@ const handleGSTChange = (e) => {
                rounded focus:outline-none focus:shadow-outline" onClick={handleClick}>
               Make Payment
             </button>
+
+            
           </div>
+
+          
+
+
         </div>
       </div>
     </div>
+
+    <a href='/profile-details'>Shortcut</a>
     </div>
 
     </>

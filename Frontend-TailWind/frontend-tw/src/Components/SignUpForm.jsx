@@ -7,7 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {EyeOutlined,EyeInvisibleOutlined} from '@ant-design/icons';
 import {jwtDecode} from "jwt-decode";
- 
+import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 
 const SignUpForm=()=> {
@@ -24,6 +28,7 @@ const SignUpForm=()=> {
   const [email,setEmail]=useState('');
   const [contactno,setContactNo]=useState('');
   const [password,setPassword]=useState('');
+  const [strength, setStrength] = useState("");
   const [showPassword, setShowPassword] = useState('');
   const [confirmpassword,setConfirmPassword]=useState('');
   const [showConfirmpassword,setShowConfirmPassword]=useState('');
@@ -33,6 +38,9 @@ const SignUpForm=()=> {
   const [erroremail,setErrorEmail]=useState('');
   const [errorcnfpwd,setErrorCnfPwd]=useState('');
   const [errorcntct,setErrorCntct]=useState('');
+  const [countrycode, setCountryCode] = React.useState('');
+
+
 
   
   
@@ -49,6 +57,10 @@ const SignUpForm=()=> {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const nameRegex = /^[A-Za-z\s]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  const handleCountryCodeChange = (event) => {
+    setCountryCode(event.target.value);
+  };
  
  
   // First Name Upload
@@ -70,7 +82,7 @@ const SignUpForm=()=> {
      setErrorFirstName('');  
      return;
   } else {
-    setErrorFirstName('Invalid Character for name');
+    setErrorFirstName('');
     return;
   }
   }
@@ -93,7 +105,7 @@ const SignUpForm=()=> {
        setLastName(value)
        setErrorLastName('');
     } else {
-      setErrorLastName('Invalid Character for name');
+      setErrorLastName('');
     }
   };
   // Email Upload
@@ -106,7 +118,7 @@ const SignUpForm=()=> {
       setEmail(value);
       setErrorEmail("");
     } else {
-      setErrorEmail("Invalid character for e-mail");
+      setErrorEmail("");
     }
   }
   const handlecntctchng=(e)=>{
@@ -123,67 +135,79 @@ const SignUpForm=()=> {
        setErrorCntct('')
       return;
    } else {
-    setErrorCntct('Invalid Contact Number');
+    setErrorCntct('');
    }
   }
 //  Upload Password
-  const handlepwdchng=(e)=>{
-    const value = e.target.value;
-        
-    /*
-    Explanation of the Regex:
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-      /^:
+const handlepwdchng = (e) => {
+  const value = e.target.value;
+  setPassword(value);
 
-      Ensures the match starts at the beginning of the string.
-      (?=.*[a-z]):
+  /*
+  Updated Regex:
+  Password must be exactly 8 characters long.
+  */
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-      Asserts that at least one lowercase letter is present.
-      (?=.*[A-Z]):
-
-      Asserts that at least one uppercase letter is present.
-      (?=.*\d):
-
-      Asserts that at least one digit (0-9) is present.
-      (?=.*[@$!%*?&]):
-
-      Asserts that at least one special character from the set @$!%*?& is present.
-      [A-Za-z\d@$!%*?&]{8,}:
-
-      Matches a string that is at least 8 characters long and contains only:
-      Uppercase letters (A-Z)
-      Lowercase letters (a-z)
-      Digits (0-9)
-      Special characters from the set @$!%*?&
-      $:
-
-      Ensures the match ends at the end of the string.
-      What It Validates:
-      A valid password must:
-
-      Be at least 8 characters long.
-      Contain at least one lowercase letter.
-      Contain at least one uppercase letter.
-      Contain at least one digit.
-      Contain at least one special character from the set @$!%*?&.
-    */
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    setPassword(value);
-    if(value === ""){
-      setErrorPassword('');
-      return;
-    }
-
-    if (passwordRegex.test(value)) {
-      
-      setErrorPassword('');
-      return;
-   } else {
-    setErrorPassword('Invalid character for password.');
-   }
+  if (value === "") {
+    setPassword("");
+    setErrorPassword("");
+    return;
   }
+
+  if (passwordRegex.test(value)) {
+    setPassword(value);
+    setErrorPassword("");
+  } else {
+ 
+    setErrorPassword("Not valid password");
+     
+  }
+};
+
   
-  
+  function evaluatePasswordStrength(password) {
+    let score = 0;
+    let label;
+    let className;
+ 
+    if (!password) return '';
+ 
+    // Check password length
+    if (password.length > 8) score += 1;
+    // Contains lowercase
+    if (/[a-z]/.test(password)) score += 1;
+    // Contains uppercase
+    if (/[A-Z]/.test(password)) score += 1;
+    // Contains numbers
+    if (/\d/.test(password)) score += 1;
+    // Contains special characters
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
+
+
+    switch (score) {
+      case 0:
+      case 1:
+      case 2:
+            label="Weak";
+            className="text-red-500";
+            break;
+    case 3:
+            label = "Medium";
+            className = "text-orange-500"; // Medium: Orange text
+            break;
+
+    case 4:
+    case 5:
+            label="Strong";
+            className="text-green-500"
+            break;
+      default:
+            label="";
+            className="text-black"
+  }
+  return <span className={className}>{label}</span>;
+}
 
  
   const shortcutfunc=()=>{
@@ -311,7 +335,7 @@ const SignUpForm=()=> {
         setErrorPassword('Password is mandatory');
         isValid = false;
     } else if (password.length < 8) {
-        setErrorPassword('Password must be at least 8 characters long');
+        setErrorPassword('');
         isValid = false;
     } else {
         setErrorPassword('');
@@ -344,7 +368,7 @@ const SignUpForm=()=> {
         formdata.append("role", role);
 
         const response = await axios.post(
-            'http://192.168.1.7:8080/signups/insertDetails',
+            'http://192.168.1.16:8080/signups/insertDetails',
             formdata,
             {
                 headers: {
@@ -453,6 +477,8 @@ const toggleConfirmPasswordVisibility = () => {
               <label className="block  text-sm font-bold mb-2" htmlFor="phno"  style={{color:'grey',fontWeight:'500'}}>
                Contact Number
               </label>
+    
+  
               <input
                 type="text"
                 id="phno"
@@ -471,15 +497,31 @@ const toggleConfirmPasswordVisibility = () => {
                   <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>
                     Password
                   </label>
-                  <input
-                   
-                    type={showPassword ? "text" : "password"}
-                    id="passwd"
-                    placeholder="Enter your password "
-                    className="appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                    value={password}
-                    onChange={handlepwdchng}
-                  />
+                  <Tooltip
+      title={
+        <ul style={{ margin: 0, padding: '0 1em', listStyleType: 'disc' }}>
+           The password must contain: 
+          <li>At most 8 characters.</li>
+          <li>At least one uppercase letter.</li>
+          <li>At least one lowercase letter.</li>
+          <li>At least one digit.</li>
+          <li>At least one special character.</li>
+        </ul>
+      }
+    >
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            id="passwd"
+                            placeholder="Enter your password"
+                            className="appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                            value={password}
+                            onChange={(event) => {
+                            handlepwdchng(event);
+                            setStrength(evaluatePasswordStrength(event.target.value));
+                            }}
+                          />
+
+                  </Tooltip>
                   <button
                     type="button"
                     className="absolute right-3 top-8"
@@ -488,8 +530,12 @@ const toggleConfirmPasswordVisibility = () => {
                   
                     {showPassword ?   <EyeOutlined />:<EyeInvisibleOutlined />}
                   </button>
-                  <div className="text-red-500 text-sm mt-2" style={{ minHeight: '1.75rem' }}>
+                  <div className="text-red-500 text-sm mt-2" style={{ minHeight: '1.165rem' }}>
                   {errorpassword}
+                  </div>
+                            
+                  <div>      
+                  <small>{strength?`Password Strength: `:null}{strength}</small>
                 </div>
                 
                 </div>
@@ -517,7 +563,7 @@ const toggleConfirmPasswordVisibility = () => {
                   
                     {showConfirmpassword ?   <EyeOutlined />:<EyeInvisibleOutlined />}
                   </button>
-                  <div className="text-red-500 text-sm mt-2" style={{ minHeight: '1.75rem' }}>
+                  <div className="text-red-500 text-sm mt-2" style={{ minHeight: '1.165rem' }}>
                     {errorcnfpwd}
                   </div>
                 
@@ -526,6 +572,10 @@ const toggleConfirmPasswordVisibility = () => {
 
           
           <div className="flex items-center justify-between">
+
+ 
+
+       
             <button
               type="next"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -533,6 +583,7 @@ const toggleConfirmPasswordVisibility = () => {
             >
               Next
             </button>
+ 
 
             <button style={{marginLeft:'40px',color:'#fff'}} onClick={shortcutfunc}>SC</button>
             </div>
@@ -564,6 +615,8 @@ const toggleConfirmPasswordVisibility = () => {
             <label htmlFor="contact-number" className="block text-sm font-medium text-gray-700">
               Contact Number
             </label>
+
+           
             <input
               type="tel"
               id="contact-number"
@@ -579,6 +632,7 @@ const toggleConfirmPasswordVisibility = () => {
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Password
             </label>
+ 
             <input
               type="password"
               id="password"
@@ -589,6 +643,7 @@ const toggleConfirmPasswordVisibility = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+      
           </div>
           <div className="pt-4 flex justify-end">
             <button
@@ -603,6 +658,8 @@ const toggleConfirmPasswordVisibility = () => {
               className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
               onClick={handleAdminLogin}
             >
+
+
               Submit
             </button>
           </div>
@@ -622,3 +679,5 @@ const toggleConfirmPasswordVisibility = () => {
 }
 
 export default SignUpForm;
+
+
