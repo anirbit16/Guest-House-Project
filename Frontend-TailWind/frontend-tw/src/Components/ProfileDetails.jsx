@@ -58,8 +58,8 @@ const ProfileDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const propertyResponse = await axios.get(`http://192.168.1.16:8080/props/getInfoByPan/${panvalue}`);
-        const adminResponse = await axios.get(`http://192.168.1.16:8080/signups/getAllsignupsByContactNo/${contactstring}`)
+        const propertyResponse = await axios.get(`http://192.168.1.16:8080/props/getInfoByPan/FEGTYR1826C`);
+        const adminResponse = await axios.get(`http://192.168.1.16:8080/signups/getAllsignupsByContactNo/6098877654`)
         
         setPropertyData(propertyResponse.data);
         setAdminData(adminResponse.data);
@@ -194,7 +194,7 @@ const ProfileDetails = () => {
     
       const patchRequests = [
         axios.patch(
-          `http://192.168.1.16:8080/signups/editSignUPdetails/${contactstring}`,
+          `http://localhost:8080/props/updateDetails/6098877654/FEGTYR1826C`,
           textPayload,
           {
             headers: {

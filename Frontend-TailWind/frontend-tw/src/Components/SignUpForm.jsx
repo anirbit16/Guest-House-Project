@@ -342,6 +342,7 @@ const handlepwdchng = (e) => {
         isValid = false;
     } else if(contactno.length <10 ) {
         setErrorCntct('Atleast 10 digits required.');
+        isValid = false;
     } else{
       setErrorCntct('');
     }
@@ -384,7 +385,7 @@ const handlepwdchng = (e) => {
         formdata.append("role", role);
 
         const response = await axios.post(
-            'http://127.0.0.1:8080/signups/insertDetails',
+            'http://192.168.1.16:8080/signups/insertDetails',
             formdata,
             {
                 headers: {
@@ -502,7 +503,7 @@ const onTabPress = (e) =>{
                Contact Number
               </label>
 
-                  
+                   
   
               
   

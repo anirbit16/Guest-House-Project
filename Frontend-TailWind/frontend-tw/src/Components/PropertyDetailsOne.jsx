@@ -36,10 +36,13 @@ console.log("Sent Contact No: ",sentcontactno)
 const [propertyname,setPropertyName]=useState('')
 const [propertynameerror,setPropertyNameError]=useState('')
 
-const [propertyaddress,setPropertyAddress]=useState('')
-const [propertyaddresserror,setPropertyAddressError]=useState('')
+const [propertyaddress1,setPropertyAddress1]=useState('')
+const [propertyaddress2,setPropertyAddress2]=useState('')
+const [propertyaddress1error,setPropertyAddress1Error]=useState('')
+const [propertyaddress2error,setPropertyAddress2Error]=useState('')
 const [propertycontactno,setPropertyContactNo]=useState('')
 const [propertycontactnoerror,setPropertyContactNoError]=useState('')
+const [idproof,setIDProof]=useState('')
 
 const [zip,setZip]=useState('');
 const [ziperror,setZiperror]=useState('');
@@ -62,6 +65,7 @@ const [panerror,setPanError]=useState('');
  
  
 const [ownerimage,setOwnerImage]=useState('');
+
 const [propertyimage,setPropertyImage]=useState('');
 const [propertyimageerror,setPropertyImageError]=useState('');
 const [ownerimageerror,setOwnerImageError]=useState('');
@@ -186,7 +190,7 @@ const handlePropertyH1Click = () => {
 
 const handleShortcut=()=>{
   navigate('/profile-details', { state: { 
-    propertyname, propertyaddress, 
+    propertyname, propertyaddress1, 
     propertycontactno, zip, rooms, 
     subplan, taxes, ownername, 
     ownercontact,  gst, pan,
@@ -212,11 +216,11 @@ const handleSubmit = async (e) => {
   }
 
   // Property Address Error Check
-  if (!propertyaddress) {
-    setPropertyAddressError('Property Address Required');
+  if (!propertyaddress1) {
+    setPropertyAddress1Error('Property Address Required');
     isValid = false;
   }  else {
-    setPropertyAddressError('');
+    setPropertyAddress1Error('');
   }
 
   // Property Contact Number Check
@@ -334,7 +338,7 @@ const handleSubmit = async (e) => {
       const formdata = new FormData()
       setTaxes(40)
       console.log('propertyname',propertyname)
-      console.log('propertyaddress',propertyaddress)
+      console.log('propertyaddress1',propertyaddress1)
       console.log('properycontactno',propertycontactno)
       console.log('zip',zip)
       console.log('rooms',rooms)
@@ -349,7 +353,8 @@ const handleSubmit = async (e) => {
       console.log('duration',duration)
       /************************ */
       formdata.append('propertyname',propertyname)
-      formdata.append('propertyaddress',propertyaddress)
+      formdata.append('propertyaddress1',propertyaddress1)
+      formdata.append('propertyaddress2',propertyaddress2)
       formdata.append('propertycontactno',propertycontactno)
       formdata.append('zip',zip)
       formdata.append('rooms',rooms)
@@ -367,7 +372,7 @@ const handleSubmit = async (e) => {
       formdata.append('tan',tan)
        
  
-      const response = await axios.post('http://127.0.0.1:8080/props/registerProperty', formdata, {
+      const response = await axios.post('http://192.168.1.16:8080/props/registerProperty', formdata, {
           'Content-Type': 'multipart/form-data'
       });
       if(response.status === 200 ){
@@ -461,21 +466,39 @@ const handlePropertyNameChange = (e) => {
  
 
 // Property Address Upload 
-const handlePropertyAddressChange = (e) => {
+const handlePropertyAddress1Change = (e) => {
   const value = e.target.value;
   const propertyaddressregex =/^[a-zA-Z0-9\s,.'#-/]+$/;
   if(value === ''){
-     setPropertyAddress('');
-     setPropertyAddressError('');
+     setPropertyAddress1('');
+     setPropertyAddress1Error('');
      return;
   }
   
   if (propertyaddressregex.test(value)) {
-        setPropertyAddress(value);
-        setPropertyAddressError(''); // Clear error if input is valid
+        setPropertyAddress1(value);
+        setPropertyAddress1Error(''); // Clear error if input is valid
         return;
   } else {
-    setPropertyAddressError('Invalid property address');
+    setPropertyAddress1Error('Invalid property address');
+    return;
+  }
+}
+const handlePropertyAddress2Change = (e) => {
+  const value = e.target.value;
+  const propertyaddressregex =/^[a-zA-Z0-9\s,.'#-/]+$/;
+  if(value === ''){
+     setPropertyAddress2('');
+     setPropertyAddress2Error('');
+     return;
+  }
+  
+  if (propertyaddressregex.test(value)) {
+        setPropertyAddress2(value);
+        setPropertyAddress2Error(''); // Clear error if input is valid
+        return;
+  } else {
+    setPropertyAddress2Error('Invalid property address');
     return;
   }
 }
@@ -741,211 +764,12 @@ const skipbtn=()=>{
                   />
                      { propertynameerror && <div className="text-red-500 text-sm mt-2">{propertynameerror}</div>}
                 </div>
-
-
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Property Contact</label>
-                  <input
-                    type="text"
-                    id="cont"
-                    placeholder="Enter property contact Number"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    value={propertycontactno}
-                    onChange={handlePropertyContactChange}   
-                    onKeyDown={handleTabpressPC}
-                  />
-                   { propertycontactnoerror && <div className="text-red-500 text-sm mt-2">{propertycontactnoerror}</div>}
-                </div>
-                  
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Property Address</label>
-                  <input
-                    type="text"
-                    id="propadd"
-                    placeholder="Enter property address here"
-                    className="w-full border border-gray-300 rounded py-2 px-3 
-                               leading-tight focus:border-gray-900 focus:ring-2 
-                               focus:ring-gray-500"
-                    value={propertyaddress}
-                    onChange={handlePropertyAddressChange}   
-                  />
-                   {propertyaddresserror && <div className="text-red-500 text-sm mt-2">{propertyaddresserror}</div>}
-                </div>
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>ZIP Code</label>
-                  <input
-                    type="text"
-                    id="zip"
-                    placeholder="Enter Zip Code"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    value={zip}
-                    onChange={handleZipChange}     
-                    onKeyDown={handleTabpressZIP}                
-                  />
-                     {ziperror && <div className="text-red-500 text-sm mt-2">{ziperror}</div>}
-
-                </div>
-
-                
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Rooms</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={rooms}
-                   className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  onChange={handleRoomChange}
-                  placeholder="Enter number of rooms"
-                />
-                {rooms < 5 && rooms !== '' && (
-                  <p style={{ color: "red" }}>Enter a value of 5 or more</p>
-                )}
-          {roomserror && <div className="text-red-500 text-sm mt-2">{roomserror}</div>}           
-
-      </div>
-
-      <div className="mb-4">
-      <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Subscription Plan</label>
-        <input
-          type="text"
-          id="subp"
-          placeholder="Enter Subscription Plan"
-          value={subplan}
-          readOnly
-          className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-          
-        />
-         
-       
-      </div>
-
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Owner Name</label>
-                  <input
-                    type="text"
-                    id="ownName"
-                    placeholder="Enter Owner Name"
-                    value={ownername}
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={handleOwnerNameChange}
-                      />
-                      {ownernameerror && <div className="text-red-500 text-sm mt-2">{ownernameerror}</div>}
-                </div>
-
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Owner Contact</label>
-                  <input
-                    type="text"
-                    id="ownNo"
-                    placeholder="Owner Contact Number"
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    value={ownercontact}
-                    onChange={handleOwnerContactChange}
-                    onKeyDown={handleTabpressOC}
-                 />
-                  { ownercontacterror && <div className="text-red-500 text-sm mt-2">{ownercontacterror}</div>}
-                </div>
-
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Rooms</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={rooms}
-                   className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                  onChange={handleRoomChange}
-                  placeholder="Enter number of rooms"
-                />
-                {rooms < 5 && rooms !== '' && (
-                  <p style={{ color: "red" }}>Enter a value of 5 or more</p>
-                )}
-          {roomserror && <div className="text-red-500 text-sm mt-2">{roomserror}</div>}           
-
-      </div>
-
-      <div className="mb-4">
-      <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Subscription Plan</label>
-        <input
-          type="text"
-          id="subp"
-          placeholder="Enter Subscription Plan"
-          value={subplan}
-          readOnly
-          className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-          
-        />
-         
-       
-      </div>
-
-
-      
-      
-             
-
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>PAN No</label>
-                  <input
-                    type="text"
-                    id="panNo"
-                    placeholder="Enter PAN No"
-                    value={pan}
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={handlePANChange}
-                    onKeyDown={handleTabpressPAN}
-                  />
-                   { panerror && <div className="text-red-500 text-sm mt-2">{panerror}</div>}
-                </div>
-
-                <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>GST No</label>
-                  <input
-                    type="text"
-                    id="gstNo"
-                    placeholder="Enter GST No"
-                    value={gst}
-                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={handleGSTChange}
-                    onKeyDown={handleTabpressGST}
-                  />
-                   { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
-                </div>
-                {/* Owner's Image */}
                 <div className="mb-4 flex items-center space-x-2" style={{display:'block'}}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
                     </svg>
                       <h1 className="text-gray-800 font-semibold cursor-pointer"
-                    onClick={handleOwnerH1Click} >Owner's Image</h1>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={ownerFileInputRef}
-                
-                    className="hidden"
-                    onChange={handleOwnerImgChange}
-                  />
-
-                      {ownerimagepreview && (
-                            <div className="image-preview">
-                                <img 
-                                    src={ownerimagepreview} 
-                                    alt="Preview" 
-                                    style={{ width: '100px', height: '80px', marginTop: '10px' }}   
-                                />
-                            </div>
-                        )}
-
-             { ownerimageerror && <div className="text-red-500 text-sm mt-2">{ownerimageerror}</div>}
-                      
-                </div>
-                {/* Property Image */}
-                <div className="mb-4 flex items-center space-x-2" style={{display:'block'}}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
-                    </svg>
-                      <h1 className="text-gray-800 font-semibold cursor-pointer"
-                     onClick={handlePropertyH1Click}>Property Image</h1>
+                     onClick={handlePropertyH1Click}>Property Logo</h1>
                   <input
                     type="file"
                     accept="image/*"
@@ -968,7 +792,102 @@ const skipbtn=()=>{
             {  propertyimageerror && <div className="text-red-500 text-sm mt-2">{propertyimageerror}</div>}
                 </div>
 
+
                 <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Contact Number</label>
+                  <input
+                    type="text"
+                    id="cont"
+                    placeholder="Enter property contact Number"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={propertycontactno}
+                    onChange={handlePropertyContactChange}   
+                    onKeyDown={handleTabpressPC}
+                  />
+                   { propertycontactnoerror && <div className="text-red-500 text-sm mt-2">{propertycontactnoerror}</div>}
+                </div>
+                  
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}> Address Line 1</label>
+                  <input
+                    type="text"
+                    id="propadd"
+                    placeholder="Enter property address here"
+                    className="w-full border border-gray-300 rounded py-2 px-3 
+                               leading-tight focus:border-gray-900 focus:ring-2 
+                               focus:ring-gray-500"
+                    value={propertyaddress1}
+                    onChange={handlePropertyAddress1Change}   
+                  />
+                   {propertyaddress1error && <div className="text-red-500 text-sm mt-2">{propertyaddress1error}</div>}
+                </div>
+
+                
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}> Address Line 2</label>
+                  <input
+                    type="text"
+                    id="propadd"
+                    placeholder="Enter property address here"
+                    className="w-full border border-gray-300 rounded py-2 px-3 
+                               leading-tight focus:border-gray-900 focus:ring-2 
+                               focus:ring-gray-500"
+                    value={propertyaddress2}
+                    onChange={handlePropertyAddress2Change}   
+                  />
+                   {propertyaddress2error && <div className="text-red-500 text-sm mt-2">{propertyaddress1error}</div>}
+                </div>
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>ZIP Code</label>
+                  <input
+                    type="text"
+                    id="zip"
+                    placeholder="Enter Zip Code"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={zip}
+                    onChange={handleZipChange}     
+                    onKeyDown={handleTabpressZIP}                
+                  />
+                     {ziperror && <div className="text-red-500 text-sm mt-2">{ziperror}</div>}
+
+                </div>
+
+                
+                
+                
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Number of rooms</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={rooms}
+                   className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                  onChange={handleRoomChange}
+                  placeholder="Enter number of rooms"
+                />
+                {rooms < 5 && rooms !== '' && (
+                  <p style={{ color: "red" }}>Enter a value of 5 or more</p>
+                )}
+          {roomserror && <div className="text-red-500 text-sm mt-2">{roomserror}</div>}           
+
+      </div>
+
+      <div className="mb-4">
+      <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Subscription Plan</label>
+        <input
+          type="text"
+          id="subp"
+          placeholder="Enter Subscription Plan"
+          value={subplan}
+          readOnly
+          className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+          
+        />
+         
+       
+      </div>
+
+      <div className="mb-4">
                   <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Check In Time</label>
                   <input
                     type="time"
@@ -998,9 +917,38 @@ const skipbtn=()=>{
                    { checkouterror && <div className="text-red-500 text-sm mt-2">{checkouterror}</div>}
                    
                 </div>
-                
+
+      
+      <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>GST No</label>
+                  <input
+                    type="text"
+                    id="gstNo"
+                    placeholder="Enter GST No"
+                    value={gst}
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={handleGSTChange}
+                    onKeyDown={handleTabpressGST}
+                  />
+                   { gsterror && <div className="text-red-500 text-sm mt-2">{gsterror}</div>}
+                </div>
+
+      <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>PAN No</label>
+                  <input
+                    type="text"
+                    id="panNo"
+                    placeholder="Enter PAN No"
+                    value={pan}
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    onChange={handlePANChange}
+                    onKeyDown={handleTabpressPAN}
+                  />
+                   { panerror && <div className="text-red-500 text-sm mt-2">{panerror}</div>}
+                </div>
+
                 <div className="mb-4">
-                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>TAN</label>
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>TAN No</label>
                   <input
                     type="text"
                     id="TAN"
@@ -1015,22 +963,149 @@ const skipbtn=()=>{
                    
                 </div>
 
-                
                 <div className="mb-4">
-                {/* <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Check Out Time</label>
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Owner Name</label>
                   <input
-                    type="time"
-                    id="checkout"
-                    step="1"
-                    placeholder="Check Out time"
-                    value={checkout}
+                    type="text"
+                    id="ownName"
+                    placeholder="Enter Owner Name"
+                    value={ownername}
                     className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
-                    onChange={(e) => setCheckOut(e.target.value)}
-                    required
-                  /> */}
-                   { checkouterror && <div className="text-red-500 text-sm mt-2">{checkouterror}</div>}
-                   
+                    onChange={handleOwnerNameChange}
+                      />
+                      {ownernameerror && <div className="text-red-500 text-sm mt-2">{ownernameerror}</div>}
                 </div>
+
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Owner Contact</label>
+                  <input
+                    type="text"
+                    id="ownNo"
+                    placeholder="Owner Contact Number"
+                    className="w-full border border-gray-300 rounded py-2 px-3 leading-tight focus:border-gray-900 focus:ring-2 focus:ring-gray-500"
+                    value={ownercontact}
+                    onChange={handleOwnerContactChange}
+                    onKeyDown={handleTabpressOC}
+                 />
+                  { ownercontacterror && <div className="text-red-500 text-sm mt-2">{ownercontacterror}</div>}
+                </div>
+
+                
+                
+
+ 
+
+ 
+
+
+      
+      
+             
+
+
+
+
+                {/* Owner's Image */}
+                <div className="mb-4 flex items-center space-x-2" style={{display:'block'}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+                    </svg>
+                      <h1 className="text-gray-800 font-semibold cursor-pointer"
+                    onClick={handleOwnerH1Click} >Owner's Image</h1>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={ownerFileInputRef}
+                
+                    className="hidden"
+                    onChange={handleOwnerImgChange}
+                  />
+
+                      {ownerimagepreview && (
+                            <div className="image-preview">
+                                <img 
+                                    src={ownerimagepreview} 
+                                    alt="Preview" 
+                                    style={{ width: '100px', height: '80px', marginTop: '10px' }}   
+                                />
+                            </div>
+                        )}
+
+             { ownerimageerror && <div className="text-red-500 text-sm mt-2">{ownerimageerror}</div>}
+                      
+                </div>
+
+
+                <div className="mb-4">
+                <label className="block text-sm font-bold mb-2" htmlFor="passwd" style={{color:'grey',fontWeight:'500'}}>Select ID Type</label>
+  
+                <div class="relative">
+                  <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                    <option>PAN Card</option>
+                    <option>Voter Card</option>
+                    <option>Aadhar Card</option>
+                    <option>Driving License</option>
+                    <option>Passport</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  </div>
+                </div>
+                </div>
+
+                
+                
+
+ 
+
+ 
+
+
+      
+      
+             
+
+
+
+
+                {/* Owner's Image */}
+                <div className="mb-4 flex items-center space-x-2" style={{display:'block'}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+                    </svg>
+                      <h1 className="text-gray-800 font-semibold cursor-pointer"
+                    onClick={handleOwnerH1Click} >Upload ID Proof</h1>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={ownerFileInputRef}
+                
+                    className="hidden"
+                    onChange={handleOwnerImgChange}
+                  />
+
+                      {ownerimagepreview && (
+                            <div className="image-preview">
+                                <img 
+                                    src={ownerimagepreview} 
+                                    alt="Preview" 
+                                    style={{ width: '100px', height: '80px', marginTop: '10px' }}   
+                                />
+                            </div>
+                        )}
+
+             { ownerimageerror && <div className="text-red-500 text-sm mt-2">{ownerimageerror}</div>}
+                      
+                </div>
+ 
+
+ 
+ 
+                
+ 
+
+                
+ 
               </div>
               
 
@@ -1038,19 +1113,7 @@ const skipbtn=()=>{
 
                 
 
-              <div className="mt-6 mx-20" style={{display:'flex',justifyContent:'left'}}>
-                {/* <button
-                  type="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
-                  onClick={handleShortcut}
-                  style={{backgroundColor:'#fff'}}
-                   
-                >
-                  Next
-                </button> */}
-
-
-              </div>
+ 
             </form>
           </div>
         </div>
